@@ -48,3 +48,5 @@ var getEventData = function() {
         searchStartDate.value = ""
         searchEndDate.value = ""
 }
+
+search-button.addEventListener("click",getEventData);
