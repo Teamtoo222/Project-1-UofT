@@ -33,9 +33,11 @@ var getEventData = function() {
             if (response.ok) {
                 response.json().then(function (data){
                     //console.log (data);// all details
+                    //console.log (data._embedded.events);// list of all events
                     //console.log (data._embedded.events[0].name);// name of the first event
-
-                    displayRecords (data);
+                    var listOfEvents = data._embedded.events
+                    console.log (listOfEvents)
+                    displayRecords (listOfEvents);
 
                 })
             }
@@ -44,15 +46,15 @@ var getEventData = function() {
             alert("Unable to connect");
         })
 
-        searchCity.value = ""
-        searchStartDate.value = ""
-        searchEndDate.value = ""
+        //searchCity.value = ""
+        //searchStartDate.value = ""
+        //searchEndDate.value = ""
 }
 
 // Function to display the data 
- var displayRecords = function(data) {
-   for (i = 0; i < data._embedded.events.lenght ; i++) {
-       console.log (data._embedded.events[i].name);
+ var displayRecords = function(listOfEvents) {
+   for (i = 0; i < listOfEvents.length ; i++) {
+       console.log (listOfEvents[i].name);
     }
  }
         // use a for loop to go around the array after .events and before .name
