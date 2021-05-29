@@ -65,15 +65,15 @@ var getEventData = function() {
        //console.log (listOfEvents[i].dates.start.localTime);
 
        var eventName = listOfEvents[i].name
-        //var eventLocalDate = listOfEvents[i].dates.start.localDate
-       //var eventLocalTime = listOfEvents[i].dates.start.localTime
+       var eventLocalDate = listOfEvents[i].dates.start.localDate
+       var eventLocalTime = listOfEvents[i].dates.start.localTime
 
        //var divElements = document.createElement ("div")  
        var ul = document.createElement ("ul")
        var li = document.createElement ("li")
 
 
-       li.innerHTML = eventName
+       li.innerHTML = eventName + ", " + eventLocalDate + ", " + eventLocalTime
        //console.log (li)
        ul.appendChild (li);
        //console.log (ul)
