@@ -33,12 +33,17 @@ var getEventData = function() {
         .then(function(response) {
             if (response.ok) {
                 response.json().then(function (data){
-                    //console.log (data);// all details
+                    console.log (data);// all details
+                    //debugger;
                     //console.log (data._embedded.events);// list of all events
                     //console.log (data._embedded.events[0].name);// name of the first event
+                    if (data._embedded.events != null) {
                     var listOfEvents = data._embedded.events
                     console.log (listOfEvents)
                     displayRecords (listOfEvents);
+                    } else {
+                        alert ("invalid")
+                    }
 
                 })
             }
