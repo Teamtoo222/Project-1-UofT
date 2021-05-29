@@ -1,0 +1,141 @@
+/* Body Style */
+body {
+    background-color: rgb(252,242,247);
+    min-height: 100vh;
+}
+
+/* Header Style */
+
+.logo-img {
+    height: 40px;
+}
+
+/* Hero Style */
+.hero-container {
+    min-height: 600px;
+    background-image: url(../images/hero-background.jpg);
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* opacity: 0.8; */
+}
+
+.search-container {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 15px;
+}
+
+.form-container {
+    margin: auto;
+}
+
+.hero-title-subs {
+    color: white;
+}
+
+.hero-title-primary {
+    color: white;
+    font-size: 50px;
+}
+
+/* Main Section Style */
+
+.title-container {
+    width: fit-content;
+    margin: auto;
+}
+
+.sub-heading {
+    border-top: 1px solid grey;
+}
+
+.stats-count {
+    font-size: 30px;
+}
+
+.img-container {
+    background-image: url(https://picsum.photos/200/300);
+    min-height: 120px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5px 5px 0px 0px;
+    padding: 15px;
+}
+
+.event-container {
+    min-width: 250px;
+    border-radius: 5px;
+    margin: 10px 10px;
+}
+
+.show-more-button {
+    min-width: 200px;
+    margin: auto;
+}
+
+/* Card Style */
+.open-status {
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px 10px;
+    width: fit-content;
+    box-shadow: 0 0 2px grey;
+}
+
+.store-details {
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 10px;
+    min-height: fit-content;
+}
+
+@media only screen and (max-width: 1024px) {
+    .main-container {
+        margin: 1rem;
+    }
+
+}
+
+@media only screen and (max-width: 880px) {
+    .section-container {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    .hero-container {
+        background-position: right; 
+    }
+    .hero-title-primary {
+        font-size: 2rem;
+    }
+
+    .hero-title-subs {
+        font-size: 1.5rem;
+    }
+
+    .form-container {
+        flex-direction: column;
+    }
+
+    .search-button {
+        margin-top: 20px;
+        margin-right: 0;
+    }
+
+    input {
+        margin-top: 20px;
+        margin-right: 0;
+    }
+
+
+  }
+
+  @media only screen and (max-width: 540px) {
+    .event-container {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        margin-top: 20px;
+    }
+  }
