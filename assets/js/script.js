@@ -83,6 +83,7 @@ var getEventData = function() {
        // var from array from API
        var eventName = listOfEvents[i].name;
        var eventLocalTime = listOfEvents[i].dates.start.localTime;
+       var eventUrl = listOfEvents[i].url;
        //var eventLocalDate = listOfEvents[i].dates.start.localDate // variable to add the local time found in the array if needed
 
        //div event-container
@@ -121,21 +122,24 @@ var getEventData = function() {
        var pEventULR = document.createElement ("p");
        pEventULR.className = "url";
        pEventULR.id = "event-url";
-       pEventULR.innerHTML = "testing"
+       pEventULR.innerHTML = "<a href =" + eventUrl + " >Details </a>"
 
 
        //appending information
-       var ul = document.createElement ("ul");
-       var li = document.createElement ("li");
-
-
-       li.innerHTML = eventName + ", " + ", " + eventLocalTime;
-       ul.appendChild (li);
-       divEventsContainer.appendChild (ul);
+       divEventDetails.appendChild (pEventName);
+       divEventDetails.appendChild (pEventTime);
+       divEventDetails.appendChild (pEventULR);
+       divDetailsContainer.appendChild (divEventDetails);
+       divEventsContainer.appendChild (divDetailsContainer);
        eventCardsContainer.appendChild (divEventsContainer);
 
        
-       //eventsOnPage.appendChild (ul);// old div to display things 
+       // old div to display things 
+        // var ul = document.createElement ("ul");
+        //var li = document.createElement ("li");
+        //li.innerHTML = eventName + ", " + ", " + eventLocalTime;
+        //ul.appendChild (li);
+       //eventsOnPage.appendChild (ul);
        //debugger;
        
     }
