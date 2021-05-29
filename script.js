@@ -4,7 +4,7 @@ var searchCity = document.querySelector ("#search-city");
 var searchStartDate = document.querySelector ("#search-start-date");
 var searchEndDate = document.querySelector ("#search-end-date");
 var searchButton = document.querySelector ("#search-button");
-var events = document.querySelector ("events");
+var eventsOnPage = document.querySelector ("#events-on-page");
 
 //var initialSampleAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=Toronto&startDateTime=2021-05-28T04:00:00Z&endDateTime=2021-05-29T04:00:00z&apikey=jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb"
 
@@ -63,7 +63,7 @@ var getEventData = function() {
         //var eventLocalDate = listOfEvents[i].dates.start.localDate
        //var eventLocalTime = listOfEvents[i].dates.start.localTime
 
-       var divElements = document.createElement ("div")  
+       //var divElements = document.createElement ("div")  
        var ul = document.createElement ("ul")
        var li = document.createElement ("li")
 
@@ -71,9 +71,13 @@ var getEventData = function() {
 
 
        li.innerHTML = eventName
+       console.log (li)
        ul.appendChild (li);
-       divElements.appendChild (ul);
-       events.innerHTML = divElements;
+       console.log (ul)
+       eventsOnPage.appendChild (ul);
+       console.log (eventsOnPage)
+       //debugger;
+       
     }
  }
 
