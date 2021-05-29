@@ -80,30 +80,62 @@ var getEventData = function() {
        //console.log (listOfEvents[i].dates.start.localDate);
        //console.log (listOfEvents[i].dates.start.localTime);
 
-       var eventName = listOfEvents[i].name
-       var eventLocalDate = listOfEvents[i].dates.start.localDate
-       var eventLocalTime = listOfEvents[i].dates.start.localTime
+       // var from array from API
+       var eventName = listOfEvents[i].name;
+       var eventLocalTime = listOfEvents[i].dates.start.localTime;
+       //var eventLocalDate = listOfEvents[i].dates.start.localDate // variable to add the local time found in the array if needed
 
-       var divEventsContainer = document.createElement ("div")
-       divEventsContainer.className = "event-container column card p-0"
-       divEventsContainer.id = "event-container"  
-
+       //div event-container
+       var divEventsContainer = document.createElement ("div");
+       divEventsContainer.className = "event-container column card p-0";
+       divEventsContainer.id = "event-container";
        divEventsContainer.innerHTML = 
        "<div class='img-container'id = 'img-container'>" + 
        "<div class='store-status is-flex is-justify-content-flex-end'>" +
        "</div>" +
-       "</div>"
+       "</div>";
 
-       var ul = document.createElement ("ul")
-       var li = document.createElement ("li")
+       //div details-container
+       var divDetailsContainer = document.createElement ("div");
+       divDetailsContainer.className = "details-container";
+       divDetailsContainer.id = "details-container";
+
+       //div event-details
+       var divEventDetails = document.createElement ("div");
+       divEventDetails.className = "store-details is-flex";
+       divEventDetails.id = "event-details";
+
+       //p for event name
+       var pEventName = document.createElement ("p");
+       pEventName.className = "name";
+       pEventName.id = "event-name";
+       pEventName.innerHTML = "<strong>" + eventName + "</strong>"
+
+       //p for event time
+       var pEventTime = document.createElement ("p");
+       pEventTime.className = "time";
+       pEventTime.id = "event-time";
+       pEventTime.innerHTML = eventLocalTime 
+
+       //p for event url
+       var pEventULR = document.createElement ("p");
+       pEventULR.className = "url";
+       pEventULR.id = "event-url";
+       pEventULR.innerHTML = "testing"
 
 
-       li.innerHTML = eventName + ", " + eventLocalDate + ", " + eventLocalTime
+       //appending information
+       var ul = document.createElement ("ul");
+       var li = document.createElement ("li");
+
+
+       li.innerHTML = eventName + ", " + ", " + eventLocalTime;
        ul.appendChild (li);
        divEventsContainer.appendChild (ul);
        eventCardsContainer.appendChild (divEventsContainer);
+
+       
        //eventsOnPage.appendChild (ul);// old div to display things 
-       //console.log (eventsOnPage)
        //debugger;
        
     }
