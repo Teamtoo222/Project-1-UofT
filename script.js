@@ -33,7 +33,7 @@ var getEventData = function() {
             if (response.ok) {
                 response.json().then(function (data){
                     // console.log (data);// all details
-                    // console.log (data._embedded.events.name);// name of the events 
+                    console.log (data._embedded.events);// name of the events 
 
                     //displayRecords (something);
 
