@@ -1,5 +1,5 @@
 //variables
-var APIkey = "jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYl";
+var APIkey = "jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb";
 var searchCity = document.querySelector ("#search-city");
 var searchStartDate = document.querySelector ("#search-start-date");
 var searchEndDate = document.querySelector ("#search-end-date");
@@ -49,4 +49,4 @@ var getEventData = function() {
         searchEndDate.value = ""
 }
 
-search-button.addEventListener("click",getEventData);
+searchButton.addEventListener("click",getEventData);
