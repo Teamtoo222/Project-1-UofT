@@ -1,31 +1,33 @@
 //variables
+
 var APIkey = "jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb";
 var searchCity = document.querySelector ("#search-city");
 var searchStartDate = document.querySelector ("#search-start-date");
 var searchEndDate = document.querySelector ("#search-end-date");
 var searchButton = document.querySelector ("#search-button");
 var eventsOnPage = document.querySelector ("#events-on-page");
-
+var currentDate = moment().format('YYYY-MM-DDT04:00:00[Z]');
+var followingDate = moment().add(1, 'days').format('YYYY-MM-DDT04:00:00[Z]');
 //var initialSampleAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=Toronto&startDateTime=2021-05-28T04:00:00Z&endDateTime=2021-05-29T04:00:00z&apikey=jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb"
 
-
+//ALL Functions
 
 //Function to get event's data
 var getEventData = function() {
     eventsOnPage.innerHTML = ""
-    var city = searchCity.value
-    var startDate = searchStartDate.value
-    var endDate = searchEndDate.value
     event.preventDefault ();
-    //saveData(city,startDate,endDate);
+    var city = searchCity.value
+    //var startDate = searchStartDate.value + "T04:00:00Z"// in case we need a value via input
+    //var endDate = searchEndDate.value + "T04:00:00Z"// in case we need a value via input
+    //saveData(city,startDate,endDate);//possible local storage function if needed
 
     var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=" 
                 + city 
                 + "&startDateTime=" 
-                + startDate 
-                + "T04:00:00Z&endDateTime="
-                + endDate 
-                +"T04:00:00z&apikey="
+                + currentDate 
+                + "&endDateTime="
+                + followingDate 
+                + "&apikey="
                 + APIkey
 
     console.log (eventsAPI);
@@ -53,7 +55,7 @@ var getEventData = function() {
             alert("Unable to connect");
         })
 
-        //searchCity.value = ""
+        searchCity.value = ""
         //searchStartDate.value = ""
         //searchEndDate.value = ""
 }
