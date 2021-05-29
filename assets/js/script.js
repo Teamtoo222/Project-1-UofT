@@ -1,4 +1,4 @@
-//variables
+//General variables
 
 var APIkey = "jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb";
 var searchCity = document.querySelector ("#search-city");
@@ -8,7 +8,20 @@ var searchButton = document.querySelector ("#search-button");
 var eventsOnPage = document.querySelector ("#events-on-page");
 var currentDate = moment().format('YYYY-MM-DDT04:00:00[Z]');
 var followingDate = moment().add(1, 'days').format('YYYY-MM-DDT04:00:00[Z]');
+
+//Variables for display cards
+var eventName = document.querySelector ("#event-name");
+var eventTime = document.querySelector ("#event-time");
+var eventURL = document.querySelector ("#event-url");
+var eventDetails = document.querySelector ("#event-details");
+var detailsContainer = document.querySelector ("#details-container");
+var imgContainer = document.querySelector ("#img-container");
+var eventContainer = document.querySelector ("#event-container");
+var eventCardsContainer = document.querySelector ("#event-cards-container");
+
 //var initialSampleAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=Toronto&startDateTime=2021-05-28T04:00:00Z&endDateTime=2021-05-29T04:00:00z&apikey=jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb"
+
+
 
 //ALL Functions
 
@@ -71,7 +84,7 @@ var getEventData = function() {
        var eventLocalDate = listOfEvents[i].dates.start.localDate
        var eventLocalTime = listOfEvents[i].dates.start.localTime
 
-       //var divElements = document.createElement ("div")  
+       var divEvents = document.createElement ("div")  
        var ul = document.createElement ("ul")
        var li = document.createElement ("li")
 
