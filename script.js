@@ -4,6 +4,7 @@ var searchCity = document.querySelector ("#search-city");
 var searchStartDate = document.querySelector ("#search-start-date");
 var searchEndDate = document.querySelector ("#search-end-date");
 var searchButton = document.querySelector ("#search-button");
+var events = document.querySelector ("events");
 
 //var initialSampleAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=Toronto&startDateTime=2021-05-28T04:00:00Z&endDateTime=2021-05-29T04:00:00z&apikey=jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb"
 
@@ -54,12 +55,27 @@ var getEventData = function() {
 // Function to display the data 
  var displayRecords = function(listOfEvents) {
    for (i = 0; i < listOfEvents.length ; i++) {
-       console.log (listOfEvents[i].name);
-       console.log (listOfEvents[i].dates.start.localDate);
-       console.log (listOfEvents[i].dates.start.localTime);
+       //console.log (listOfEvents[i].name);
+       //console.log (listOfEvents[i].dates.start.localDate);
+       //console.log (listOfEvents[i].dates.start.localTime);
+
+       var eventName = listOfEvents[i].name
+        //var eventLocalDate = listOfEvents[i].dates.start.localDate
+       //var eventLocalTime = listOfEvents[i].dates.start.localTime
+
+       var divElements = document.createElement ("div")  
+       var ul = document.createElement ("ul")
+       var li = document.createElement ("li")
+
+       
+
+
+       li.innerHTML = eventName
+       ul.appendChild (li);
+       divElements.appendChild (ul);
+       events.innerHTML = divElements;
     }
  }
-        // use a for loop to go around the array after .events and before .name
 
 //Event listener
 searchButton.addEventListener("click",getEventData);
