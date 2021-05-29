@@ -37,12 +37,12 @@ var getEventData = function() {
                     //debugger;
                     //console.log (data._embedded.events);// list of all events
                     //console.log (data._embedded.events[0].name);// name of the first event
-                    if (data._embedded.events != null) {
+                    if (data._embedded != undefined) {
                     var listOfEvents = data._embedded.events
                     console.log (listOfEvents)
                     displayRecords (listOfEvents);
                     } else {
-                        alert ("invalid")
+                        alert ("unavailable")
                     }
 
                 })
@@ -72,15 +72,13 @@ var getEventData = function() {
        var ul = document.createElement ("ul")
        var li = document.createElement ("li")
 
-       
-
 
        li.innerHTML = eventName
-       console.log (li)
+       //console.log (li)
        ul.appendChild (li);
-       console.log (ul)
+       //console.log (ul)
        eventsOnPage.appendChild (ul);
-       console.log (eventsOnPage)
+       //console.log (eventsOnPage)
        //debugger;
        
     }
