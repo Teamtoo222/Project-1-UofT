@@ -15,7 +15,7 @@ var getEventData = function() {
     var startDate = searchStartDate.value
     var endDate = searchEndDate.value
     event.preventDefault ();
-    //saveCity(city);
+    //saveData(city,startDate,endDate);
 
     var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=" 
                 + city 
@@ -32,10 +32,10 @@ var getEventData = function() {
         .then(function(response) {
             if (response.ok) {
                 response.json().then(function (data){
-                    console.log (data);// all details
-                    console.log (data._embedded.events[0].name);// name of the events 
+                    //console.log (data);// all details
+                    //console.log (data._embedded.events[0].name);// name of the first event
 
-                    //displayRecords (something);
+                    displayRecords (data);
 
                 })
             }
@@ -49,4 +49,13 @@ var getEventData = function() {
         searchEndDate.value = ""
 }
 
+// Function to display the data 
+ var displayRecords = function(data) {
+   for (i = 0; i < data._embedded.events.lenght ; i++) {
+       console.log (data._embedded.events[i].name);
+    }
+ }
+        // use a for loop to go around the array after .events and before .name
+
+//Event listener
 searchButton.addEventListener("click",getEventData);
