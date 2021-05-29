@@ -50,7 +50,6 @@ var getEventData = function() {
             if (response.ok) {
                 response.json().then(function (data){
                     console.log (data);// all details
-                    //debugger;
                     //console.log (data._embedded.events);// list of all events
                     //console.log (data._embedded.events[0].name);// name of the first event
                     if (data._embedded != undefined) {
@@ -58,7 +57,35 @@ var getEventData = function() {
                     console.log (listOfEvents)
                     displayRecords (listOfEvents);
                     } else {
-                        alert ("unavailable")
+                        //alert ("unavailable")
+                        //div event-container
+                        var divEventsContainer = document.createElement ("div");
+                        divEventsContainer.className = "event-container column card p-0";
+                        divEventsContainer.id = "event-container";
+
+                        //div details-container
+                        var divDetailsContainer = document.createElement ("div");
+                        divDetailsContainer.className = "details-container";
+                        divDetailsContainer.id = "details-container";
+
+                        //div event-details
+                        var divEventDetails = document.createElement ("div");
+                        divEventDetails.className = "store-details is-flex";
+                        divEventDetails.id = "event-details";
+
+                        //p for Alert for nothing available
+                        var pnothing = document.createElement ("p");
+                        pnothing.className = "is-size-3 has-text-centered";
+                        pnothing.id = "event-name";
+                        pnothing.innerHTML = "<strong> Nothing is Available </strong>"
+
+
+                        //appending information
+                        divEventDetails.appendChild (pnothing);
+                        divDetailsContainer.appendChild (divEventDetails);
+                        divEventsContainer.appendChild (divDetailsContainer);
+                        eventCardsContainer.appendChild (divEventsContainer);
+       
                     }
 
                 })
@@ -69,16 +96,11 @@ var getEventData = function() {
         })
 
         searchCity.value = ""
-        //searchStartDate.value = ""
-        //searchEndDate.value = ""
 }
 
 // Function to display the data 
  var displayRecords = function(listOfEvents) {
    for (i = 0; i < listOfEvents.length ; i++) {
-       //console.log (listOfEvents[i].name);
-       //console.log (listOfEvents[i].dates.start.localDate);
-       //console.log (listOfEvents[i].dates.start.localTime);
 
        // var from array from API
        var eventName = listOfEvents[i].name;
@@ -132,15 +154,6 @@ var getEventData = function() {
        divDetailsContainer.appendChild (divEventDetails);
        divEventsContainer.appendChild (divDetailsContainer);
        eventCardsContainer.appendChild (divEventsContainer);
-
-       
-       // old div to display things 
-        // var ul = document.createElement ("ul");
-        //var li = document.createElement ("li");
-        //li.innerHTML = eventName + ", " + ", " + eventLocalTime;
-        //ul.appendChild (li);
-       //eventsOnPage.appendChild (ul);
-       //debugger;
        
     }
  }
