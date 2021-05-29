@@ -55,6 +55,8 @@ var getEventData = function() {
  var displayRecords = function(listOfEvents) {
    for (i = 0; i < listOfEvents.length ; i++) {
        console.log (listOfEvents[i].name);
+       console.log (listOfEvents[i].dates.start.localDate);
+       console.log (listOfEvents[i].dates.start.localTime);
     }
  }
         // use a for loop to go around the array after .events and before .name
