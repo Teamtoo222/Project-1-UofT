@@ -84,16 +84,25 @@ var getEventData = function() {
        var eventLocalDate = listOfEvents[i].dates.start.localDate
        var eventLocalTime = listOfEvents[i].dates.start.localTime
 
-       var divEvents = document.createElement ("div")  
+       var divEventsContainer = document.createElement ("div")
+       divEventsContainer.className = "event-container column card p-0"
+       divEventsContainer.id = "event-container"  
+
+       divEventsContainer.innerHTML = 
+       "<div class='img-container'id = 'img-container'>" + 
+       "<div class='store-status is-flex is-justify-content-flex-end'>" +
+       "</div>" +
+       "</div>"
+
        var ul = document.createElement ("ul")
        var li = document.createElement ("li")
 
 
        li.innerHTML = eventName + ", " + eventLocalDate + ", " + eventLocalTime
-       //console.log (li)
        ul.appendChild (li);
-       //console.log (ul)
-       eventsOnPage.appendChild (ul);
+       divEventsContainer.appendChild (ul);
+       eventCardsContainer.appendChild (divEventsContainer);
+       //eventsOnPage.appendChild (ul);// old div to display things 
        //console.log (eventsOnPage)
        //debugger;
        
