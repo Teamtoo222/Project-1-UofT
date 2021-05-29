@@ -12,6 +12,7 @@ var eventsOnPage = document.querySelector ("#events-on-page");
 
 //Function to get event's data
 var getEventData = function() {
+    eventsOnPage.innerHTML = ""
     var city = searchCity.value
     var startDate = searchStartDate.value
     var endDate = searchEndDate.value
