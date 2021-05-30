@@ -2,6 +2,8 @@
 
 // Variables
 var searchForm = document.getElementById("searchForm");
+// To Update the location subheading on the DOM
+var locationName = document.querySelector(".locHeading");
 
 cityInput = "Toronto";
 var googleApiKey = "AIzaSyAhOZZGJoUqHE0c14emapGTAXw11nkiHqs";
@@ -15,6 +17,8 @@ searchForm.addEventListener("submit", function(event) {
     googleGeoCodeUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + cityInput + "&key=" + googleApiKey;
 
     apiGeoCodeFetch(googleGeoCodeUrl);
+
+    locationName.textContent = cityInput;
 });
 
 // Fetch the google data
@@ -66,4 +70,6 @@ function logPlaceDetails(passedData) {
     });
 
 };
+
+
 

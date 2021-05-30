@@ -2,8 +2,12 @@
 body {
     background-color: rgb(252,242,247);
     min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
 }
 
+.hero-title-primary {
+    font-family: 'Playfair Display', serif;
+}
 /* Header Style */
 
 .logo-img {
@@ -21,14 +25,14 @@ body {
 }
 
 .search-container {
-    padding-top: 50px;
-    padding-bottom: 50px;
+    padding: 50px 20px;
     background: rgba(0,0,0,0.4);
     border-radius: 15px;
 }
 
 .form-container {
     margin: auto;
+    padding: 20px 20px;
 }
 
 .hero-title-subs {
@@ -40,7 +44,41 @@ body {
     font-size: 50px;
 }
 
+.control  {
+    width: 100%;
+    padding: 0;
+}
+
 /* Main Section Style */
+
+.covid-stat-container {
+    padding: 2.5rem 1.5rem;
+    margin: 30px 5px;
+}
+
+.total-cases {
+    border: 1px solid  #ffb429;
+}
+
+.total-cases .stats-count {
+    color:#ffb429;
+}
+
+.total-deaths {
+    border: 1px solid  #ff7373;
+}
+
+.total-deaths .stats-count {
+    color: #ff7373;
+}
+
+.total-recovered {
+    border: 1px solid #3bca6cbf;
+}
+
+.total-recovered .stats-count {
+    color: #3bca6cbf;
+}
 
 .title-container {
     width: fit-content;
@@ -90,6 +128,7 @@ body {
     justify-content: flex-end;
     padding: 10px;
     min-height: fit-content;
+    box-shadow: 0px -3px 5px rgb(50 50 50 / 5%);
 }
 
 @media only screen and (max-width: 1024px) {
@@ -124,10 +163,13 @@ body {
         margin-right: 0;
     }
 
-    input {
-        margin-top: 20px;
-        margin-right: 0;
+    .control {
+        margin: 5px;
     }
+
+    /* .covid-stat-container {
+        margin: 15px 5px;
+    } */
 
 
   }
