@@ -31,6 +31,12 @@ var getEventData = function() {
     eventCardsContainer.innerHTML = ""
     event.preventDefault ();
     var city = searchCity.value
+    console.log(city)
+    debugger
+
+    if (city === "") {
+        alert("please insert value")
+    } else {
     //var startDate = searchStartDate.value + "T04:00:00Z"// in case we need a value via input
     //var endDate = searchEndDate.value + "T04:00:00Z"// in case we need a value via input
     //saveData(city,startDate,endDate);//possible local storage function if needed
@@ -53,7 +59,7 @@ var getEventData = function() {
                     console.log (data);// all details
                     //console.log (data._embedded.events);// list of all events
                     //console.log (data._embedded.events[0].name);// name of the first event
-                    if (data._embedded != undefined) {
+                    if (data._embedded != undefined || data._embedded != null || city.value != null) {
                     var listOfEvents = data._embedded.events
                     console.log (listOfEvents)
                     display5Records (listOfEvents);
@@ -95,12 +101,14 @@ var getEventData = function() {
         .catch(function(error) {
             alert("Unable to connect");
         })
+    }
 
         searchCity.value = ""
 }
 
 // Function to display the initial 5 data 
  var display5Records = function(listOfEvents) {
+    
    for (i = 0; i < 5 ; i++) {
 
        // var from array from API
@@ -158,12 +166,19 @@ var getEventData = function() {
     }
 
     //Showmore button
+    
+
+    var sbtnsection = document.createElement ("div");
+    sbtnsection.id = "show-more-events"
+    
+
     var showMoreEventsBtn = document.createElement ("button");
     showMoreEventsBtn.className = "button is-medium is-danger is-light show-more-button is-flex mt-5";
-    showMoreEventsBtn.id = "show-more-events"
+    showMoreEventsBtn.id = "show-more-events-btn"
     showMoreEventsBtn.innerHTML = "Show More"
-    nearbyEventsSection.appendChild (showMoreEventsBtn);
-    debugger
+
+    sbtnsection.appendChild (showMoreEventsBtn)
+    nearbyEventsSection.appendChild (sbtnsection);
 
     //showMoreEvents.addEventListener("click", displayAllRecords (listOfEvents));
    //displayAllRecords (listOfEvents);
