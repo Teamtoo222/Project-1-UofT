@@ -20,6 +20,7 @@ var eventContainer = document.querySelector ("#event-container");
 var eventCardsContainer = document.querySelector ("#event-cards-container");
 var nearbyEventsSection = document.querySelector ("#nearby-events-section");
 var showMoreEvents = document.querySelector ("#show-more-events");
+var showMoreEventsBtn = document.querySelector ("#show-more-events-btn");
 
 //var initialSampleAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=Toronto&startDateTime=2021-05-28T04:00:00Z&endDateTime=2021-05-29T04:00:00z&apikey=jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb"
 
@@ -179,17 +180,21 @@ var getEventData = function() {
     localArray =[]
     localArray.push(listOfEvents)
     console.log (localArray);
-    debugger
+   // debugger
+    //displayAllRecords(localArray);
  }
 
 
 // Function to display the initial remaining data 
 var displayAllRecords = function(localArray) {
+    eventCardsContainer.innerHTML = ""
+    showMoreEvents.innerHTML =""
+    debugger
 
-eventCardsContainer.innerHTML = ""
-showMoreEvents.innerHTML =""
+    // showMoreEventsBtn.addEventListener("click", function(localArray) {
 
- for (i = 0; i < localArray.length ; i++) {
+
+    for (i = 0; i < localArray.length ; i++) {
  
         // var from array from API
         var eventName = localArray[i].name;
@@ -243,9 +248,9 @@ showMoreEvents.innerHTML =""
         divEventsContainer.appendChild (divDetailsContainer);
         eventCardsContainer.appendChild (divEventsContainer);
               
+        }
     }
-}
-
+    // )}
 
 
 
@@ -255,4 +260,5 @@ showMoreEvents.innerHTML =""
 
 //Event listener
 searchButton.addEventListener("click",getEventData);
-showMoreEvents.addEventListener("click", displayAllRecords(localArray));
+//showMoreEvents.addEventListener("click", displayAllRecords (localArray)); //problem lies here remove parameter 
+
