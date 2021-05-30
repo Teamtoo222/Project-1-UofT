@@ -5,8 +5,8 @@ var searchCity = document.querySelector ("#search-city");
 var searchStartDate = document.querySelector ("#search-start-date");
 var searchEndDate = document.querySelector ("#search-end-date");
 var searchButton = document.querySelector ("#search-button");
-var currentDate = moment().format('YYYY-MM-DDT04:00:00[Z]');
-var followingDate = moment().add(1, 'days').format('YYYY-MM-DDT04:00:00[Z]');
+var currentDate = moment().format('YYYY-MM-DDT08:00:00[Z]');
+var followingDate = moment().add(1, 'days').format('YYYY-MM-DDT07:59:00[Z]');
 var localArray = []
 
 //Variables for display cards
@@ -44,7 +44,7 @@ var getEventData = function() {
     //var endDate = searchEndDate.value + "T04:00:00Z"// in case we need a value via input
     //saveData(city,startDate,endDate);//possible local storage function if needed
 
-    var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&size=50&city=" 
+    var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&size=60&sort=date,asc&city=" 
                 + city 
                 + "&startDateTime=" 
                 + currentDate 
@@ -65,7 +65,7 @@ var getEventData = function() {
                     if (data._embedded != undefined || data._embedded != null || city.value != null) {
                     var listOfEvents = data._embedded.events
                     console.log (listOfEvents)
-                    display5Records (listOfEvents);
+                    display10Records (listOfEvents);
                     } else {
                         //alert ("unavailable")
                         //div event-container
@@ -110,9 +110,9 @@ var getEventData = function() {
 }
 
 // Function to display the initial 5 data 
- var display5Records = function(listOfEvents) {
+ var display10Records = function(listOfEvents) {
     
-   for (i = 0; i < 5 ; i++) {
+   for (i = 0; i < 10 ; i++) {
 
        // var from array from API
        var eventName = listOfEvents[i].name;
