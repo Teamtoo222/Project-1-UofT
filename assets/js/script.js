@@ -177,29 +177,32 @@ var getEventData = function() {
 
     showMoreEvents.appendChild (showMoreEventsBtn)
     
-    localArray =[]
-    localArray.push(listOfEvents)
-    console.log (localArray);
-   // debugger
-    //displayAllRecords(localArray);
+    // localArray =[]
+    // localArray.push(listOfEvents)
+    // console.log (localArray);
+    //debugger
+
+    $ ("#show-more-events-btn").click(function() {
+    displayAllRecords(listOfEvents);
+    })
  }
 
 
 // Function to display the initial remaining data 
-var displayAllRecords = function(localArray) {
+var displayAllRecords = function(listOfEvents) {
+
+    // $ ("#show-more-events-btn").click(function(localArray) {
     eventCardsContainer.innerHTML = ""
     showMoreEvents.innerHTML =""
-    debugger
+    console.log (listOfEvents)
+   //debugger
 
-    // showMoreEventsBtn.addEventListener("click", function(localArray) {
-
-
-    for (i = 0; i < localArray.length ; i++) {
+    for (i = 0; i < listOfEvents.length ; i++) {
  
         // var from array from API
-        var eventName = localArray[i].name;
-        var eventLocalTime = localArray[i].dates.start.localTime;
-        var eventUrl = localArray[i].url;
+        var eventName = listOfEvents[i].name;
+        var eventLocalTime = listOfEvents[i].dates.start.localTime;
+        var eventUrl = listOfEvents[i].url;
         //var eventLocalDate = listOfEvents[i].dates.start.localDate // variable to add the local time found in the array if needed
  
         //div event-container
@@ -248,8 +251,8 @@ var displayAllRecords = function(localArray) {
         divEventsContainer.appendChild (divDetailsContainer);
         eventCardsContainer.appendChild (divEventsContainer);
               
-        }
     }
+}
     // )}
 
 
@@ -261,4 +264,3 @@ var displayAllRecords = function(localArray) {
 //Event listener
 searchButton.addEventListener("click",getEventData);
 //showMoreEvents.addEventListener("click", displayAllRecords (localArray)); //problem lies here remove parameter 
-
