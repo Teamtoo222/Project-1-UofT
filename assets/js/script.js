@@ -29,6 +29,7 @@ var showMoreEvents = document.querySelector ("#show-more-events");
 //Function to get event's data
 var getEventData = function() {
     eventCardsContainer.innerHTML = ""
+    showMoreEvents.innerHTML =""
     event.preventDefault ();
     var city = searchCity.value
     console.log(city)
@@ -165,20 +166,15 @@ var getEventData = function() {
              
     }
 
-    //Showmore button
-    
-
-    var sbtnsection = document.createElement ("div");
-    sbtnsection.id = "show-more-events"
-    
+    //Showmore button  
 
     var showMoreEventsBtn = document.createElement ("button");
     showMoreEventsBtn.className = "button is-medium is-danger is-light show-more-button is-flex mt-5";
     showMoreEventsBtn.id = "show-more-events-btn"
     showMoreEventsBtn.innerHTML = "Show More"
 
-    sbtnsection.appendChild (showMoreEventsBtn)
-    nearbyEventsSection.appendChild (sbtnsection);
+    showMoreEvents.appendChild (showMoreEventsBtn)
+    
 
     //showMoreEvents.addEventListener("click", displayAllRecords (listOfEvents));
    //displayAllRecords (listOfEvents);
