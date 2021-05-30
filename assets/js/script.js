@@ -44,7 +44,7 @@ var getEventData = function() {
     //var endDate = searchEndDate.value + "T04:00:00Z"// in case we need a value via input
     //saveData(city,startDate,endDate);//possible local storage function if needed
 
-    var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&size=100&city=" 
+    var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&size=50&city=" 
                 + city 
                 + "&startDateTime=" 
                 + currentDate 
@@ -116,6 +116,8 @@ var getEventData = function() {
 
        // var from array from API
        var eventName = listOfEvents[i].name;
+       var img = listOfEvents[i].images[7].url;
+       //console.log(img);
        var eventLocalTime = listOfEvents[i].dates.start.localTime;
        var eventUrl = listOfEvents[i].url;
        //var eventLocalDate = listOfEvents[i].dates.start.localDate // variable to add the local time found in the array if needed
@@ -125,7 +127,7 @@ var getEventData = function() {
        divEventsContainer.className = "event-container column card p-0";
        divEventsContainer.id = "event-container";
        divEventsContainer.innerHTML = 
-       "<div class='img-container'id = 'img-container'>" + 
+       "<div class='img-container' style = 'background-image: url("+img+")' id = 'img-container'>"+
        "<div class='store-status is-flex is-justify-content-flex-end'>" +
        "</div>" +
        "</div>";
@@ -203,6 +205,7 @@ var displayAllRecords = function(listOfEvents) {
         var eventName = listOfEvents[i].name;
         var eventLocalTime = listOfEvents[i].dates.start.localTime;
         var eventUrl = listOfEvents[i].url;
+        var img = listOfEvents[i].images[7].url;
         //var eventLocalDate = listOfEvents[i].dates.start.localDate // variable to add the local time found in the array if needed
  
         //div event-container
@@ -210,7 +213,7 @@ var displayAllRecords = function(listOfEvents) {
         divEventsContainer.className = "event-container column card p-0";
         divEventsContainer.id = "event-container";
         divEventsContainer.innerHTML = 
-        "<div class='img-container'id = 'img-container'>" + 
+        "<div class='img-container' style = 'background-image: url("+img+")' id = 'img-container'>"+ 
         "<div class='store-status is-flex is-justify-content-flex-end'>" +
         "</div>" +
         "</div>";
