@@ -11,8 +11,7 @@ var googleGeoCodeUrl = "https://maps.googleapis.com/maps/api/geocode/json?addres
 // submit form event listner 
 searchForm.addEventListener("submit", function(event) {
     event.preventDefault();
-    cityInput = document.getElementById("cityInput").value;
-
+    cityInput = document.getElementById("search-city").value;
     googleGeoCodeUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + cityInput + "&key=" + googleApiKey;
 
     apiGeoCodeFetch(googleGeoCodeUrl);
@@ -37,16 +36,18 @@ var apiGeoCodeFetch = function(url) {
 function logPlaceDetails(passedData) {
     var latData = passedData.results[0].geometry.location.lat;
     var lngData = passedData.results[0].geometry.location.lng;
-    keywordImput = document.getElementById("keywordInput").value;
+    keywordInput = document.getElementById("keywordInput").value;
     //console.log(passedData , latData, lngData);
     var service = new google.maps.places.PlacesService(document.getElementById('map'));
     // Nearby Search method, https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.nearbySearch
     service.nearbySearch({
         // We can use the user input and covert it to lat long and use it here...
         location: {lat: latData, lng:lngData},
-        radius: 500,
-        // We can use the keywords field here // could be resaturants or parks 
-        keyword: keywordImput 
+        radius: 5000,
+        // We can use the keywords field here 
+        keyword: keywordInput,
+        // I think we could use the same function for recreations as we will be able to change the type and get this to work 
+        type: "restaurant"
     },function (place, status) {
         console.log('Place details:', place);
         if(place) {
