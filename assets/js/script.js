@@ -7,6 +7,7 @@ var searchEndDate = document.querySelector ("#search-end-date");
 var searchButton = document.querySelector ("#search-button");
 var currentDate = moment().format('YYYY-MM-DDT04:00:00[Z]');
 var followingDate = moment().add(1, 'days').format('YYYY-MM-DDT04:00:00[Z]');
+var localArray = []
 
 //Variables for display cards
 var eventName = document.querySelector ("#event-name");
@@ -33,7 +34,7 @@ var getEventData = function() {
     event.preventDefault ();
     var city = searchCity.value
     console.log(city)
-    debugger
+
 
     if (city === "") {
         alert("please insert value")
@@ -175,84 +176,75 @@ var getEventData = function() {
 
     showMoreEvents.appendChild (showMoreEventsBtn)
     
-
-    //showMoreEvents.addEventListener("click", displayAllRecords (listOfEvents));
-   //displayAllRecords (listOfEvents);
-    
-
-    
+    localArray =[]
+    localArray.push(listOfEvents)
+    console.log (localArray);
+    debugger
  }
 
 
 // Function to display the initial remaining data 
-// var displayAllRecords = function(listOfEvents) {
-//     debugger
-//     nearbyEventsSection.innerHTML = ""
-//     debugger
-//     nearbyEventsSection.innerHTML = 
-//     "<div class='title-container column has-text-centered'>" +
-//         "<h3 class='title is-size-3 mt-3 mb-2'>Nearby Events</h3>" +
-//         "<h5 class='title is-size-5 pt-2 sub-heading'>Location</h5>" +
-//     "</div>" +
-//     "<div class='cards-container columns is-full pt-5 is-flex-wrap-wrap' id = 'event-cards-container'>"+
-//     "<div>"
+var displayAllRecords = function(localArray) {
 
-//     for (i = 0; i < listOfEvents.length ; i++) {
+eventCardsContainer.innerHTML = ""
+showMoreEvents.innerHTML =""
+
+ for (i = 0; i < localArray.length ; i++) {
  
-//         // var from array from API
-//         var eventName = listOfEvents[i].name;
-//         var eventLocalTime = listOfEvents[i].dates.start.localTime;
-//         var eventUrl = listOfEvents[i].url;
-//         //var eventLocalDate = listOfEvents[i].dates.start.localDate // variable to add the local time found in the array if needed
+        // var from array from API
+        var eventName = localArray[i].name;
+        var eventLocalTime = localArray[i].dates.start.localTime;
+        var eventUrl = localArray[i].url;
+        //var eventLocalDate = listOfEvents[i].dates.start.localDate // variable to add the local time found in the array if needed
  
-//         //div event-container
-//         var divEventsContainer = document.createElement ("div");
-//         divEventsContainer.className = "event-container column card p-0";
-//         divEventsContainer.id = "event-container";
-//         divEventsContainer.innerHTML = 
-//         "<div class='img-container'id = 'img-container'>" + 
-//         "<div class='store-status is-flex is-justify-content-flex-end'>" +
-//         "</div>" +
-//         "</div>";
+        //div event-container
+        var divEventsContainer = document.createElement ("div");
+        divEventsContainer.className = "event-container column card p-0";
+        divEventsContainer.id = "event-container";
+        divEventsContainer.innerHTML = 
+        "<div class='img-container'id = 'img-container'>" + 
+        "<div class='store-status is-flex is-justify-content-flex-end'>" +
+        "</div>" +
+        "</div>";
  
-//         //div details-container
-//         var divDetailsContainer = document.createElement ("div");
-//         divDetailsContainer.className = "details-container";
-//         divDetailsContainer.id = "details-container";
+        //div details-container
+        var divDetailsContainer = document.createElement ("div");
+        divDetailsContainer.className = "details-container";
+        divDetailsContainer.id = "details-container";
  
-//         //div event-details
-//         var divEventDetails = document.createElement ("div");
-//         divEventDetails.className = "store-details is-flex";
-//         divEventDetails.id = "event-details";
+        //div event-details
+        var divEventDetails = document.createElement ("div");
+        divEventDetails.className = "store-details is-flex";
+        divEventDetails.id = "event-details";
  
-//         //p for event name
-//         var pEventName = document.createElement ("p");
-//         pEventName.className = "name";
-//         pEventName.id = "event-name";
-//         pEventName.innerHTML = "<strong>" + eventName + "</strong>"
+        //p for event name
+        var pEventName = document.createElement ("p");
+        pEventName.className = "name";
+        pEventName.id = "event-name";
+        pEventName.innerHTML = "<strong>" + eventName + "</strong>"
  
-//         //p for event time
-//         var pEventTime = document.createElement ("p");
-//         pEventTime.className = "time";
-//         pEventTime.id = "event-time";
-//         pEventTime.innerHTML = eventLocalTime 
+        //p for event time
+        var pEventTime = document.createElement ("p");
+        pEventTime.className = "time";
+        pEventTime.id = "event-time";
+        pEventTime.innerHTML = eventLocalTime 
  
-//         //p for event url
-//         var pEventULR = document.createElement ("p");
-//         pEventULR.className = "url";
-//         pEventULR.id = "event-url";
-//         pEventULR.innerHTML = "<a href =" + eventUrl + " >Details </a>"
+        //p for event url
+        var pEventULR = document.createElement ("p");
+        pEventULR.className = "url";
+        pEventULR.id = "event-url";
+        pEventULR.innerHTML = "<a href =" + eventUrl + " >Details </a>"
  
-//         //appending information
-//         divEventDetails.appendChild (pEventName);
-//         divEventDetails.appendChild (pEventTime);
-//         divEventDetails.appendChild (pEventULR);
-//         divDetailsContainer.appendChild (divEventDetails);
-//         divEventsContainer.appendChild (divDetailsContainer);
-//         eventCardsContainer.appendChild (divEventsContainer);
+        //appending information
+        divEventDetails.appendChild (pEventName);
+        divEventDetails.appendChild (pEventTime);
+        divEventDetails.appendChild (pEventULR);
+        divDetailsContainer.appendChild (divEventDetails);
+        divEventsContainer.appendChild (divDetailsContainer);
+        eventCardsContainer.appendChild (divEventsContainer);
               
-//     }
-// }
+    }
+}
 
 
 
@@ -263,3 +255,4 @@ var getEventData = function() {
 
 //Event listener
 searchButton.addEventListener("click",getEventData);
+showMoreEvents.addEventListener("click", displayAllRecords(localArray));
