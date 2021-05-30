@@ -44,7 +44,7 @@ var getEventData = function() {
     //var endDate = searchEndDate.value + "T04:00:00Z"// in case we need a value via input
     //saveData(city,startDate,endDate);//possible local storage function if needed
 
-    var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=" 
+    var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&size=100&city=" 
                 + city 
                 + "&startDateTime=" 
                 + currentDate 
