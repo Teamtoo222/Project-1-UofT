@@ -120,6 +120,7 @@ function logPlaceDetails(passedData) {
                var placePhotoUrlThree = place[2].photos[0].getUrl({maxWidth:640}); 
                var placePhotoUrlFour = place[3].photos[0].getUrl({maxWidth:640}); 
                var placePhotoUrlFive = place[4].photos[0].getUrl({maxWidth:640}); 
+               console.log(placeDetails)
 
                 //Update restaurant background images using retrieved image URLs
                restaurantImageOne.setAttribute('style', 'background-image: url('+placePhotoUrlOne+')');
