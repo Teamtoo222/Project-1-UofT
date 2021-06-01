@@ -5,6 +5,8 @@ var searchCity = document.querySelector ("#search-city");
 var searchStartDate = document.querySelector ("#search-start-date");
 var searchEndDate = document.querySelector ("#search-end-date");
 var searchButton = document.querySelector ("#search-button");
+// added the form id 
+var searchForm = document.querySelector("#searchForm");
 var currentDate = moment().format('YYYY-MM-DDT08:00:00[Z]');
 var followingDate = moment().add(1, 'days').format('YYYY-MM-DDT07:59:00[Z]');
 var localArray = []
@@ -37,9 +39,10 @@ var getEventData = function() {
     console.log(city)
 
 
-    if (city === "") {
-        alert("please insert value")
-    } else {
+    if (city !="") {
+        
+    //     // alert("please insert value")
+    // } else {
     //var startDate = searchStartDate.value + "T04:00:00Z"// in case we need a value via input
     //var endDate = searchEndDate.value + "T04:00:00Z"// in case we need a value via input
     //saveData(city,startDate,endDate);//possible local storage function if needed
@@ -255,7 +258,7 @@ var displayAllRecords = function(listOfEvents) {
         eventCardsContainer.appendChild (divEventsContainer);
               
     }
-}
+};
     // )}
 
 
@@ -263,7 +266,7 @@ var displayAllRecords = function(listOfEvents) {
 
 
 
-
+// Change the function to submit so it works on the other side as well.
 //Event listener
-searchButton.addEventListener("click",getEventData);
+searchForm.addEventListener("submit",getEventData);
 //showMoreEvents.addEventListener("click", displayAllRecords (localArray)); //problem lies here remove parameter 
