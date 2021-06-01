@@ -40,7 +40,7 @@ var getEventData = function() {
 
 
     if (city === "") {
-        alert("please insert value")
+        // alert("please insert value")
     } else {
     //var startDate = searchStartDate.value + "T04:00:00Z"// in case we need a value via input
     //var endDate = searchEndDate.value + "T04:00:00Z"// in case we need a value via input

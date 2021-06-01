@@ -12,6 +12,7 @@ var googleGeoCodeUrl =
   googleApiKey;
 
 var placeArray = [];
+var errorModal =  document.getElementById("error-Modal");
 
 let iStart = 0;
 let iEnd = 5;
@@ -27,7 +28,14 @@ var service = new google.maps.places.PlacesService(document.getElementById('map'
 searchForm.addEventListener('submit', function (event) {
   event.preventDefault();
   cityInput = document.getElementById('search-city').value;
-  googleGeoCodeUrl =
+
+  if(!cityInput) {
+    errorModal.classList.remove("hideMsg");
+    errorModal.classList.add("showMsg")
+  } else {
+    document.getElementById("error-Modal").classList.add("hideMsg");
+    errorModal.classList.remove("showMsg");
+    googleGeoCodeUrl =
     'https://maps.googleapis.com/maps/api/geocode/json?address=' +
     cityInput +
     '&key=' +
@@ -85,7 +93,7 @@ searchForm.addEventListener('submit', function (event) {
     apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
   }
 
-  // document.querySelector(targetId).innerHTML = "";
+  }
 
 });
 

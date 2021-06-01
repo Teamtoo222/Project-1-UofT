@@ -30,28 +30,33 @@
             <!-- Sub-Title -->
             <h4 class="title is-size-4 hero-title-subs has-text-centered">Find the covid stats, events, restaurants & recreational facilities</h4>
             <!-- Submit Form -->
-            <form id="searchForm" class="form-container card column is-flex is-full-desktop is-four-fifths-widescreen m-auto">
-                <p class="control has-icons-left has-icons-right pr-2">
-                    <input class="input" id="search-city" type="text" placeholder="City/Location">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </span>
-                </p>
-                <div class="select is-normal pr-2">
-                    <select id="selectOption">
-                      <option>Events</option>
-                      <option>Restaurants</option>
-                      <option>Recreations</option>
-                    </select>
-                  </div>
-                <p class="control has-icons-left has-icons-right pr-2">
-                    <input class="input" id="keywordInput" type="text" placeholder="Keywords">
-                    <span class="icon is-small is-left">
-                        <i class="fas fa-keyboard"></i>
-                    </span>
-                </p>
-                <button class="button is-danger search-button" id ="search-button" type="submit">Search</button>
-            </form>
+            <div class="">
+                <form id="searchForm" class="form-container card column is-flex is-full-desktop is-four-fifths-widescreen m-auto">
+                    <p class="control has-icons-left has-icons-right pr-2">
+                        <input class="input" id="search-city" type="text" placeholder="City/Location">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                    </p>
+                    <div class="select is-normal pr-2">
+                        <select id="selectOption">
+                        <option>Events</option>
+                        <option>Restaurants</option>
+                        <option>Recreations</option>
+                        </select>
+                    </div>
+                    <p class="control has-icons-left has-icons-right pr-2">
+                        <input class="input" id="keywordInput" type="text" placeholder="Keywords">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-keyboard"></i>
+                        </span>
+                    </p>
+                    <button class="button is-danger search-button" id ="search-button" type="submit">Search</button>  
+                </form>
+                <div id="error-Modal" class="box column is-flex is-full-desktop is-four-fifths-widescreen mx-auto is-justify-content-center has-background-danger has-text-white hideMsg">
+                    <p id="errorMsg">Please enter a valid city or location</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -62,7 +67,7 @@
             <!-- Title -->
             <div class="title-container has-text-centered">
                 <h3 class="title is-size-3 mt-3 mb-2">Covid Stats</h3>
-                <h5 id="covidLocation" class="title is-size-5 pt-2 locHeading sub-heading">Location</h5>
+                <h5 id="covidLocation" class="title is-size-5 pt-2 locHeading sub-heading"></h5>
             </div>
             <!-- Stats Containers -->
             <div class="stats-container is-flex-wrap-wrap columns my-4">
