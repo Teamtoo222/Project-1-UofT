@@ -43,6 +43,7 @@ var apiGeoCodeFetch = function (url) {
     if (response.ok) {
       response.json().then(function (data) {
         logResPlaceDetails(data);
+        covidLoc(data);
         // logPlaceDetails(data, 'parks');
         console.log('DATAAAAA', data);
       });
@@ -86,9 +87,9 @@ var passNearByData = function (place) {
             placeId: place[i].place_id,
           },
           function (place, status) {
-            console.log("this is the error status", status);
+            // console.log("this is the error status", status);
             if (place) {
-              console.log('rec details **** :', place);
+              // console.log('rec details **** :', place);
               createCards(place);
             }
           }
@@ -144,4 +145,50 @@ document.querySelector('#show-rec').addEventListener('click', () => {
   //logPlaceDetails(data, 'recreation', '#nearby-recreation', recCount);
     passNearByData(placeArray);
 });
+
+var currentDay = moment().subtract(1, 'day').format('DD-MM-YYYY');
+// var province = "ON";
+console.log(currentDay);
+
+
+
+var covidLoc = function(data) {
+  var addressData = data.results[0].address_components;
+  var province = addressData[addressData.length - 2].short_name;
+  var covidUrl = "https://api.opencovid.ca/summary?loc=" + province + "&date=" + currentDay;
+  console.log(province);
+  console.log(covidUrl);
+  covidData(covidUrl);
+} 
+
+// Fetch the google data
+var covidData = function (covidUrl) {
+  fetch(covidUrl).then(function (response) {
+    if (response.ok) {
+      response.json().then(function (data) {
+        // logPlaceDetails(data, 'parks');
+        console.log('DATAAAAA', data);
+        displayCovidStats(data);
+      });
+    }
+  });
+};
+
+
+var totalCases = document.querySelector("#totalCases");
+var totalDeaths = document.querySelector("#totalDeaths");
+var totalRecovered = document.querySelector("#totalRecovered");
+var todayCases = document.querySelector("#todayCases");
+var todayDeaths = document.querySelector("#todayDeaths");
+var todayRecovered = document.querySelector("#todayRecovered");
+
+
+var displayCovidStats = function (data) {
+  totalCases.textContent = data.summary[0].cumulative_cases;
+  totalDeaths.textContent = data.summary[0].cumulative_deaths;
+  totalRecovered.textContent = data.summary[0].cumulative_recovered;
+  todayCases.textContent = data.summary[0].cases;
+  todayDeaths.textContent = data.summary[0].deaths;
+  todayRecovered.textContent = data.summary[0].recovered;
+}
 
