@@ -3,14 +3,14 @@
 // Variables
 var searchForm = document.getElementById('searchForm');
 
-cityInput = 'Toronto';
+var cityInput = 'Toronto';
+var keywordInput = "";
 var googleApiKey = 'AIzaSyAhOZZGJoUqHE0c14emapGTAXw11nkiHqs';
 var googleGeoCodeUrl =
   'https://maps.googleapis.com/maps/api/geocode/json?address=' +
   cityInput +
   '&key=' +
   googleApiKey;
-var keywordInput = document.getElementById('keywordInput').value;
 
 var placeArray = [];
 var errorModal =  document.getElementById("error-Modal");
@@ -29,6 +29,7 @@ var service = new google.maps.places.PlacesService(document.getElementById('map'
 searchForm.addEventListener('submit', function (event) {
   event.preventDefault();
   cityInput = document.getElementById('search-city').value;
+  keywordInput = document.getElementById('keywordInput').value;
 
   if(!cityInput) {
     errorModal.classList.remove("hideMsg");
