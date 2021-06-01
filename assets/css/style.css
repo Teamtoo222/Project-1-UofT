@@ -40,11 +40,12 @@ body {
 
 /* Hero Style */
 .hero-container {
-    min-height: 600px;
+    height: 600px;
     background-image: url(../images/hero-background.jpg);
     background-position: top;
     background-repeat: no-repeat;
     background-size: cover;
+    transition: height 0.5s;
     /* opacity: 0.8; */
 }
 
@@ -66,6 +67,11 @@ body {
 .hero-title-primary {
     color: white;
     font-size: 50px;
+}
+
+.hero-def-height {
+    height: 83vh;
+    transition: height 2s linear 1s;
 }
 
 .control  {

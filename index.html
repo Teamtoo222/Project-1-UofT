@@ -23,7 +23,7 @@
         </div>
     </header>
     <!-- Hero Section -->
-    <div class="columns is-flex hero-container is-justify-content-center is-align-items-center m-0">
+    <div id="heroContainer" class="columns is-flex hero-container is-justify-content-center is-align-items-center m-0 hero-def-height">
         <div class="column search-container is-four-fifths-tablet is-four-fifths-desktop is-three-fifths-fullhd  pt-5 m-5">
             <!-- Main Hero Title -->
             <h2 class="title hero-title-primary has-text-centered mt-3">Wanna Know What's Happening?</h2>
@@ -56,7 +56,7 @@
     </div>
 
     <!-- Main Section -->
-    <main id="mainContainer" class="container main-container p-2">
+    <main id="mainContainer" class="container">
         <!-- Covid Stats Section -->
         <div id="covidContainer" class="covid-stats container is-flex-direction-column my-6 hideEl">
             <!-- Title -->
@@ -151,7 +151,7 @@
         <!-- Title -->
         <div class="title-container column has-text-centered">
           <h3 class="title is-size-3 mt-3 mb-2">Nearby Restaurants</h3>
-          <h5 class="title is-size-5 pt-2 sub-heading">Location</h5>
+          <h5 id="resLocation" class="title is-size-5 pt-2 sub-heading"></h5>
         </div>
 
         <!-- Restaurants Cards Container -->
@@ -180,7 +180,7 @@
         <!-- Title -->
         <div class="title-container column has-text-centered">
           <h3 class="title is-size-3 mt-3 mb-2">Nearby Recreations</h3>
-          <h5 class="title is-size-5 pt-2 sub-heading">Location</h5>
+          <h5 id="recLocation" class="title is-size-5 pt-2 sub-heading"></h5>
         </div>
 
         <!-- Recreations Cards Container -->

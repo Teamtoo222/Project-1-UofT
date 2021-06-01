@@ -13,8 +13,6 @@ var googleGeoCodeUrl =
 
 var placeArray = [];
 
-let resCount = 5;
-let recCount = 5;
 let iStart = 0;
 let iEnd = 5;
 let type = 'restaurant';
@@ -34,6 +32,9 @@ searchForm.addEventListener('submit', function (event) {
     cityInput +
     '&key=' +
     googleApiKey;
+
+  iStart = 0;
+  iEnd = 5;
   
   var selectedOption = document.getElementById("selectOption").value;
   var covidContainer = document.getElementById("covidContainer");
@@ -42,32 +43,46 @@ searchForm.addEventListener('submit', function (event) {
   var recreationContainer = document.getElementById("recreationContainer");
 
   //document.getElementById("mainContainer").innerHTML = "";
+
+  var heroContainer = document.getElementById("heroContainer");
+  heroContainer.classList.remove("hero-def-height");
+  document.getElementById("mainContainer").classList.add("p-2", "main-container");
   
   if(selectedOption === "Events") {
+    apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
     covidContainer.classList.remove("hideEl");
     covidContainer.classList.add("showEl");
+    recreationContainer.classList.add("hideEl");
+    recreationContainer.classList.remove("columns");
     eventsContainer.classList.remove("hideEl");
     eventsContainer.classList.add("columns");
+    eventsContainer.classList.add("showEl");
   } else if (selectedOption === "Restaurants") { 
     eventsContainer.classList.add("hideEl");
     eventsContainer.classList.remove("columns");
     covidContainer.classList.remove("hideEl");
     covidContainer.classList.add("showEl");
+    recreationContainer.classList.add("hideEl");
+    recreationContainer.classList.remove("columns");
     restaurantsContainer.classList.remove("hideEl");
     restaurantsContainer.classList.add("columns");
-    apiGeoCodeFetch(googleGeoCodeUrl);
+    document.getElementById("nearby-resturants").innerHTML = "";
+    document.getElementById("resLocation").textContent = cityInput;
+    apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
   } else if (selectedOption === "Recreations") {
+    type = 'tourist_attraction';
+    targetId = '#nearby-recreation';
     eventsContainer.classList.add("hideEl");
     eventsContainer.classList.remove("columns");
     restaurantsContainer.classList.add("hideEl");
     restaurantsContainer.classList.remove("columns");
-    type = 'tourist_attraction';
-    targetId = '#nearby-recreation';
     covidContainer.classList.remove("hideEl");
     covidContainer.classList.add("showEl");
     recreationContainer.classList.remove("hideEl");
     recreationContainer.classList.add("columns");
-    apiGeoCodeFetch(googleGeoCodeUrl);
+    document.getElementById("nearby-recreation").innerHTML = "";
+    document.getElementById("recLocation").textContent = cityInput;
+    apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
   }
 
   // document.querySelector(targetId).innerHTML = "";
@@ -77,12 +92,17 @@ searchForm.addEventListener('submit', function (event) {
 
 
 // Fetch the google data
-var apiGeoCodeFetch = function (url) {
+var apiGeoCodeFetch = function (url, option) {
   fetch(url).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        logResPlaceDetails(data);
-        covidLoc(data);
+        if(option === "Events") {
+          covidLoc(data);
+        } else {
+          covidLoc(data);
+          logResPlaceDetails(data);
+        }
+        
         // logPlaceDetails(data, 'parks');
         console.log('DATAAAAA', data);
       });

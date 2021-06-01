@@ -257,7 +257,7 @@ var displayAllRecords = function(listOfEvents) {
         eventCardsContainer.appendChild (divEventsContainer);
               
     }
-}
+};
     // )}
 
 
