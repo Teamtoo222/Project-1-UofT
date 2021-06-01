@@ -10,6 +10,7 @@ var googleGeoCodeUrl =
   cityInput +
   '&key=' +
   googleApiKey;
+var keywordInput = document.getElementById('keywordInput').value;
 
 var placeArray = [];
 var errorModal =  document.getElementById("error-Modal");
@@ -41,57 +42,60 @@ searchForm.addEventListener('submit', function (event) {
     '&key=' +
     googleApiKey;
 
-  iStart = 0;
-  iEnd = 5;
-  
-  var selectedOption = document.getElementById("selectOption").value;
-  var covidContainer = document.getElementById("covidContainer");
-  var eventsContainer = document.getElementById("nearby-events-section");
-  var restaurantsContainer = document.getElementById("restaurantsContainer");
-  var recreationContainer = document.getElementById("recreationContainer");
+    iStart = 0;
+    iEnd = 5;
+    
+    var selectedOption = document.getElementById("selectOption").value;
+    var covidContainer = document.getElementById("covidContainer");
+    var eventsContainer = document.getElementById("nearby-events-section");
+    var restaurantsContainer = document.getElementById("restaurantsContainer");
+    var recreationContainer = document.getElementById("recreationContainer");
 
-  //document.getElementById("mainContainer").innerHTML = "";
+    //document.getElementById("mainContainer").innerHTML = "";
 
-  var heroContainer = document.getElementById("heroContainer");
-  heroContainer.classList.remove("hero-def-height");
-  document.getElementById("mainContainer").classList.add("p-2", "main-container");
-  
-  if(selectedOption === "Events") {
-    apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
-    covidContainer.classList.remove("hideEl");
-    covidContainer.classList.add("showEl");
-    recreationContainer.classList.add("hideEl");
-    recreationContainer.classList.remove("columns");
-    eventsContainer.classList.remove("hideEl");
-    eventsContainer.classList.add("columns");
-    eventsContainer.classList.add("showEl");
-  } else if (selectedOption === "Restaurants") { 
-    eventsContainer.classList.add("hideEl");
-    eventsContainer.classList.remove("columns");
-    covidContainer.classList.remove("hideEl");
-    covidContainer.classList.add("showEl");
-    recreationContainer.classList.add("hideEl");
-    recreationContainer.classList.remove("columns");
-    restaurantsContainer.classList.remove("hideEl");
-    restaurantsContainer.classList.add("columns");
-    document.getElementById("nearby-resturants").innerHTML = "";
-    document.getElementById("resLocation").textContent = cityInput;
-    apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
-  } else if (selectedOption === "Recreations") {
-    type = 'tourist_attraction';
-    targetId = '#nearby-recreation';
-    eventsContainer.classList.add("hideEl");
-    eventsContainer.classList.remove("columns");
-    restaurantsContainer.classList.add("hideEl");
-    restaurantsContainer.classList.remove("columns");
-    covidContainer.classList.remove("hideEl");
-    covidContainer.classList.add("showEl");
-    recreationContainer.classList.remove("hideEl");
-    recreationContainer.classList.add("columns");
-    document.getElementById("nearby-recreation").innerHTML = "";
-    document.getElementById("recLocation").textContent = cityInput;
-    apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
-  }
+    var heroContainer = document.getElementById("heroContainer");
+    heroContainer.classList.remove("hero-def-height");
+    document.getElementById("mainContainer").classList.add("p-2", "main-container");
+    
+    if(selectedOption === "Events") {
+      apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
+      covidContainer.classList.remove("hideEl");
+      covidContainer.classList.add("showEl");
+      recreationContainer.classList.add("hideEl");
+      recreationContainer.classList.remove("columns");
+      eventsContainer.classList.remove("hideEl");
+      eventsContainer.classList.add("columns");
+      eventsContainer.classList.add("showEl");
+    } else if (selectedOption === "Restaurants") { 
+      eventsContainer.classList.add("hideEl");
+      eventsContainer.classList.remove("columns");
+      covidContainer.classList.remove("hideEl");
+      covidContainer.classList.add("showEl");
+      recreationContainer.classList.add("hideEl");
+      recreationContainer.classList.remove("columns");
+      restaurantsContainer.classList.remove("hideEl");
+      restaurantsContainer.classList.add("columns");
+      document.getElementById("nearby-resturants").innerHTML = "";
+      document.getElementById("resLocation").textContent = cityInput;
+      apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
+    } else if (selectedOption === "Recreations") {
+      type = 'tourist_attraction';
+      targetId = '#nearby-recreation';
+      eventsContainer.classList.add("hideEl");
+      eventsContainer.classList.remove("columns");
+      restaurantsContainer.classList.add("hideEl");
+      restaurantsContainer.classList.remove("columns");
+      covidContainer.classList.remove("hideEl");
+      covidContainer.classList.add("showEl");
+      recreationContainer.classList.remove("hideEl");
+      recreationContainer.classList.add("columns");
+      document.getElementById("nearby-recreation").innerHTML = "";
+      document.getElementById("recLocation").textContent = cityInput;
+      apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
+    }
+
+    // searchForm.reset();
+    document.querySelector("#keywordInput").value = "";
 
   }
 
@@ -122,7 +126,6 @@ var apiGeoCodeFetch = function (url, option) {
 function logResPlaceDetails(passedData) {
   var latData = passedData.results[0].geometry.location.lat;
   var lngData = passedData.results[0].geometry.location.lng;
-  keywordInput = document.getElementById('keywordInput').value;
   //console.log(passedData , latData, lngData);
   // Nearby Search method, https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.nearbySearch
   service.nearbySearch(
