@@ -11,6 +11,19 @@ var googleGeoCodeUrl =
   '&key=' +
   googleApiKey;
 
+var placeArray = [];
+
+let resCount = 5;
+let recCount = 5;
+let iStart = 0;
+let iEnd = 5;
+let type = 'restaurant';
+var targetId = '#nearby-resturants';
+
+// type = 'tourist_attraction';
+// targetId = '#nearby-recreation';
+
+
 var service = new google.maps.places.PlacesService(document.getElementById('map'));
 // submit form event listner
 searchForm.addEventListener('submit', function (event) {
@@ -21,21 +34,47 @@ searchForm.addEventListener('submit', function (event) {
     cityInput +
     '&key=' +
     googleApiKey;
+  
+  var selectedOption = document.getElementById("selectOption").value;
+  var covidContainer = document.getElementById("covidContainer");
+  var eventsContainer = document.getElementById("nearby-events-section");
+  var restaurantsContainer = document.getElementById("restaurantsContainer");
+  var recreationContainer = document.getElementById("recreationContainer");
 
-  apiGeoCodeFetch(googleGeoCodeUrl);
+  //document.getElementById("mainContainer").innerHTML = "";
+  
+  if(selectedOption === "Events") {
+    covidContainer.classList.remove("hideEl");
+    covidContainer.classList.add("showEl");
+    eventsContainer.classList.remove("hideEl");
+    eventsContainer.classList.add("columns");
+  } else if (selectedOption === "Restaurants") { 
+    eventsContainer.classList.add("hideEl");
+    eventsContainer.classList.remove("columns");
+    covidContainer.classList.remove("hideEl");
+    covidContainer.classList.add("showEl");
+    restaurantsContainer.classList.remove("hideEl");
+    restaurantsContainer.classList.add("columns");
+    apiGeoCodeFetch(googleGeoCodeUrl);
+  } else if (selectedOption === "Recreations") {
+    eventsContainer.classList.add("hideEl");
+    eventsContainer.classList.remove("columns");
+    restaurantsContainer.classList.add("hideEl");
+    restaurantsContainer.classList.remove("columns");
+    type = 'tourist_attraction';
+    targetId = '#nearby-recreation';
+    covidContainer.classList.remove("hideEl");
+    covidContainer.classList.add("showEl");
+    recreationContainer.classList.remove("hideEl");
+    recreationContainer.classList.add("columns");
+    apiGeoCodeFetch(googleGeoCodeUrl);
+  }
+
+  // document.querySelector(targetId).innerHTML = "";
+
 });
 
-var placeArray = [];
 
-let resCount = 5;
-let recCount = 5;
-let iStart = 0;
-let iEnd = 5;
-let type = 'restaurant';
-let targetId = '#nearby-resturants';
-
-// type = 'tourist_attraction';
-// targetId = '#nearby-recreation';
 
 // Fetch the google data
 var apiGeoCodeFetch = function (url) {
@@ -62,7 +101,7 @@ function logResPlaceDetails(passedData) {
     {
       // We can use the user input and covert it to lat long and use it here...
       location: { lat: latData, lng: lngData },
-      radius: 5000,
+      radius: 10000,
       // We can use the keywords field here
       keyword: keywordInput,
       // I think we could use the same function for recreations as we will be able to change the type and get this to work
@@ -89,7 +128,7 @@ var passNearByData = function (place) {
           function (place, status) {
             // console.log("this is the error status", status);
             if (place) {
-              // console.log('rec details **** :', place);
+              console.log('rec details **** :', place);
               createCards(place);
             }
           }
@@ -103,30 +142,76 @@ var passNearByData = function (place) {
 }
 
 var createCards = function(place) {
+  // console.log(place.opening_hours.isOpen());
+  // Check if store has opening hours
+  if(place.hasOwnProperty("opening_hours")) {
+    if (place.opening_hours.isOpen() === true) {
+      var openStatus = "Open Now";
+    } else {
+      openStatus = "Closed Now";
+    }  
+  } else {
+    openStatus = "Please Call ";
+  }
+
+  // Check to see if the business is operational
+  if(place.business_status === "OPERATIONAL") {
+    var businesStatus = "Operational";
+    var busClassList = "busStatus bg-green"
+    // document.querySelector(".busStatus").style.background = "green";
+  } else if (place.business_status === "CLOSED_TEMPORARILY") {
+    businesStatus = "Temporarily closed";
+    busClassList = "busStatus bg-red"
+  } else {
+    businesStatus = "Permanently closed"
+    busClassList = "busStatus bg-red"
+  }
+
   const template = `
-    <a href=${place.url} target="_blank">
+    <a class="linkImage" href=${place.url} target="_blank">
     <div class="img-container" style="background-image:url(${place.photos[0].getUrl()});">
-    <div class="store-status is-flex is-justify-content-flex-end">
-    <p class="open-status">OPEN</p>
+    <div class="store-status is-flex is-align-items-flex-end is-flex-direction-column">
+    <div class="w-100 is-flex is-justify-content-space-between">
+    <p class="ratingNumb"><i class="ratingNumbIcon fas fa-star-half-alt"></i>&nbsp${place.rating}</p>
+    <p class="mb-2 open-status">${openStatus}</p>
+    </div>
+    <p class="${busClassList}">${businesStatus}</p>
     </div>
     </div>
+    </a>
     <div class="details-container">
     <div class="store-details is-flex">
-    <p class="store-name"><strong>${place.name}</strong> </p>
-      <p class="store-address">${place.formatted_address}</p>
-      <p class="store-status">${place.business_status}</p>
-      <p class="store-phone">${place.formatted_phone_number}</p>
-      <a href=${place.website}>Details</a>
+    <p class="store-name wrap-content"><i class="fas fa-bars"></i>&nbsp<strong>${place.name}</strong></p>
+      <a class="wrap-content" href="https://maps.google.com/maps?q=${place.formatted_address}" target="_blank class="store-address"><i class="fas fa-map-marker-alt">&nbsp</i>${place.formatted_address}</a>
+      <a href="tel:${place.formatted_phone_number}" class="store-phone"><i class="fas fa-phone-alt"></i>&nbsp${place.formatted_phone_number}</a>
+      <a href="${place.website}" target="_blank"><i class="fas fa-globe"></i>&nbsp Website</a>
       </div>
       </div>
-      </a>
       `;
 
     const container = document.createElement('div');
     container.classList = "event-container column card p-0";
     container.innerHTML = template;
     document.querySelector(targetId).append(container);
+
 };
+
+
+
+var busStatChecker = function() {
+// Change the background color of busStats
+  var busStatEl = document.querySelectorAll(".busStatus");
+
+  for (var i = 0; i < busStatEl.length; i++) {
+    console.log("test");
+    if(busStatEl[i] === "Operational") {
+      var statEl =  document.querySelector(".busStatus");
+      statEl.classList.remove("bg-red");
+      statEl.classList.add("bg-green");
+    }
+  }
+}
+
 
 
 document.querySelector('#show-res').addEventListener('click', () => {
@@ -154,7 +239,12 @@ console.log(currentDay);
 
 var covidLoc = function(data) {
   var addressData = data.results[0].address_components;
-  var province = addressData[addressData.length - 2].short_name;
+  var province = "";
+  if(addressData.length === 8) {
+    province = addressData[addressData.length - 3].short_name;
+  } else {
+    province = addressData[addressData.length - 2].short_name;
+  }
   var covidUrl = "https://api.opencovid.ca/summary?loc=" + province + "&date=" + currentDay;
   console.log(province);
   console.log(covidUrl);
@@ -181,6 +271,8 @@ var totalRecovered = document.querySelector("#totalRecovered");
 var todayCases = document.querySelector("#todayCases");
 var todayDeaths = document.querySelector("#todayDeaths");
 var todayRecovered = document.querySelector("#todayRecovered");
+var proviceEl = document.querySelectorAll(".province");
+var covidLocEl = document.querySelector("#covidLocation");
 
 
 var displayCovidStats = function (data) {
@@ -190,5 +282,7 @@ var displayCovidStats = function (data) {
   todayCases.textContent = data.summary[0].cases;
   todayDeaths.textContent = data.summary[0].deaths;
   todayRecovered.textContent = data.summary[0].recovered;
+  covidLocEl.textContent = data.summary[0].province;
+
 }
 

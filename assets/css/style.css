@@ -10,6 +10,25 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+.w-100 {
+    width: 100%;
+}
+
+.showEl {
+    display: flex;
+}
+
+.hideEl {
+    display: none;
+}
+
+.wrap-content {
+  white-space: nowrap; 
+  width: 100%; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
 .hero-title-primary {
     font-family: 'Playfair Display', serif;
 }
@@ -122,7 +141,7 @@ body {
 /* Card Style */
 .open-status {
     background-color: white;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 5px 10px;
     width: fit-content;
     box-shadow: 0 0 2px grey;
@@ -134,6 +153,59 @@ body {
     padding: 10px;
     min-height: fit-content;
     box-shadow: 0px -3px 5px rgb(50 50 50 / 5%);
+    font-size: 0.9rem;
+}
+
+.store-details a {
+    color: #222;
+}
+
+.store-details a:hover {
+    color: #cc0f35;
+}
+
+.stats-count {
+    font-size: 30px;
+}
+
+.busStatus {
+    font-size: 12px;
+    padding: 2px 4px;
+    color: white;
+    border-radius: 5px;
+}
+
+.bg-red {
+    background: #fd6c6c;;
+}
+
+.bg-green {
+    background: rgb(14, 179, 69);
+}
+
+.open-status {
+    text-align: center;
+}
+
+.busStatus {
+    width: fit-content;
+}
+
+.ratingNumb {
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    width: fit-content;
+    box-shadow: 0 0 2px grey;
+    height: 33px;
+}
+
+.ratingNumbIcon{
+    color: rgb(248,183,4);
+}
+
+.linkImage {
+    color: #222;
 }
 
 @media only screen and (max-width: 1300px) {
