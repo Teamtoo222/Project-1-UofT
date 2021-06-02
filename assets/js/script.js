@@ -261,12 +261,31 @@ var createCards = function(place ,targetId) {
     busClassList = "busStatus bg-red";
   }
 
+  //check if the array has an image 
+  if(place.hasOwnProperty("photos")) {
+    var photoUrl = place.photos[0].getUrl();
+  } else {
+    photoUrl = "https://picsum.photos/640/320/?blur=8";
+  }
+
+  if(place.hasOwnProperty("rating")) {
+    var placeRating = place.rating;
+  } else {
+    placeRating = "N/A";
+  }
+
+  if(place.hasOwnProperty("formatted_phone_number")) {
+    var placePhone = place.formatted_phone_number;
+  } else {
+    placePhone = "Not Available";
+  }
+
   const template = `
     <a class="linkImage" href=${place.url} target="_blank">
-    <div class="img-container" style="background-image:url(${place.photos[0].getUrl()});">
+    <div class="img-container" style="background-image:url(${photoUrl});">
     <div class="store-status is-flex is-align-items-flex-end is-flex-direction-column">
     <div class="w-100 is-flex is-justify-content-space-between">
-    <p class="ratingNumb"><i class="ratingNumbIcon fas fa-star-half-alt"></i>&nbsp${place.rating}</p>
+    <p class="ratingNumb"><i class="ratingNumbIcon fas fa-star-half-alt"></i>&nbsp${placeRating}</p>
     <p class="mb-2 open-status">${openStatus}</p>
     </div>
     <p class="${busClassList}">${businesStatus}</p>
@@ -277,7 +296,7 @@ var createCards = function(place ,targetId) {
     <div class="store-details is-flex">
     <p class="store-name wrap-content"><i class="fas fa-bars"></i>&nbsp<strong>${place.name}</strong></p>
       <a class="wrap-content" href="https://maps.google.com/maps?q=${place.formatted_address}" target="_blank class="store-address"><i class="fas fa-map-marker-alt">&nbsp</i>${place.formatted_address}</a>
-      <a href="tel:${place.formatted_phone_number}" class="store-phone"><i class="fas fa-phone-alt"></i>&nbsp${place.formatted_phone_number}</a>
+      <a href="tel:${place.formatted_phone_number}" class="store-phone"><i class="fas fa-phone-alt"></i>&nbsp${placePhone}</a>
       <a href="${place.website}" target="_blank"><i class="fas fa-globe"></i>&nbsp Website</a>
       </div>
       </div>
