@@ -63,7 +63,7 @@
     <!-- Main Section -->
     <main id="mainContainer" class="container">
         <!-- Covid Stats Section -->
-        <div id="covidContainer" class="covid-stats container is-flex-direction-column my-6 hideEl">
+        <div id="covidContainer" class="covid-stats container is-flex-direction-column my-6">
             <!-- Title -->
             <div class="title-container has-text-centered">
                 <h3 class="title is-size-3 mt-3 mb-2">Covid Stats</h3>
@@ -77,23 +77,46 @@
                     <h4 class="title has-text-centered stats-heading">
                         Total Figures
                     </h4>
-                    <div class="columns has-text-centered mt-3">
-                        <!-- Total Cases -->
-                        <div class="column total-cases card p-4 m-2">
-                            <h5>Total Cases</h5>
-                            <p class="stats-count"><span id="totalCases">0</span></p>
-                        </div>
-                        <!-- Total Deaths -->
-                        <div class="column total-deaths card p-4 m-2">
-                            <h5>Total Deaths</h5>
-                            <p class="stats-count"><span id="totalDeaths">0</span></p>
-                        </div>
-                        <!-- Total Recovered -->
-                        <div class="column total-recovered card p-4 m-2">
-                            <h5>Total Recovered</h5>
-                            <p class="stats-count"><span id="totalRecovered">0</span></p>
+                    <div class="covidContRow">
+                        <div class="columns has-text-centered mt-3">
+                            <!-- Total Cases -->
+                            <div class="column total-cases card p-4 m-2">
+                                <h5>Total Cases</h5>
+                                <p class="stats-count"><span id="totalCases">0</span></p>
+                            </div>
+                            <!-- Total Deaths -->
+                            <div class="column total-deaths card p-4 m-2">
+                                <h5>Total Deaths</h5>
+                                <p class="stats-count"><span id="totalDeaths">0</span></p>
+                            </div>
+                            <!-- Total Recovered -->
+                            <div class="column total-recovered card p-4 m-2">
+                                <h5>Total Recovered</h5>
+                                <p class="stats-count"><span id="totalRecovered">0</span></p>
+                            </div>
                         </div>
                     </div>
+                   
+                    <div class="covidContRow">
+                        <div class="columns has-text-centered mt-3">
+                            <!-- Total Tests -->
+                            <div class="column total-cases card p-4 m-2">
+                                <h5>Total Tests</h5>
+                                <p class="stats-count"><span id="totalTests">0</span></p>
+                            </div>
+                            <!-- Total Active Cases -->
+                            <div class="column total-deaths card p-4 m-2">
+                                <h5>Active Cases</h5>
+                                <p class="stats-count"><span id="totalActive">0</span></p>
+                            </div>
+                            <!-- Total Vaccination Cases -->
+                            <div class="column total-recovered card p-4 m-2">
+                                <h5>Total Vaccination</h5>
+                                <p class="stats-count"><span id="totalVaccine">0</span></p>
+                            </div>
+                        </div>            
+                    </div>
+                    
                 </div>
                 <!-- Totay's Stats Container -->
                 <div class="column card covid-stat-container">
@@ -101,23 +124,44 @@
                     <h4 class="title has-text-centered stats-heading">
                         Daily Figures
                     </h4>
-
-                    <div class="columns has-text-centered mt-3">
-                        <!-- Total Cases -->
-                        <div class="column total-cases card p-4 m-2">
-                            <h5>Total Cases</h5>
-                            <p class="stats-count"><span id="todayCases">0</span></p>
+                    <div class="covidContRow">
+                        <div class="columns has-text-centered mt-3">
+                            <!-- Total Cases -->
+                            <div class="column total-cases card p-4 m-2">
+                                <h5>Total Cases</h5>
+                                <p class="stats-count"><span id="todayCases">0</span></p>
+                            </div>
+                            <!-- Total Deaths -->
+                            <div class="column total-deaths card p-4 m-2">
+                                <h5>Total Deaths</h5>
+                                <p class="stats-count"><span id="todayDeaths">0</span> </p>
+                            </div>
+                            <!-- Total Recovered -->
+                            <div class="column total-recovered card p-4 m-2">
+                                <h5>Total Recovered</h5>
+                                <p class="stats-count"><span id="todayRecovered">0</span></p>
+                            </div>
                         </div>
-                        <!-- Total Deaths -->
-                        <div class="column total-deaths card p-4 m-2">
-                            <h5>Total Deaths</h5>
-                            <p class="stats-count"><span id="todayDeaths">0</span> </p>
-                        </div>
-                        <!-- Total Recovered -->
-                        <div class="column total-recovered card p-4 m-2">
-                            <h5>Total Recovered</h5>
-                            <p class="stats-count"><span id="todayRecovered">0</span></p>
-                        </div>
+    
+                    </div>
+                    <div class="covidContRow">
+                        <div class="columns has-text-centered mt-3">
+                            <!-- Total Tests -->
+                            <div class="column total-cases card p-4 m-2">
+                                <h5>Total Tests</h5>
+                                <p class="stats-count"><span id="todayTests">0</span></p>
+                            </div>
+                            <!-- Total Active Cases -->
+                            <div class="column total-deaths card p-4 m-2">
+                                <h5>Active Change </h5>
+                                <p class="stats-count"><span id="todayChange">0</span></p>
+                            </div>
+                            <!-- Total Vaccination Cases -->
+                            <div class="column total-recovered card p-4 m-2">
+                                <h5>Total Vaccination</h5>
+                                <p class="stats-count"><span id="todayVaccine">0</span></p>
+                            </div>
+                        </div>            
                     </div>
                 </div>
             </div>

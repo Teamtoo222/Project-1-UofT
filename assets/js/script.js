@@ -19,6 +19,8 @@ let iStart = 0;
 let iEnd = 5;
 let type = 'restaurant';
 var targetId = '#nearby-resturants';
+var mainCont = document.getElementById("mainContainer");
+var heroContainer = document.getElementById("heroContainer");
 
 // type = 'tourist_attraction';
 // targetId = '#nearby-recreation';
@@ -35,6 +37,7 @@ searchForm.addEventListener('submit', function (event) {
     errorModal.classList.remove("hideMsg");
     errorModal.classList.add("showMsg")
   } else {
+    mainCont.style.display = "block";
     document.getElementById("error-Modal").classList.add("hideMsg");
     errorModal.classList.remove("showMsg");
     googleGeoCodeUrl =
@@ -54,9 +57,9 @@ searchForm.addEventListener('submit', function (event) {
 
     //document.getElementById("mainContainer").innerHTML = "";
 
-    var heroContainer = document.getElementById("heroContainer");
+    
     heroContainer.classList.remove("hero-def-height");
-    document.getElementById("mainContainer").classList.add("p-2", "main-container");
+    mainCont.classList.add("p-2", "main-container");
     
     if(selectedOption === "Events") {
       apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
@@ -283,6 +286,9 @@ var covidLoc = function(data) {
   covidData(covidUrl);
 } 
 
+
+var covidArray = [];
+
 // Fetch the google data
 var covidData = function (covidUrl) {
   fetch(covidUrl).then(function (response) {
@@ -290,31 +296,78 @@ var covidData = function (covidUrl) {
       response.json().then(function (data) {
         // logPlaceDetails(data, 'parks');
         console.log('DATAAAAA', data);
+        saveCovidData(data);
         displayCovidStats(data);
       });
     }
   });
 };
 
+var saveCovidData = function(data) {
+  localStorage.setItem("covidData", JSON.stringify(data));
+}
+
+var loadCovidData = function() {
+  loadedData = JSON.parse(localStorage.getItem("covidData"));
+
+  if(!loadedData) {
+    return;
+  } else {
+    covidArray = loadedData;
+
+    console.log("this is the returned array", covidArray);
+
+    displayCovidStats(covidArray);
+  }
+  
+}
 
 var totalCases = document.querySelector("#totalCases");
 var totalDeaths = document.querySelector("#totalDeaths");
 var totalRecovered = document.querySelector("#totalRecovered");
+var totalTests = document.querySelector("#totalTests");
+var totalActive = document.querySelector("#totalActive");
+var totalVaccine = document.querySelector("#totalVaccine");
 var todayCases = document.querySelector("#todayCases");
 var todayDeaths = document.querySelector("#todayDeaths");
 var todayRecovered = document.querySelector("#todayRecovered");
+var todayTests = document.querySelector("#todayTests");
+var todayChange = document.querySelector("#todayChange");
+var todayVaccine = document.querySelector("#todayVaccine");
 var proviceEl = document.querySelectorAll(".province");
 var covidLocEl = document.querySelector("#covidLocation");
 
 
-var displayCovidStats = function (data) {
-  totalCases.textContent = data.summary[0].cumulative_cases;
-  totalDeaths.textContent = data.summary[0].cumulative_deaths;
-  totalRecovered.textContent = data.summary[0].cumulative_recovered;
-  todayCases.textContent = data.summary[0].cases;
-  todayDeaths.textContent = data.summary[0].deaths;
-  todayRecovered.textContent = data.summary[0].recovered;
-  covidLocEl.textContent = data.summary[0].province;
-
+function formatNumber(num) {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
 
+
+var displayCovidStats = function (covidArray) {
+  totalCases.textContent = formatNumber(covidArray.summary[0].cumulative_cases);
+  totalDeaths.textContent = formatNumber(covidArray.summary[0].cumulative_deaths);
+  totalRecovered.textContent = formatNumber(covidArray.summary[0].cumulative_recovered); 
+  todayCases.textContent = formatNumber(covidArray.summary[0].cases);
+  todayDeaths.textContent = formatNumber(covidArray.summary[0].deaths);
+  todayRecovered.textContent = formatNumber(covidArray.summary[0].recovered);
+  covidLocEl.textContent = formatNumber(covidArray.summary[0].province);
+  totalTests.textContent = formatNumber(covidArray.summary[0].cumulative_testing);
+  totalActive.textContent = formatNumber(covidArray.summary[0].active_cases);
+  totalVaccine.textContent = formatNumber(covidArray.summary[0].cumulative_avaccine);
+  todayTests.textContent = formatNumber(covidArray.summary[0].testing);
+  todayChange.textContent = formatNumber(covidArray.summary[0].active_cases_change);
+  todayVaccine.textContent = formatNumber(covidArray.summary[0].avaccine);
+
+};
+
+loadCovidData();
+
+if (placeArray.length !== 0 || covidArray.length !== 0) {
+  console.log(placeArray);
+  mainCont.style.display = "block";
+  heroContainer.classList.remove("hero-def-height");
+  mainCont.classList.add("p-2", "main-container");
+
+} else {
+  mainCont.style.display = "none";
+}

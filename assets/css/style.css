@@ -279,6 +279,10 @@ body {
         margin: 5px;
     }
 
+    .covidContRow {
+        margin-top: 20px;
+    }
+
     select {
         margin-left: 5px;
         min-width: 100%;
