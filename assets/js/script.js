@@ -17,7 +17,7 @@ var errorModal =  document.getElementById("error-Modal");
 
 let iStart = 0;
 let iEnd = 5;
-let type = 'restaurant';
+let typeOf = 'restaurant';
 var targetId = '#nearby-resturants';
 var mainCont = document.getElementById("mainContainer");
 var heroContainer = document.getElementById("heroContainer");
@@ -116,7 +116,7 @@ var apiGeoCodeFetch = function (url, option) {
           covidLoc(data);
         } else {
           covidLoc(data);
-          logResPlaceDetails(data);
+          logResPlaceDetails(data, option);
         }
         
         // logPlaceDetails(data, 'parks');
@@ -127,7 +127,7 @@ var apiGeoCodeFetch = function (url, option) {
 };
 
 // Function to pull the nearby the restaurants
-function logResPlaceDetails(passedData) {
+function logResPlaceDetails(passedData, typeOf) {
   var latData = passedData.results[0].geometry.location.lat;
   var lngData = passedData.results[0].geometry.location.lng;
   //console.log(passedData , latData, lngData);
@@ -140,17 +140,47 @@ function logResPlaceDetails(passedData) {
       // We can use the keywords field here
       keyword: keywordInput,
       // I think we could use the same function for recreations as we will be able to change the type and get this to work
-      type: type,
+      type: typeOf,
     },
     function (place, status) {
-      console.log('Place details:', place);
-      placeArray = place;
-      passNearByData(placeArray);
+      // console.log('Place details:', place);
+      localStorage.setItem("resData", JSON.stringify(place));
+      console.log(typeOf);
+      localStorage.setItem("type", JSON.stringify(typeOf));
+      
+      loadResData();
     }
   );
 };
 
-var passNearByData = function (place) {
+var loadResData = function() {
+  var loadedResData = JSON.parse(localStorage.getItem("resData"));
+  var loadedType = JSON.parse(localStorage.getItem("type"));
+
+  if(loadedType === "Restaurants") {
+    type = "#nearby-resturants";
+  } else if (loadedType === "Recreations") {
+    type = "#nearby-recreation";
+  }
+
+  console.log(loadedType);
+  // if (lodedType === Restaurants) {
+
+  // }
+
+  if(!loadedResData) {
+    return;
+  } else {
+    placeArray = loadedResData;
+    console.log("loaded array", placeArray);
+    passNearByData(placeArray ,type);
+  }
+
+};
+
+
+
+var passNearByData = function (place ,targetId) {
   if (place) {
     for (let i = iStart; i < iEnd; i++) {
       // Get details method, check this link for more info https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.getDetails
@@ -163,8 +193,8 @@ var passNearByData = function (place) {
           function (place, status) {
             // console.log("this is the error status", status);
             if (place) {
-              console.log('rec details **** :', place);
-              createCards(place);
+              console.log('rec details **** :', targetId);
+              createCards(place ,targetId);
             }
           }
         );
@@ -176,7 +206,9 @@ var passNearByData = function (place) {
   }
 }
 
-var createCards = function(place) {
+loadResData();
+
+var createCards = function(place ,targetId) {
   // console.log(place.opening_hours.isOpen());
   // Check if store has opening hours
   if(place.hasOwnProperty("opening_hours")) {
@@ -254,7 +286,7 @@ document.querySelector('#show-res').addEventListener('click', () => {
   iEnd += 5;
   //document.querySelector('#nearby-resturants').innerHTML = '';
   //logPlaceDetails(data, 'recreation', '#nearby-recreation', recCount);
-    passNearByData(placeArray);
+    passNearByData(placeArray, type);
 });
 
 
@@ -263,7 +295,7 @@ document.querySelector('#show-rec').addEventListener('click', () => {
   iEnd += 5;
   //document.querySelector('#nearby-resturants').innerHTML = '';
   //logPlaceDetails(data, 'recreation', '#nearby-recreation', recCount);
-    passNearByData(placeArray);
+    passNearByData(placeArray, type);
 });
 
 var currentDay = moment().subtract(1, 'day').format('DD-MM-YYYY');
@@ -305,7 +337,7 @@ var covidData = function (covidUrl) {
 
 var saveCovidData = function(data) {
   localStorage.setItem("covidData", JSON.stringify(data));
-}
+};
 
 var loadCovidData = function() {
   loadedData = JSON.parse(localStorage.getItem("covidData"));
@@ -320,7 +352,7 @@ var loadCovidData = function() {
     displayCovidStats(covidArray);
   }
   
-}
+};
 
 var totalCases = document.querySelector("#totalCases");
 var totalDeaths = document.querySelector("#totalDeaths");
@@ -340,7 +372,7 @@ var covidLocEl = document.querySelector("#covidLocation");
 
 function formatNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-}
+};
 
 
 var displayCovidStats = function (covidArray) {
