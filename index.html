@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bulma CSS link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.2/css/bulma.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- custom CSS link -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>What's Happening</title>
+</head>
+<body>
+    <div id="map"></div>
+    <!-- Header Section -->
+    <header class="container">
+        <div class="logo-container is-flex is-justify-content-center p-5">
+            <img class="logo-img" src="./assets/images/logo.png" alt="">
+        </div>
+    </header>
+    <!-- Hero Section -->
+    <div class="columns is-flex hero-container is-justify-content-center is-align-items-center m-0">
+        <div class="column search-container is-three-fifths pt-5 m-5">
+            <!-- Main Hero Title -->
+            <h2 class="title hero-title-primary has-text-centered mt-3">Wanna Know What's Happening?</h2>
+            <!-- Sub-Title -->
+            <h4 class="title is-size-4 hero-title-subs has-text-centered">Find the covid stats, events, restaurants & recreational facilities</h4>
+            <!-- Submit Form -->
+<<<<<<< Updated upstream
+            <form id="searchForm" class="form-container card column is-flex is-four-fifths m-auto">
+                <p class="control has-icons-left has-icons-right pr-3">
+                    <input class="input" id="search-city" type="text" placeholder="City/Location">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </span>
+                </p>
+                <p class="control has-icons-left has-icons-right pr-3">
+                    <input class="input" id="keywordInput" type="text" placeholder="Keywords">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-keyboard"></i>
+                    </span>
+                </p>
+                <button class="button is-danger search-button" id ="search-button" type="submit">Search</button>
+            </form>
+=======
+            <div class="">
+                <form id="searchForm" class="form-container card column is-flex is-full-desktop is-four-fifths-widescreen m-auto">
+                    <p class="control has-icons-left has-icons-right pr-2">
+                        <input class="input" id="search-city" type="text" placeholder="City/Location">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                    </p>
+                    <div class="select is-normal pr-2">
+                        <select id="selectOption">
+                        <option>Events</option>
+                        <option>Restaurants</option>
+                        <option>Recreations</option>
+                        </select>
+                    </div>
+                    <p class="control has-icons-left has-icons-right pr-2">
+                        <input class="input" id="keywordInput" type="text" placeholder="Keywords">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-keyboard"></i>
+                        </span>
+                    </p>
+                    <button class="button is-danger search-button" id ="search-button" type="submit">Search</button>  
+                </form>
+                <div id="error-Modal" class="box column is-flex is-full-desktop is-four-fifths-widescreen mx-auto is-justify-content-center has-background-danger has-text-white hideMsg">
+                    <p id="errorMsg">Please enter a valid city or location</p>
+                </div>
+            </div>
+            <div class="hideEl column is-four-fifths-tablet is-four-fifths-desktop is-three-fifths-fullhd  pt-5 m-5" id='history'></div>
+>>>>>>> Stashed changes
+        </div>
+    </div>
+
+    <!-- Main Section -->
+    <main class="container main-container p-2">
+        <!-- Covid Stats Section -->
+        <div class="covid-stats container my-6">
+            <!-- Title -->
+            <div class="title-container has-text-centered">
+                <h3 class="title is-size-3 mt-3 mb-2">Covid Stats</h3>
+                <h5 class="title is-size-5 pt-2 locHeading sub-heading">Location</h5>
+            </div>
+            <!-- Stats Containers -->
+            <div class="stats-container is-flex-wrap-wrap columns my-4">
+                <!-- Total Stats Container -->
+                <div class="column card covid-stat-container">
+                    <!-- Stats Heading -->
+                    <h4 class="title has-text-centered stats-heading">
+                        Total Figures (CA)
+                    </h4>
+                    <div class="columns has-text-centered mt-3">
+                        <!-- Total Cases -->
+                        <div class="column total-cases card p-4 m-2">
+                            <h5>Total Cases</h5>
+                            <p class="stats-count">2500</p>
+                        </div>
+                        <!-- Total Deaths -->
+                        <div class="column total-deaths card p-4 m-2">
+                            <h5>Total Deaths</h5>
+                            <p class="stats-count">2500</p>
+                        </div>
+                        <!-- Total Recovered -->
+                        <div class="column total-recovered card p-4 m-2">
+                            <h5>Total Recovered</h5>
+                            <p class="stats-count">2500</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Totay's Stats Container -->
+                <div class="column card covid-stat-container">
+                    <!-- Stats Heading -->
+                    <h4 class="title has-text-centered stats-heading">
+                        Daily Figures (CA)
+                    </h4>
+
+                    <div class="columns has-text-centered mt-3">
+                        <!-- Total Cases -->
+                        <div class="column total-cases card p-4 m-2">
+                            <h5>Total Cases</h5>
+                            <p class="stats-count">2500</p>
+                        </div>
+                        <!-- Total Deaths -->
+                        <div class="column total-deaths card p-4 m-2">
+                            <h5>Total Deaths</h5>
+                            <p class="stats-count">2500</p>
+                        </div>
+                        <!-- Total Recovered -->
+                        <div class="column total-recovered card p-4 m-2">
+                            <h5>Total Recovered</h5>
+                            <p class="stats-count">2500</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nearby Events Section -->
+    <div class="section-container my-6 columns is-flex-direction-column" id = "nearby-events-section">
+        <!-- Title -->
+        <div class="title-container column has-text-centered">
+            <h3 class="title is-size-3 mt-3 mb-2">Nearby Events</h3>
+            <h5 class="title is-size-7 pt-2 locHeading sub-heading">(Sorted by Relevance)</h5>
+        </div>
+
+        <!-- Event Cards Container -->
+        <div class="cards-container columns is-full pt-5 is-flex-wrap-wrap" id = "event-cards-container">
+        <!-- Sample DOM starts
+            <div class="event-container column card p-0" id = "event-container">
+                <div class="img-container"id = "img-container">
+                    <div class="store-status is-flex is-justify-content-flex-end">
+                    </div>
+                </div>
+                <div class="details-container" id = "details-container">
+                    <div class="store-details is-flex" id = "event-details">
+                        <p class="name" id = "event-name"><strong>Toronto Raptors</strong> </p>
+                        <p class="time" id = "event-time"> 14:00pm</p>
+                        <p class="url" id = "event-url" > event.com</p>
+                    </div>
+                </div>
+            Sample DOM ends -->
+            </div>
+            <div id="show-more-events">
+            </div>         
+        </div>
+
+        <!-- Nearby Restaurants Section -->
+        <div class="section-container my-6 columns is-flex-direction-column">
+            <!-- Title -->
+            <div class="title-container column has-text-centered">
+                <h3 class="title is-size-3 mt-3 mb-2">Nearby Restaurants</h3>
+                <h5 class="title is-size-5 pt-2 locHeading sub-heading">Location</h5>
+            </div>
+
+            <!-- Restaurants Cards Container -->
+            <div class="cards-container columns is-full pt-5 is-flex-wrap-wrap">
+                <div class="event-container column card p-0">
+                    <div class="img-container restaurant-img-one">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                            <p class="open-status">OPEN</p>
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <div class="store-details is-flex">
+                            <p><strong class="store-name-one">New Event</strong> </p>
+                            <p class="store-address-one">300 Toronto, Rd Toronto</p>
+                            <p class="store-phone-one">647-123-456</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="event-container column card p-0">
+                    <div class="img-container restaurant-img-two">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                            <p class="open-status">OPEN</p>
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <div class="store-details is-flex">
+                            <p><strong class="store-name-two">New Event</strong> </p>
+                            <p class="store-address-two">300 Toronto, Rd Toronto</p>
+                            <p class="store-phone-two">647-123-456</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="event-container column card p-0">
+                    <div class="img-container restaurant-img-three">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                            <p class="open-status">OPEN</p>
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <div class="store-details is-flex">
+                            <p><strong class="store-name-three">New Event</strong> </p>
+                            <p class="store-address-three">300 Toronto, Rd Toronto</p>
+                            <p class="store-phone-three">647-123-456</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="event-container column card p-0">
+                    <div class="img-container restaurant-img-four">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                            <p class="open-status">OPEN</p>
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <div class="store-details is-flex">
+                            <p><strong class="store-name-four">New Event</strong> </p>
+                            <p class="store-address-four">300 Toronto, Rd Toronto</p>
+                            <p class="store-phone-four">647-123-456</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="event-container column card p-0">
+                    <div class="img-container restaurant-img-five">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                            <p class="open-status">OPEN</p>
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <div class="store-details is-flex">
+                            <p><strong class="store-name-five">New Event</strong> </p>
+                            <p class="store-address-five">300 Toronto, Rd Toronto</p>
+                            <p class="store-phone-five">647-123-46</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Showmore button -->
+            <button class="button is-medium is-danger is-light show-more-button is-flex mt-5"> Show More</button>
+        </div>
+
+        <!-- Nearby Recreations Facilities -->
+        <div class="section-container my-6 columns is-flex-direction-column">
+            <!-- Title -->
+            <div class="title-container column has-text-centered">
+                <h3 class="title is-size-3 mt-3 mb-2">Nearby Recreations</h3>
+                <h5 class="title is-size-5 pt-2 locHeading sub-heading">Location</h5>
+            </div>
+
+            <!-- Recreations Cards Container -->
+            <div class="cards-container columns is-full pt-5 is-flex-wrap-wrap">
+                <div class="event-container column card p-0">
+                    <div class="img-container">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                            <p class="open-status">OPEN</p>
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <div class="store-details is-flex">
+                            <p class="store-name"><strong>New Event</strong> </p>
+                            <p class="store-address">300 Toronto, Rd Toronto</p>
+                            <p class="store-phone">647-123-456</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="event-container column card p-0">
+                    <div class="img-container">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                            <p class="open-status">OPEN</p>
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <div class="store-details is-flex">
+                            <p class="store-name"><strong>New Event</strong> </p>
+                            <p class="store-address">300 Toronto, Rd Toronto</p>
+                            <p class="store-phone">647-123-456</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="event-container column card p-0">
+                    <div class="img-container">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                            <p class="open-status">OPEN</p>
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <div class="store-details is-flex">
+                            <p class="store-name"><strong>New Event</strong> </p>
+                            <p class="store-address">300 Toronto, Rd Toronto</p>
+                            <p class="store-phone">647-123-456</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="event-container column card p-0">
+                    <div class="img-container">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                            <p class="open-status">OPEN</p>
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <div class="store-details is-flex">
+                            <p class="store-name"><strong>New Event</strong> </p>
+                            <p class="store-address">300 Toronto, Rd Toronto</p>
+                            <p class="store-phone">647-123-456</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="event-container column card p-0">
+                    <div class="img-container">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                            <p class="open-status">OPEN</p>
+                        </div>
+                    </div>
+                    <div class="details-container">
+                        <div class="store-details is-flex">
+                            <p class="store-name"><strong>New Event</strong> </p>
+                            <p class="store-address">300 Toronto, Rd Toronto</p>
+                            <p class="store-phone">647-123-456</p>
+                        </div>
+                    </div>
+
+                </div>
+        </div>
+
+           <!-- Showmore button -->
+           <button class="button is-medium is-danger is-light show-more-button is-flex mt-5"> Show More</button>
+
+       </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer p-5">
+        <div class="content has-text-centered">
+            <p>Made with ❤️ By Teamtoo</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhOZZGJoUqHE0c14emapGTAXw11nkiHqs&libraries=places"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/eventsScript.js"></script>
+    <script src="./assets/js/restaurantsScript.js"></script>
+</body>
+</html>
