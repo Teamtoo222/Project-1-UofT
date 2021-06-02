@@ -39,10 +39,9 @@ var getEventData = function() {
     console.log(city)
 
 
-    if (city !="") {
-        
-    //     // alert("please insert value")
-    // } else {
+    if (city === "") {
+        // alert("please insert value")
+    } else {
     //var startDate = searchStartDate.value + "T04:00:00Z"// in case we need a value via input
     //var endDate = searchEndDate.value + "T04:00:00Z"// in case we need a value via input
     //saveData(city,startDate,endDate);//possible local storage function if needed
