@@ -29,6 +29,7 @@
             <!-- Sub-Title -->
             <h4 class="title is-size-4 hero-title-subs has-text-centered">Find the covid stats, events, restaurants & recreational facilities</h4>
             <!-- Submit Form -->
+<<<<<<< Updated upstream
             <form id="searchForm" class="form-container card column is-flex is-four-fifths m-auto">
                 <p class="control has-icons-left has-icons-right pr-3">
                     <input class="input" id="search-city" type="text" placeholder="City/Location">
@@ -44,6 +45,36 @@
                 </p>
                 <button class="button is-danger search-button" id ="search-button" type="submit">Search</button>
             </form>
+=======
+            <div class="">
+                <form id="searchForm" class="form-container card column is-flex is-full-desktop is-four-fifths-widescreen m-auto">
+                    <p class="control has-icons-left has-icons-right pr-2">
+                        <input class="input" id="search-city" type="text" placeholder="City/Location">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </span>
+                    </p>
+                    <div class="select is-normal pr-2">
+                        <select id="selectOption">
+                        <option>Events</option>
+                        <option>Restaurants</option>
+                        <option>Recreations</option>
+                        </select>
+                    </div>
+                    <p class="control has-icons-left has-icons-right pr-2">
+                        <input class="input" id="keywordInput" type="text" placeholder="Keywords">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-keyboard"></i>
+                        </span>
+                    </p>
+                    <button class="button is-danger search-button" id ="search-button" type="submit">Search</button>  
+                </form>
+                <div id="error-Modal" class="box column is-flex is-full-desktop is-four-fifths-widescreen mx-auto is-justify-content-center has-background-danger has-text-white hideMsg">
+                    <p id="errorMsg">Please enter a valid city or location</p>
+                </div>
+            </div>
+            <div class="hideEl column is-four-fifths-tablet is-four-fifths-desktop is-three-fifths-fullhd  pt-5 m-5" id='history'></div>
+>>>>>>> Stashed changes
         </div>
     </div>
 
