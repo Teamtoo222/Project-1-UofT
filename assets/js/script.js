@@ -1,9 +1,7 @@
-// Added the API key on the html with the api call
-
 // Variables
 var searchForm = document.getElementById('searchForm');
 
-var cityInput = 'Toronto';
+var cityInput = "";
 var keywordInput = "";
 var googleApiKey = 'AIzaSyAhOZZGJoUqHE0c14emapGTAXw11nkiHqs';
 var googleGeoCodeUrl =
@@ -21,11 +19,15 @@ let typeOf = 'restaurant';
 var targetId = '#nearby-resturants';
 var mainCont = document.getElementById("mainContainer");
 var heroContainer = document.getElementById("heroContainer");
+var covidContainer = document.getElementById("covidContainer");
+var eventsContainer = document.getElementById("nearby-events-section");
+var restaurantsContainer = document.getElementById("restaurantsContainer");
+var recreationContainer = document.getElementById("recreationContainer");
 
 // type = 'tourist_attraction';
 // targetId = '#nearby-recreation';
 
-
+// Variable to get the PLaceServiceMap
 var service = new google.maps.places.PlacesService(document.getElementById('map'));
 // submit form event listner
 searchForm.addEventListener('submit', function (event) {
@@ -46,18 +48,13 @@ searchForm.addEventListener('submit', function (event) {
     '&key=' +
     googleApiKey;
 
+    // value when running the 1st time
     iStart = 0;
     iEnd = 5;
     
     var selectedOption = document.getElementById("selectOption").value;
-    var covidContainer = document.getElementById("covidContainer");
-    var eventsContainer = document.getElementById("nearby-events-section");
-    var restaurantsContainer = document.getElementById("restaurantsContainer");
-    var recreationContainer = document.getElementById("recreationContainer");
 
     //document.getElementById("mainContainer").innerHTML = "";
-
-    
     heroContainer.classList.remove("hero-def-height");
     mainCont.classList.add("p-2", "main-container");
     
@@ -70,6 +67,8 @@ searchForm.addEventListener('submit', function (event) {
       eventsContainer.classList.remove("hideEl");
       eventsContainer.classList.add("columns");
       eventsContainer.classList.add("showEl");
+      recreationContainer.classList.add("hideEl");
+      recreationContainer.classList.remove("columns");
     } else if (selectedOption === "Restaurants") { 
       eventsContainer.classList.add("hideEl");
       eventsContainer.classList.remove("columns");
@@ -159,23 +158,51 @@ var loadResData = function() {
 
   if(loadedType === "Restaurants") {
     type = "#nearby-resturants";
+    eventsContainer.classList.add("hideEl");
+    eventsContainer.classList.remove("columns");
+    covidContainer.classList.remove("hideEl");
+    covidContainer.classList.add("showEl");
+    recreationContainer.classList.add("hideEl");
+    recreationContainer.classList.remove("columns");
+    restaurantsContainer.classList.remove("hideEl");
+    restaurantsContainer.classList.add("columns");
   } else if (loadedType === "Recreations") {
     type = "#nearby-recreation";
+    eventsContainer.classList.add("hideEl");
+    eventsContainer.classList.remove("columns");
+    restaurantsContainer.classList.add("hideEl");
+    restaurantsContainer.classList.remove("columns");
+    covidContainer.classList.remove("hideEl");
+    covidContainer.classList.add("showEl");
+    recreationContainer.classList.remove("hideEl");
+    recreationContainer.classList.add("columns");
+  } else if (loadedType === "Events"){
+    covidContainer.classList.remove("hideEl");
+    covidContainer.classList.add("showEl");
+    recreationContainer.classList.add("hideEl");
+    recreationContainer.classList.remove("columns");
+    eventsContainer.classList.remove("hideEl");
+    eventsContainer.classList.add("columns");
+    eventsContainer.classList.add("showEl");
+    recreationContainer.classList.remove("hideEl");
+    recreationContainer.classList.add("columns");
   }
 
   console.log(loadedType);
   // if (lodedType === Restaurants) {
-
   // }
 
   if(!loadedResData) {
+    eventsContainer.classList.add("hideEl");
+    restaurantsContainer.classList.add("hideEl");
+    recreationContainer.classList.add("hideEl");
     return;
+
   } else {
     placeArray = loadedResData;
     console.log("loaded array", placeArray);
     passNearByData(placeArray ,type);
   }
-
 };
 
 
@@ -224,14 +251,14 @@ var createCards = function(place ,targetId) {
   // Check to see if the business is operational
   if(place.business_status === "OPERATIONAL") {
     var businesStatus = "Operational";
-    var busClassList = "busStatus bg-green"
+    var busClassList = "busStatus bg-green";
     // document.querySelector(".busStatus").style.background = "green";
   } else if (place.business_status === "CLOSED_TEMPORARILY") {
     businesStatus = "Temporarily closed";
-    busClassList = "busStatus bg-red"
+    busClassList = "busStatus bg-red";
   } else {
-    businesStatus = "Permanently closed"
-    busClassList = "busStatus bg-red"
+    businesStatus = "Permanently closed";
+    busClassList = "busStatus bg-red";
   }
 
   const template = `
@@ -298,11 +325,10 @@ document.querySelector('#show-rec').addEventListener('click', () => {
     passNearByData(placeArray, type);
 });
 
+// Covid Function
 var currentDay = moment().subtract(1, 'day').format('DD-MM-YYYY');
 // var province = "ON";
 console.log(currentDay);
-
-
 
 var covidLoc = function(data) {
   var addressData = data.results[0].address_components;
@@ -348,7 +374,6 @@ var loadCovidData = function() {
     covidArray = loadedData;
 
     console.log("this is the returned array", covidArray);
-
     displayCovidStats(covidArray);
   }
   
@@ -399,7 +424,6 @@ if (placeArray.length !== 0 || covidArray.length !== 0) {
   mainCont.style.display = "block";
   heroContainer.classList.remove("hero-def-height");
   mainCont.classList.add("p-2", "main-container");
-
 } else {
   mainCont.style.display = "none";
 }
