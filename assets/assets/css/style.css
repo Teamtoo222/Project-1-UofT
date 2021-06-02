@@ -14,11 +14,6 @@ body {
     width: 100%;
 }
 
-.mx-auto {
-    margin-left: auto;
-    margin-right: auto;
-}
-
 .showEl {
     display: flex;
 }
@@ -76,7 +71,7 @@ body {
 
 .hero-def-height {
     height: 83vh;
-    transition: height 1s, margin 0.2s ease-out;
+    transition: height 2s linear 1s;
 }
 
 .control  {
@@ -84,22 +79,6 @@ body {
     padding: 0;
 }
 
-.showMsg {
-    max-height: 100%;
-    margin-top: 10px;
-    /* display: none; */
-    opacity: 100%;
-    transition: opacity 0.2s, margin 0.2s  ease-out;
-}
-
-.hideMsg {
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    margin: 0;
-    padding: 0;
-    transition: opacity 0.2s, margin 0.2s ease-in;
-}
 /* Main Section Style */
 
 .covid-stat-container {
@@ -255,7 +234,6 @@ body {
         margin-right: 1rem;
     }
     .hero-container {
-        height: 650px;
         background-position: right; 
     }
     .hero-title-primary {
