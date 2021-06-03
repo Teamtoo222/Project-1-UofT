@@ -32,9 +32,12 @@ var service = new google.maps.places.PlacesService(document.getElementById('map'
 // submit form event listner
 searchForm.addEventListener('submit', function (event) {
   event.preventDefault();
+
+  var selectedOption = document.getElementById("selectOption").value;
   cityInput = document.getElementById('search-city').value;
   keywordInput = document.getElementById('keywordInput').value;
 
+  // Check if the city is empty and show the error msg
   if(!cityInput) {
     errorModal.classList.remove("hideMsg");
     errorModal.classList.add("showMsg")
@@ -51,8 +54,6 @@ searchForm.addEventListener('submit', function (event) {
     // value when running the 1st time
     iStart = 0;
     iEnd = 5;
-    
-    var selectedOption = document.getElementById("selectOption").value;
 
     //document.getElementById("mainContainer").innerHTML = "";
     heroContainer.classList.remove("hero-def-height");
@@ -60,38 +61,17 @@ searchForm.addEventListener('submit', function (event) {
     
     if(selectedOption === "Events") {
       apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
-      covidContainer.classList.remove("hideEl");
-      covidContainer.classList.add("showEl");
-      recreationContainer.classList.add("hideEl");
-      recreationContainer.classList.remove("columns");
-      eventsContainer.classList.remove("hideEl");
-      eventsContainer.classList.add("columns");
-      eventsContainer.classList.add("showEl");
-      recreationContainer.classList.add("hideEl");
-      recreationContainer.classList.remove("columns");
+      eventsDisplay();
+      
     } else if (selectedOption === "Restaurants") { 
-      eventsContainer.classList.add("hideEl");
-      eventsContainer.classList.remove("columns");
-      covidContainer.classList.remove("hideEl");
-      covidContainer.classList.add("showEl");
-      recreationContainer.classList.add("hideEl");
-      recreationContainer.classList.remove("columns");
-      restaurantsContainer.classList.remove("hideEl");
-      restaurantsContainer.classList.add("columns");
+      restaurantsDisplay();
       document.getElementById("nearby-resturants").innerHTML = "";
       document.getElementById("resLocation").textContent = cityInput;
       apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
     } else if (selectedOption === "Recreations") {
       type = 'tourist_attraction';
       targetId = '#nearby-recreation';
-      eventsContainer.classList.add("hideEl");
-      eventsContainer.classList.remove("columns");
-      restaurantsContainer.classList.add("hideEl");
-      restaurantsContainer.classList.remove("columns");
-      covidContainer.classList.remove("hideEl");
-      covidContainer.classList.add("showEl");
-      recreationContainer.classList.remove("hideEl");
-      recreationContainer.classList.add("columns");
+      recreationsDsiplay();
       document.getElementById("nearby-recreation").innerHTML = "";
       document.getElementById("recLocation").textContent = cityInput;
       apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
@@ -104,9 +84,45 @@ searchForm.addEventListener('submit', function (event) {
 
 });
 
+// Function to display/hide the Events
+var eventsDisplay = function() {
+  covidContainer.classList.remove("hideEl");
+  covidContainer.classList.add("showEl");
+  recreationContainer.classList.add("hideEl");
+  recreationContainer.classList.remove("columns");
+  eventsContainer.classList.remove("hideEl");
+  eventsContainer.classList.add("columns");
+  eventsContainer.classList.add("showEl");
+  recreationContainer.classList.add("hideEl");
+  recreationContainer.classList.remove("columns");
+};
+
+// Function to display/hide the restaurants
+var restaurantsDisplay = function() {
+  eventsContainer.classList.add("hideEl");
+  eventsContainer.classList.remove("columns");
+  covidContainer.classList.remove("hideEl");
+  covidContainer.classList.add("showEl");
+  recreationContainer.classList.add("hideEl");
+  recreationContainer.classList.remove("columns");
+  restaurantsContainer.classList.remove("hideEl");
+  restaurantsContainer.classList.add("columns");
+};
+
+// Funtion to display/hide the recreations
+var recreationsDsiplay = function() {
+  eventsContainer.classList.add("hideEl");
+  eventsContainer.classList.remove("columns");
+  restaurantsContainer.classList.add("hideEl");
+  restaurantsContainer.classList.remove("columns");
+  covidContainer.classList.remove("hideEl");
+  covidContainer.classList.add("showEl");
+  recreationContainer.classList.remove("hideEl");
+  recreationContainer.classList.add("columns");
+};
 
 
-// Fetch the google data
+// Fetch the geocoordinates google data
 var apiGeoCodeFetch = function (url, option) {
   fetch(url).then(function (response) {
     if (response.ok) {
@@ -117,9 +133,6 @@ var apiGeoCodeFetch = function (url, option) {
           covidLoc(data);
           logResPlaceDetails(data, option);
         }
-        
-        // logPlaceDetails(data, 'parks');
-        console.log('DATAAAAA', data);
       });
     }
   });
@@ -133,65 +146,47 @@ function logResPlaceDetails(passedData, typeOf) {
   // Nearby Search method, https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.nearbySearch
   service.nearbySearch(
     {
-      // We can use the user input and covert it to lat long and use it here...
+      // City/Location in lat and lng
       location: { lat: latData, lng: lngData },
-      radius: 10000,
-      // We can use the keywords field here
+      // radius for the search list
+      radius: 15000,
+      // Specific keywords
       keyword: keywordInput,
-      // I think we could use the same function for recreations as we will be able to change the type and get this to work
+      // Type or option for the result Restaurants or Recreations
       type: typeOf,
     },
     function (place, status) {
       // console.log('Place details:', place);
       localStorage.setItem("resData", JSON.stringify(place));
-      console.log(typeOf);
+      console.log(place);
       localStorage.setItem("type", JSON.stringify(typeOf));
       
+      // load the Resdata
       loadResData();
     }
   );
 };
 
+// Function to load the load the Restaurant and Recreations
 var loadResData = function() {
   var loadedResData = JSON.parse(localStorage.getItem("resData"));
   var loadedType = JSON.parse(localStorage.getItem("type"));
 
   if(loadedType === "Restaurants") {
     type = "#nearby-resturants";
-    eventsContainer.classList.add("hideEl");
-    eventsContainer.classList.remove("columns");
-    covidContainer.classList.remove("hideEl");
-    covidContainer.classList.add("showEl");
-    recreationContainer.classList.add("hideEl");
-    recreationContainer.classList.remove("columns");
-    restaurantsContainer.classList.remove("hideEl");
-    restaurantsContainer.classList.add("columns");
+    restaurantsDisplay();
+    document.getElementById("resLocation").textContent = cityInput;
+
   } else if (loadedType === "Recreations") {
     type = "#nearby-recreation";
-    eventsContainer.classList.add("hideEl");
-    eventsContainer.classList.remove("columns");
-    restaurantsContainer.classList.add("hideEl");
-    restaurantsContainer.classList.remove("columns");
-    covidContainer.classList.remove("hideEl");
-    covidContainer.classList.add("showEl");
-    recreationContainer.classList.remove("hideEl");
-    recreationContainer.classList.add("columns");
+    recreationsDsiplay();
+    document.getElementById("recLocation").textContent = cityInput;
+    
   } else if (loadedType === "Events"){
-    covidContainer.classList.remove("hideEl");
-    covidContainer.classList.add("showEl");
-    recreationContainer.classList.add("hideEl");
-    recreationContainer.classList.remove("columns");
-    eventsContainer.classList.remove("hideEl");
-    eventsContainer.classList.add("columns");
-    eventsContainer.classList.add("showEl");
-    recreationContainer.classList.remove("hideEl");
-    recreationContainer.classList.add("columns");
+    eventsDisplay();
   }
 
-  console.log(loadedType);
-  // if (lodedType === Restaurants) {
-  // }
-
+  // if the loaded data is empty hide all the elements
   if(!loadedResData) {
     eventsContainer.classList.add("hideEl");
     restaurantsContainer.classList.add("hideEl");
@@ -200,35 +195,29 @@ var loadResData = function() {
 
   } else {
     placeArray = loadedResData;
-    console.log("loaded array", placeArray);
     passNearByData(placeArray ,type);
   }
 };
 
-
-
+// Function to pass the nearByData
 var passNearByData = function (place ,targetId) {
   if (place) {
     for (let i = iStart; i < iEnd; i++) {
       // Get details method, check this link for more info https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.getDetails
       if (place[i]) {
-        console.log(place[i]);
+        // console.log(place[i]);
         service.getDetails(
           {
             placeId: place[i].place_id,
           },
-          function (place, status) {
-            // console.log("this is the error status", status);
+          function (getResults, status) {
             if (place) {
-              console.log('rec details **** :', targetId);
-              createCards(place ,targetId);
+              //console.log('rec details **** :', targetId);
+              createCards(getResults ,targetId);
             }
           }
         );
       }
-      //Retrive Photo Urls
-      // var placePhotoUrl = place[i].photos[0].getUrl({ maxWidth: 640 });
-      // console.log(placePhotoUrl);
     }
   }
 }
@@ -236,10 +225,9 @@ var passNearByData = function (place ,targetId) {
 loadResData();
 
 var createCards = function(place ,targetId) {
-  // console.log(place.opening_hours.isOpen());
-  // Check if store has opening hours
   if(place.hasOwnProperty("opening_hours")) {
-    if (place.opening_hours.isOpen() === true) {
+    const isOpen = place.opening_hours.isOpen();
+    if (isOpen === true) {
       var openStatus = "Open Now";
     } else {
       openStatus = "Closed Now";
@@ -268,18 +256,21 @@ var createCards = function(place ,targetId) {
     photoUrl = "https://picsum.photos/640/320/?blur=8";
   }
 
+  // check if the array has a rating
   if(place.hasOwnProperty("rating")) {
     var placeRating = place.rating;
   } else {
     placeRating = "N/A";
   }
 
+  // check if the array has a phone number
   if(place.hasOwnProperty("formatted_phone_number")) {
     var placePhone = place.formatted_phone_number;
   } else {
     placePhone = "Not Available";
   }
 
+  // template to create the card
   const template = `
     <a class="linkImage" href=${place.url} target="_blank">
     <div class="img-container" style="background-image:url(${photoUrl});">
@@ -301,7 +292,8 @@ var createCards = function(place ,targetId) {
       </div>
       </div>
       `;
-
+    
+  // Create and append the card
     const container = document.createElement('div');
     container.classList = "event-container column card p-0";
     container.innerHTML = template;
@@ -310,44 +302,44 @@ var createCards = function(place ,targetId) {
 };
 
 
+// // Fcuntion to check the business status
+// var busStatChecker = function() {
+// // Change the background color of busStats
+//   var busStatEl = document.querySelectorAll(".busStatus");
 
-var busStatChecker = function() {
-// Change the background color of busStats
-  var busStatEl = document.querySelectorAll(".busStatus");
-
-  for (var i = 0; i < busStatEl.length; i++) {
-    console.log("test");
-    if(busStatEl[i] === "Operational") {
-      var statEl =  document.querySelector(".busStatus");
-      statEl.classList.remove("bg-red");
-      statEl.classList.add("bg-green");
-    }
-  }
-}
+//   for (var i = 0; i < busStatEl.length; i++) {
+//     if(busStatEl[i] === "Operational") {
+//       var statEl =  document.querySelector(".busStatus");
+//       statEl.classList.remove("bg-red");
+//       statEl.classList.add("bg-green");
+//     }
+//   }
+// };
 
 
 
 document.querySelector('#show-res').addEventListener('click', () => {
   iStart += 5;
   iEnd += 5;
-  //document.querySelector('#nearby-resturants').innerHTML = '';
-  //logPlaceDetails(data, 'recreation', '#nearby-recreation', recCount);
-    passNearByData(placeArray, type);
+// run the passNearByData function
+  passNearByData(placeArray, type);
 });
 
 
 document.querySelector('#show-rec').addEventListener('click', () => {
   iStart += 5;
   iEnd += 5;
-  //document.querySelector('#nearby-resturants').innerHTML = '';
-  //logPlaceDetails(data, 'recreation', '#nearby-recreation', recCount);
-    passNearByData(placeArray, type);
+// run the passNearByData function
+  passNearByData(placeArray, type);
 });
+
+/**
+ * ////////////// COVID SECTION ///////////////
+ */
 
 // Covid Function
 var currentDay = moment().subtract(1, 'day').format('DD-MM-YYYY');
 // var province = "ON";
-console.log(currentDay);
 
 var covidLoc = function(data) {
   var addressData = data.results[0].address_components;
@@ -358,21 +350,18 @@ var covidLoc = function(data) {
     province = addressData[addressData.length - 2].short_name;
   }
   var covidUrl = "https://api.opencovid.ca/summary?loc=" + province + "&date=" + currentDay;
-  console.log(province);
-  console.log(covidUrl);
   covidData(covidUrl);
 } 
 
-
+// Array for Covid
 var covidArray = [];
 
-// Fetch the google data
+// Fetch the covid data
 var covidData = function (covidUrl) {
   fetch(covidUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        // logPlaceDetails(data, 'parks');
-        console.log('DATAAAAA', data);
+        // pass the covid data
         saveCovidData(data);
         displayCovidStats(data);
       });
@@ -380,10 +369,12 @@ var covidData = function (covidUrl) {
   });
 };
 
+// Function to SaveCovidData
 var saveCovidData = function(data) {
   localStorage.setItem("covidData", JSON.stringify(data));
 };
 
+// Function to LoadCovidFunction
 var loadCovidData = function() {
   loadedData = JSON.parse(localStorage.getItem("covidData"));
 
@@ -392,12 +383,13 @@ var loadCovidData = function() {
   } else {
     covidArray = loadedData;
 
-    console.log("this is the returned array", covidArray);
-    displayCovidStats(covidArray);
+  // console.log("this is the returned array", covidArray);
+  displayCovidStats(covidArray);
   }
   
 };
 
+// Define the covid related DOM elements
 var totalCases = document.querySelector("#totalCases");
 var totalDeaths = document.querySelector("#totalDeaths");
 var totalRecovered = document.querySelector("#totalRecovered");
@@ -413,12 +405,12 @@ var todayVaccine = document.querySelector("#todayVaccine");
 var proviceEl = document.querySelectorAll(".province");
 var covidLocEl = document.querySelector("#covidLocation");
 
-
+// Function to format numbers (Obtained from - https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript)
 function formatNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 };
 
-
+// Function to display the covid stats
 var displayCovidStats = function (covidArray) {
   totalCases.textContent = formatNumber(covidArray.summary[0].cumulative_cases);
   totalDeaths.textContent = formatNumber(covidArray.summary[0].cumulative_deaths);
@@ -436,10 +428,13 @@ var displayCovidStats = function (covidArray) {
 
 };
 
+// Load covidData when the page loads
 loadCovidData();
 
+
+// If the arrays are empty hide the main container.
 if (placeArray.length !== 0 || covidArray.length !== 0) {
-  console.log(placeArray);
+  //console.log(placeArray);
   mainCont.style.display = "block";
   heroContainer.classList.remove("hero-def-height");
   mainCont.classList.add("p-2", "main-container");
