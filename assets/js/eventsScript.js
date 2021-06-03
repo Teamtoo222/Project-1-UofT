@@ -114,7 +114,7 @@ var getEventData = function() {
 // Function to display the initial 5 data 
  var display5Records = function(listOfEvents) {
     
-   for (i = 0; i < 5 ; i++) {
+   for (i = 0; i < 4 ; i++) {
 
        // var from array from API
        var eventName = listOfEvents[i].name;

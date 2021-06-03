@@ -155,7 +155,7 @@ body {
 }
 
 .event-container {
-    min-width: 250px;
+    min-width: 20%;
     border-radius: 5px;
     margin: 10px 10px;
 }
@@ -235,6 +235,13 @@ body {
     color: #222;
 }
 
+@media only screen and (max-width: 1400px) {
+    .event-container {
+        width: 20%;
+    }
+
+}
+
 @media only screen and (max-width: 1300px) {
     .form-container {
         width: 100%;
@@ -245,6 +252,10 @@ body {
 @media only screen and (max-width: 1024px) {
     .main-container {
         margin: 1rem;
+    }
+
+    .event-container {
+        min-width: 45%;
     }
 
 }
@@ -291,6 +302,10 @@ body {
     .select {
         margin-top: 5px;
         margin-bottom: 5px;
+    }
+
+    .event-container {
+        min-width: 100%;
     }
 
     /* .covid-stat-container {

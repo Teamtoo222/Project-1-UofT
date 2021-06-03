@@ -14,7 +14,7 @@ var placeArray = [];
 var errorModal =  document.getElementById("error-Modal");
 
 let iStart = 0;
-let iEnd = 5;
+let iEnd = 4;
 let typeOf = 'restaurant';
 var targetId = '#nearby-resturants';
 var mainCont = document.getElementById("mainContainer");
@@ -64,7 +64,7 @@ searchForm.addEventListener('submit', function (event) {
 
     // value when running the 1st time
     iStart = 0;
-    iEnd = 5;
+    iEnd = 4;
 
     //document.getElementById("mainContainer").innerHTML = "";
     heroContainer.classList.remove("hero-def-height");
@@ -346,16 +346,16 @@ var createCards = function(place ,targetId) {
 
 
 document.querySelector('#show-res').addEventListener('click', () => {
-  iStart += 5;
-  iEnd += 5;
+  iStart += 4;
+  iEnd += 4;
 // run the passNearByData function
   passNearByData(placeArray, type);
 });
 
 
 document.querySelector('#show-rec').addEventListener('click', () => {
-  iStart += 5;
-  iEnd += 5;
+  iStart += 4;
+  iEnd += 4;
 // run the passNearByData function
   passNearByData(placeArray, type);
 });
