@@ -75,7 +75,7 @@ body {
 }
 
 .hero-def-height {
-    height: 82vh;
+    height: 81vh;
     transition: height 1s, margin 0.2s ease-out;
 }
 

@@ -108,7 +108,7 @@ var getEventData = function() {
         })
     }
 
-        searchCity.value = ""
+        // searchCity.value = ""
 }
 
 // Function to display the initial 5 data 
@@ -265,7 +265,7 @@ var displayAllRecords = function(listOfEvents) {
 
 
 
-// Change the function to submit so it works on the other side as well.
-//Event listener
-searchForm.addEventListener("submit",getEventData);
-//showMoreEvents.addEventListener("click", displayAllRecords (localArray)); //problem lies here remove parameter 
+// // Change the function to submit so it works on the other side as well.
+// //Event listener
+// searchForm.addEventListener("submit",getEventData);
+// //showMoreEvents.addEventListener("click", displayAllRecords (localArray)); //problem lies here remove parameter 
