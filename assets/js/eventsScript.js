@@ -37,83 +37,76 @@ var showMoreEventsBtn = document.querySelector ("#show-more-events-btn");
 var getEventData = function() {
     eventCardsContainer.innerHTML = ""
     showMoreEvents.innerHTML =""
-    event.preventDefault ();
+    // event.preventDefault ();
+
     var city = searchCity.value
-    localStorage.setItem("cityUsed", JSON.stringify(searchCity.value));
-    // console.log(cityUsed)
+    console.log (city)
+    localStorage.setItem("cityUsed", JSON.stringify(city))
 
 
-    if (city === "") {
-        // alert("please insert value")
-    } else {
-    //var startDate = searchStartDate.value + "T04:00:00Z"// in case we need a value via input
-    //var endDate = searchEndDate.value + "T04:00:00Z"// in case we need a value via input
-    //saveData(city,startDate,endDate);//possible local storage function if needed
+        var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&size=15&sort=relevance,desc&city=" 
+                    + city 
+                    + "&startDateTime=" 
+                    + currentDate 
+                    + "&endDateTime="
+                    + followingDate 
+                    + "&apikey="
+                    + APIkey
 
-    var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&size=15&sort=relevance,desc&city=" 
-                + city 
-                + "&startDateTime=" 
-                + currentDate 
-                + "&endDateTime="
-                + followingDate 
-                + "&apikey="
-                + APIkey
+        console.log (eventsAPI);
 
-    console.log (eventsAPI);
+        fetch (eventsAPI)
+            .then(function(response) {
+                if (response.ok) {
+                    response.json().then(function (data){
+                        console.log (data);// all details
+                        //console.log (data._embedded.events);// list of all events
+                        //console.log (data._embedded.events[0].name);// name of the first event
+                        if (data._embedded != undefined || data._embedded != null || city.value != null) {
+                        var listOfEvents = data._embedded.events
+                        console.log (listOfEvents)
+                        display5Records (listOfEvents);
+                        } else {
+                            //alert ("unavailable")
+                            //div event-container
+                            var divEventsContainer = document.createElement ("div");
+                            divEventsContainer.className = "event-container column card p-0";
+                            divEventsContainer.id = "event-container";
 
-    fetch (eventsAPI)
-        .then(function(response) {
-            if (response.ok) {
-                response.json().then(function (data){
-                    console.log (data);// all details
-                    //console.log (data._embedded.events);// list of all events
-                    //console.log (data._embedded.events[0].name);// name of the first event
-                    if (data._embedded != undefined || data._embedded != null || city.value != null) {
-                    var listOfEvents = data._embedded.events
-                    console.log (listOfEvents)
-                    display5Records (listOfEvents);
-                    } else {
-                        //alert ("unavailable")
-                        //div event-container
-                        var divEventsContainer = document.createElement ("div");
-                        divEventsContainer.className = "event-container column card p-0";
-                        divEventsContainer.id = "event-container";
+                            //div details-container
+                            var divDetailsContainer = document.createElement ("div");
+                            divDetailsContainer.className = "details-container";
+                            divDetailsContainer.id = "details-container";
 
-                        //div details-container
-                        var divDetailsContainer = document.createElement ("div");
-                        divDetailsContainer.className = "details-container";
-                        divDetailsContainer.id = "details-container";
+                            //div event-details
+                            var divEventDetails = document.createElement ("div");
+                            divEventDetails.className = "store-details is-flex";
+                            divEventDetails.id = "event-details";
 
-                        //div event-details
-                        var divEventDetails = document.createElement ("div");
-                        divEventDetails.className = "store-details is-flex";
-                        divEventDetails.id = "event-details";
-
-                        //p for Alert for nothing available
-                        var pnothing = document.createElement ("p");
-                        pnothing.className = "is-size-3 has-text-centered";
-                        pnothing.id = "event-name";
-                        pnothing.innerHTML = "<strong> Nothing is Available </strong>"
+                            //p for Alert for nothing available
+                            var pnothing = document.createElement ("p");
+                            pnothing.className = "is-size-3 has-text-centered";
+                            pnothing.id = "event-name";
+                            pnothing.innerHTML = "<strong> Nothing is Available </strong>"
 
 
-                        //appending information
-                        divEventDetails.appendChild (pnothing);
-                        divDetailsContainer.appendChild (divEventDetails);
-                        divEventsContainer.appendChild (divDetailsContainer);
-                        eventCardsContainer.appendChild (divEventsContainer);
-       
-                    }
+                            //appending information
+                            divEventDetails.appendChild (pnothing);
+                            divDetailsContainer.appendChild (divEventDetails);
+                            divEventsContainer.appendChild (divDetailsContainer);
+                            eventCardsContainer.appendChild (divEventsContainer);
+        
+                        }
 
-                })
-            }
-        })
-        .catch(function(error) {
-            alert("Unable to connect");
-        })
-    }
+                    })
+                }
+            })
+            .catch(function(error) {
+                alert("Unable to connect");
+            })
 
-        // searchCity.value = ""
-}
+            //searchCity.value = city
+        }
 
 // Function to display the initial 5 data 
  var display5Records = function(listOfEvents) {
@@ -271,89 +264,13 @@ var displayAllRecords = function(listOfEvents) {
 
 
 
-//Function to load the load the Restaurant and Recreations
-var loadEventsData = function() {
-    var loadedEventsData = JSON.parse(localStorage.getItem("eventsData"));
-    var storeDataEvents = loadedEventsData[0]
-    console.log (storeDataEvents)
-    var citieUsed = JSON.parse(localStorage.getItem("searchCities"));
-    console.log (citieUsed)
-    citieUsed.value = searchCity
-    //displayNew5Records (storeDataEvents);
-}
+// //Function to load the load the Restaurant and Recreations
+// var loadEventsData = function() {
+//     var loadedEventsData = JSON.parse(localStorage.getItem("eventsData"));
+//     var storeDataEvents = loadedEventsData[0]
+//     console.log (storeDataEvents)
+//     var citieUsed = JSON.parse(localStorage.getItem("searchCities"));
+//     console.log (citieUsed)
+//     citieUsed.value = searchCity
 
-// // Function to display the initial 5 data 
-// var displayNew5Records = function(listOfEvents) {
-    
-//     for (i = 0; i < 4 ; i++) {
- 
-//         // var from array from API
-//         var eventName = listOfEvents[i].name;
-//         var img = listOfEvents[i].images[7].url;
-//         //console.log(img);
-//         var eventLocalTime = listOfEvents[i].dates.start.localTime;
-//         var eventUrl = listOfEvents[i].url;
-//         //var eventLocalDate = listOfEvents[i].dates.start.localDate // variable to add the local time found in the array if needed
- 
-//         //div event-container
-//         var divEventsContainer = document.createElement ("div");
-//         divEventsContainer.className = "event-container column card p-0";
-//         divEventsContainer.id = "event-container";
-//         divEventsContainer.innerHTML = 
-//         "<div class='img-container' style = 'background-image: url("+img+")' id = 'img-container'>"+
-//         "<div class='store-status is-flex is-justify-content-flex-end'>" +
-//         "</div>" +
-//         "</div>";
- 
-//         //div details-container
-//         var divDetailsContainer = document.createElement ("div");
-//         divDetailsContainer.className = "details-container";
-//         divDetailsContainer.id = "details-container";
- 
-//         //div event-details
-//         var divEventDetails = document.createElement ("div");
-//         divEventDetails.className = "store-details is-flex";
-//         divEventDetails.id = "event-details";
- 
-//         //p for event name
-//         var pEventName = document.createElement ("p");
-//         pEventName.className = "name";
-//         pEventName.id = "event-name";
-//         pEventName.innerHTML = "<strong>" + eventName + "</strong>"
- 
-//         //p for event time
-//         var pEventTime = document.createElement ("p");
-//         pEventTime.className = "time";
-//         pEventTime.id = "event-time";
-//         pEventTime.innerHTML = eventLocalTime 
- 
-//         //p for event url
-//         var pEventULR = document.createElement ("p");
-//         pEventULR.className = "url";
-//         pEventULR.id = "event-url";
-//         pEventULR.innerHTML = "<a href =" + eventUrl + " >Details </a>"
- 
-//         //appending information
-//         divEventDetails.appendChild (pEventName);
-//         divEventDetails.appendChild (pEventTime);
-//         divEventDetails.appendChild (pEventULR);
-//         divDetailsContainer.appendChild (divEventDetails);
-//         divEventsContainer.appendChild (divDetailsContainer);
-//         eventCardsContainer.appendChild (divEventsContainer);
-              
-//      }
- 
-//      //Showmore button  
- 
-//      var showMoreEventsBtn = document.createElement ("button");
-//      showMoreEventsBtn.className = "button is-medium is-danger is-light show-more-button is-flex mt-5";
-//      showMoreEventsBtn.id = "show-more-events-btn"
-//      showMoreEventsBtn.innerHTML = "Show More"
- 
-//      showMoreEvents.appendChild (showMoreEventsBtn)
- 
- 
-//      $ ("#show-more-events-btn").click(function() {
-//      displayAllRecords(listOfEvents);
-//      })
-//   }
+// }
