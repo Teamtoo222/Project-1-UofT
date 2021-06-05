@@ -1,5 +1,6 @@
 // Variables
 var searchForm = document.getElementById('searchForm');
+var submitForm = document.getElementById ("#submit-form")
 
 var cityInput = "";
 var keywordInput = "";
@@ -10,7 +11,9 @@ var googleGeoCodeUrl =
   '&key=' +
   googleApiKey;
 
-var placeArray = [];
+var placeIdArray = [];
+var placeArray = []
+var searchedCities = [];
 var errorModal =  document.getElementById("error-Modal");
 
 let iStart = 0;
@@ -94,6 +97,10 @@ searchForm.addEventListener('submit', function (event) {
 
   }
 
+  //store the cities 
+  searchedCities.push(cityInput);
+  localStorage.setItem("searchCities", JSON.stringify(searchedCities));
+
 });
 
 // Function to display/hide the Events
@@ -169,11 +176,11 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
       type: typeOf,
     },
     function (place, status) {
-
+      
       var placeIdArray = [];
-      var searchedCities = [];
+      var resSearchedCities = [];
 
-      searchedCities.push(searchCity);
+      resSearchedCities.push(searchCity);
 
       for(var i = 0; i < place.length; i++) {
         placeIdArray.push(place[i].place_id);
@@ -184,7 +191,7 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
       // save the data to local storage
       localStorage.setItem("resData", JSON.stringify(placeIdArray));
       localStorage.setItem("type", JSON.stringify(typeOf));
-      localStorage.setItem("searchCities", JSON.stringify(searchedCities));
+      localStorage.setItem("restSearchCities", JSON.stringify(resSearchedCities));
       
       
       // load the Resdata
@@ -469,3 +476,8 @@ if (placeArray.length !== 0 || covidArray.length !== 0) {
 } else {
   mainCont.style.display = "none";
 }
+
+
+
+
+  
