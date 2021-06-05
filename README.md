@@ -11,12 +11,12 @@ During this pandemic, we've all been through lockdowns or quarantines, and most 
 
 Sample Screenhots
 
-![Sample 1](/assets/images/sample1.jpeg)
-![Sample 2](/assets/images/sample2.jpeg)
-![Sample 3](/assets/images/sample3.jpeg)
-![Sample 4](/assets/images/sample4.jpeg)
-![Sample 5](/assets/images/sample5.jpeg)
+![Sample 1](/assets/images/Sample1.jpeg)
+![Sample 2](/assets/images/Sample2.jpeg)
+![Sample 3](/assets/images/Sample3.jpeg)
+![Sample 4](/assets/images/Sample4.jpeg)
+![Sample 5](/assets/images/Sample5.jpeg)
 
 ## Link to deployed application
 
-[] (Wanna Know What's Happening?)
+[https://teamtoo222.github.io/Project-1-UofT/] (Wanna Know What's Happening?)
