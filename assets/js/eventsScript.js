@@ -5,11 +5,14 @@ var searchCity = document.querySelector ("#search-city");
 var searchStartDate = document.querySelector ("#search-start-date");
 var searchEndDate = document.querySelector ("#search-end-date");
 var searchButton = document.querySelector ("#search-button");
+var eventType = 'Events'
+
 // added the form id 
 var searchForm = document.querySelector("#searchForm");
 var currentDate = moment().format('YYYY-MM-DDT08:00:00[Z]');
 var followingDate = moment().add(1, 'days').format('YYYY-MM-DDT07:59:00[Z]');
 var localArray = []
+var savedEventsArray = []
 
 //Variables for display cards
 var eventName = document.querySelector ("#event-name");
@@ -180,11 +183,16 @@ var getEventData = function() {
     showMoreEventsBtn.innerHTML = "Show More"
 
     showMoreEvents.appendChild (showMoreEventsBtn)
-    
-    // localArray =[]
-    // localArray.push(listOfEvents)
-    // console.log (localArray);
-    //debugger
+
+     // save the data to local storage
+    savedEventsArray.push(listOfEvents)
+    console.log (savedEventsArray);
+    //debugger;
+    localStorage.setItem("eventsData", JSON.stringify(savedEventsArray));
+    localStorage.setItem("type", JSON.stringify(eventType));
+
+    loadEventsData();
+
 
     $ ("#show-more-events-btn").click(function() {
     displayAllRecords(listOfEvents);
@@ -255,17 +263,17 @@ var displayAllRecords = function(listOfEvents) {
         divDetailsContainer.appendChild (divEventDetails);
         divEventsContainer.appendChild (divDetailsContainer);
         eventCardsContainer.appendChild (divEventsContainer);
-              
+          
     }
 };
     // )}
 
 
-
-
-
-
-// // Change the function to submit so it works on the other side as well.
-// //Event listener
-// searchForm.addEventListener("submit",getEventData);
-// //showMoreEvents.addEventListener("click", displayAllRecords (localArray)); //problem lies here remove parameter 
+//Function to load the load the Restaurant and Recreations
+var loadEventsData = function() {
+    var loadedEventsData = JSON.parse(localStorage.getItem("eventsData"));
+    
+    if(loadedEventsData != null) {
+        display5Records (loadedEventsData);
+    }
+}

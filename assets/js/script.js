@@ -76,7 +76,6 @@ searchForm.addEventListener('submit', function (event) {
     if(selectedOption === "Events") {
       apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
       eventsDisplay();
-      getEventData();
       
     } else if (selectedOption === "Restaurants") { 
       restaurantsDisplay();
@@ -203,6 +202,7 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
 // Function to load the load the Restaurant and Recreations
 var loadResData = function() {
   var loadedResData = JSON.parse(localStorage.getItem("resData"));
+  var loadedEventsData = JSON.parse(localStorage.getItem("eventsData"));
   var loadedType = JSON.parse(localStorage.getItem("type"));
   var loadedCities = JSON.parse(localStorage.getItem("searchCities"));
 
@@ -216,7 +216,7 @@ var loadResData = function() {
     recreationsDsiplay();
     document.getElementById("recLocation").textContent = loadedCities[0];
     
-  } else if (loadedType === "Events"){
+  } else if (loadedType === "Events") {
     eventsDisplay();
   }
 
@@ -462,6 +462,8 @@ var displayCovidStats = function (covidArray) {
   todayVaccine.textContent = formatNumber(covidArray.summary[0].avaccine);
 
 };
+
+
 
 // Load covidData when the page loads
 loadCovidData();

@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 //cityButtonLoading.id = storedCityList[i];
     
                 console.log(cityButtonLoading);
-                debugger;
+                //debugger;
             
                 //submitForm.append(cityButtonLoading);
                 
