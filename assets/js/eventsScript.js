@@ -39,7 +39,8 @@ var getEventData = function() {
     showMoreEvents.innerHTML =""
     event.preventDefault ();
     var city = searchCity.value
-    console.log(city)
+    localStorage.setItem("cityUsed", JSON.stringify(searchCity.value));
+    // console.log(cityUsed)
 
 
     if (city === "") {
@@ -190,8 +191,9 @@ var getEventData = function() {
     //debugger;
     localStorage.setItem("eventsData", JSON.stringify(savedEventsArray));
     localStorage.setItem("type", JSON.stringify(eventType));
+    
 
-    loadEventsData();
+    //loadEventsData();
 
 
     $ ("#show-more-events-btn").click(function() {
@@ -266,14 +268,92 @@ var displayAllRecords = function(listOfEvents) {
           
     }
 };
-    // )}
+
 
 
 //Function to load the load the Restaurant and Recreations
 var loadEventsData = function() {
     var loadedEventsData = JSON.parse(localStorage.getItem("eventsData"));
-    
-    if(loadedEventsData != null) {
-        display5Records (loadedEventsData);
-    }
+    var storeDataEvents = loadedEventsData[0]
+    console.log (storeDataEvents)
+    var citieUsed = JSON.parse(localStorage.getItem("searchCities"));
+    console.log (citieUsed)
+    citieUsed.value = searchCity
+    //displayNew5Records (storeDataEvents);
 }
+
+// // Function to display the initial 5 data 
+// var displayNew5Records = function(listOfEvents) {
+    
+//     for (i = 0; i < 4 ; i++) {
+ 
+//         // var from array from API
+//         var eventName = listOfEvents[i].name;
+//         var img = listOfEvents[i].images[7].url;
+//         //console.log(img);
+//         var eventLocalTime = listOfEvents[i].dates.start.localTime;
+//         var eventUrl = listOfEvents[i].url;
+//         //var eventLocalDate = listOfEvents[i].dates.start.localDate // variable to add the local time found in the array if needed
+ 
+//         //div event-container
+//         var divEventsContainer = document.createElement ("div");
+//         divEventsContainer.className = "event-container column card p-0";
+//         divEventsContainer.id = "event-container";
+//         divEventsContainer.innerHTML = 
+//         "<div class='img-container' style = 'background-image: url("+img+")' id = 'img-container'>"+
+//         "<div class='store-status is-flex is-justify-content-flex-end'>" +
+//         "</div>" +
+//         "</div>";
+ 
+//         //div details-container
+//         var divDetailsContainer = document.createElement ("div");
+//         divDetailsContainer.className = "details-container";
+//         divDetailsContainer.id = "details-container";
+ 
+//         //div event-details
+//         var divEventDetails = document.createElement ("div");
+//         divEventDetails.className = "store-details is-flex";
+//         divEventDetails.id = "event-details";
+ 
+//         //p for event name
+//         var pEventName = document.createElement ("p");
+//         pEventName.className = "name";
+//         pEventName.id = "event-name";
+//         pEventName.innerHTML = "<strong>" + eventName + "</strong>"
+ 
+//         //p for event time
+//         var pEventTime = document.createElement ("p");
+//         pEventTime.className = "time";
+//         pEventTime.id = "event-time";
+//         pEventTime.innerHTML = eventLocalTime 
+ 
+//         //p for event url
+//         var pEventULR = document.createElement ("p");
+//         pEventULR.className = "url";
+//         pEventULR.id = "event-url";
+//         pEventULR.innerHTML = "<a href =" + eventUrl + " >Details </a>"
+ 
+//         //appending information
+//         divEventDetails.appendChild (pEventName);
+//         divEventDetails.appendChild (pEventTime);
+//         divEventDetails.appendChild (pEventULR);
+//         divDetailsContainer.appendChild (divEventDetails);
+//         divEventsContainer.appendChild (divDetailsContainer);
+//         eventCardsContainer.appendChild (divEventsContainer);
+              
+//      }
+ 
+//      //Showmore button  
+ 
+//      var showMoreEventsBtn = document.createElement ("button");
+//      showMoreEventsBtn.className = "button is-medium is-danger is-light show-more-button is-flex mt-5";
+//      showMoreEventsBtn.id = "show-more-events-btn"
+//      showMoreEventsBtn.innerHTML = "Show More"
+ 
+//      showMoreEvents.appendChild (showMoreEventsBtn)
+ 
+ 
+//      $ ("#show-more-events-btn").click(function() {
+//      displayAllRecords(listOfEvents);
+//      })
+//   }

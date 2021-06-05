@@ -76,6 +76,8 @@ searchForm.addEventListener('submit', function (event) {
     if(selectedOption === "Events") {
       apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
       eventsDisplay();
+      getEventData();
+
       
     } else if (selectedOption === "Restaurants") { 
       restaurantsDisplay();
@@ -482,4 +484,3 @@ if (placeArray.length !== 0 || covidArray.length !== 0) {
 
 
 
-  
