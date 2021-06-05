@@ -191,7 +191,7 @@ var getEventData = function() {
     localStorage.setItem("eventsData", JSON.stringify(savedEventsArray));
     localStorage.setItem("type", JSON.stringify(eventType));
 
-    loadEventsData();
+    //loadEventsData();
 
 
     $ ("#show-more-events-btn").click(function() {
