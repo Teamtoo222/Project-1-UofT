@@ -40,12 +40,11 @@ body {
 /* Header Style */
 
 .logo-img {
-    height: 40px;
+    height: 50px;
 }
 
 /* Hero Style */
 .hero-container {
-    flex-direction: column;
     height: 600px;
     background-image: url(../images/hero-background.jpg);
     background-position: top;
@@ -61,10 +60,6 @@ body {
     border-radius: 15px;
 }
 
-
-.history-buttons {
-    margin: 20px;
-}
 .form-container {
     margin: auto;
     padding: 20px 20px;
@@ -80,7 +75,7 @@ body {
 }
 
 .hero-def-height {
-    height: 83vh;
+    height: 81vh;
     transition: height 1s, margin 0.2s ease-out;
 }
 
@@ -160,7 +155,7 @@ body {
 }
 
 .event-container {
-    min-width: 250px;
+    min-width: 20%;
     border-radius: 5px;
     margin: 10px 10px;
 }
@@ -240,6 +235,13 @@ body {
     color: #222;
 }
 
+@media only screen and (max-width: 1400px) {
+    .event-container {
+        width: 20%;
+    }
+
+}
+
 @media only screen and (max-width: 1300px) {
     .form-container {
         width: 100%;
@@ -250,6 +252,10 @@ body {
 @media only screen and (max-width: 1024px) {
     .main-container {
         margin: 1rem;
+    }
+
+    .event-container {
+        min-width: 45%;
     }
 
 }
@@ -284,6 +290,10 @@ body {
         margin: 5px;
     }
 
+    .covidContRow {
+        margin-top: 20px;
+    }
+
     select {
         margin-left: 5px;
         min-width: 100%;
@@ -292,6 +302,10 @@ body {
     .select {
         margin-top: 5px;
         margin-bottom: 5px;
+    }
+
+    .event-container {
+        min-width: 100%;
     }
 
     /* .covid-stat-container {
