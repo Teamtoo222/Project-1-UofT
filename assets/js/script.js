@@ -23,6 +23,7 @@ var covidContainer = document.getElementById("covidContainer");
 var eventsContainer = document.getElementById("nearby-events-section");
 var restaurantsContainer = document.getElementById("restaurantsContainer");
 var recreationContainer = document.getElementById("recreationContainer");
+var newscontainer = document.querySelector("#news-cards-container");
 
 // type = 'tourist_attraction';
 // targetId = '#nearby-recreation';
@@ -93,6 +94,8 @@ searchForm.addEventListener('submit', function (event) {
     // document.querySelector("#keywordInput").value = "";
 
   }
+
+  newscontainer.innerHTML = "";
 
 });
 
@@ -379,6 +382,8 @@ var covidLoc = function(data) {
   var covidUrl = "https://api.opencovid.ca/summary?loc=" + province + "&date=" + currentDay;
 
   covidData(covidUrl);
+  covidNewsFetch(province);
+  covidNewsLoc.textContent = province;
 } 
 
 // Array for Covid
@@ -432,6 +437,7 @@ var todayChange = document.querySelector("#todayChange");
 var todayVaccine = document.querySelector("#todayVaccine");
 var proviceEl = document.querySelectorAll(".province");
 var covidLocEl = document.querySelector("#covidLocation");
+var covidNewsLoc = document.querySelector("#covidNewsLoc");
 
 // Function to format numbers (Obtained from - https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript)
 function formatNumber(num) {
@@ -446,7 +452,8 @@ var displayCovidStats = function (covidArray) {
   todayCases.textContent = formatNumber(covidArray.summary[0].cases);
   todayDeaths.textContent = formatNumber(covidArray.summary[0].deaths);
   todayRecovered.textContent = formatNumber(covidArray.summary[0].recovered);
-  covidLocEl.textContent = formatNumber(covidArray.summary[0].province);
+  covidLocEl.textContent = covidArray.summary[0].province;
+  covidNewsLoc.textContent = covidArray.summary[0].province;
   totalTests.textContent = formatNumber(covidArray.summary[0].cumulative_testing);
   totalActive.textContent = formatNumber(covidArray.summary[0].active_cases);
   totalVaccine.textContent = formatNumber(covidArray.summary[0].cumulative_avaccine);
@@ -455,6 +462,93 @@ var displayCovidStats = function (covidArray) {
   todayVaccine.textContent = formatNumber(covidArray.summary[0].avaccine);
 
 };
+
+
+
+// Covid 19 News
+var covidNewsFetch = function(chosenProvince) {
+  // Covid News
+  fetch("https://coronavirus-smartable.p.rapidapi.com/news/v1/CA-" + chosenProvince + "/", {
+    "method": "GET",
+    "headers": {
+      "x-rapidapi-key": "4cf7ac4704msh1b9e803a13a0c62p1cfe7djsnef3594636b71",
+      "x-rapidapi-host": "coronavirus-smartable.p.rapidapi.com"
+    }
+  })
+  .then(response => {
+    return response.json();
+  })
+  .then(data => {
+    console.log(data);
+    CovidNewsCards(data);
+    localStorage.setItem("news", JSON.stringify(data));
+
+  })
+  .catch(err => {
+    console.error(err);
+  });
+};
+// function checkImage(url) {
+//   var image = new Image();
+//   image.onload = function() {
+//     if (this.width > 0) {
+//       console.log("image exists");
+//     }
+//   }
+//   image.onerror = function() {
+//     console.log("image doesn't exist");
+//   }
+//   image.src = url;
+// };
+
+//  Covid News Generator 
+
+
+var CovidNewsCards = function(newsData) {     
+  for(var i = iStart; i < iEnd;i ++) {
+    var imageUrl = "";
+    if(newsData.news[i].images === null) {
+      imageUrl = "./assets/images/news.jpg";
+    } else {
+      imageUrl = newsData.news[i].images[0].url;
+    }
+
+    var articleDate = moment(newsData.news[i].publishedDateTime).format("MM/DD/YYYY");
+    const newsCardTemp = `
+      <a class="linkImage" href=${newsData.news[i].originalUrl} target="_blank">
+      <div class="img-container" style="background-image:url(${imageUrl});">
+      <div class="w-100 is-flex is-justify-content-space-between">
+      <p class="open-status">${articleDate}</p>
+      </div>
+      </div>
+      </a>
+      <div class="details-container">
+      <div class="store-details is-flex">
+      <a href="${newsData.news[i].originalUrl}" target="_blank"><p class="store-name wrap-content-100 height-65"><strong>${newsData.news[i].title}</strong></p></a>
+      <p class="store-desc wrap-content-100 my-2">${newsData.news[i].excerpt}</p>
+        <a href="${newsData.news[i].originalUrl}" target="_blank"><i class="fas fa-globe"></i>&nbsp ${newsData.news[i].provider.name}</a>
+        </div>
+        </div>
+        `;
+
+      // Create and append the card
+      const container = document.createElement('div');
+      container.classList = "event-container column card p-0";
+      container.innerHTML = newsCardTemp;
+      document.querySelector("#news-cards-container").append(container); 
+    }
+};
+
+
+
+document.querySelector('#show-news').addEventListener('click', () => {
+  var loadedNews = JSON.parse(localStorage.getItem("news"));
+  iStart += 4;
+  iEnd += 4;
+// run the passNearByData function
+CovidNewsCards(loadedNews);
+});
+
 
 // Load covidData when the page loads
 loadCovidData();
@@ -469,3 +563,5 @@ if (placeArray.length !== 0 || covidArray.length !== 0) {
 } else {
   mainCont.style.display = "none";
 }
+
+

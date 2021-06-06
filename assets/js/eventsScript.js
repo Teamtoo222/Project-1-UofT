@@ -260,11 +260,6 @@ var displayAllRecords = function(listOfEvents) {
 };
     // )}
 
-
-
-
-
-
 // // Change the function to submit so it works on the other side as well.
 // //Event listener
 // searchForm.addEventListener("submit",getEventData);

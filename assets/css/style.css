@@ -235,6 +235,19 @@ body {
     color: #222;
 }
 
+.wrap-content-100 {
+    /* white-space: nowrap; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.height-65 {
+    height: 65px;
+}
+
 @media only screen and (max-width: 1400px) {
     .event-container {
         width: 20%;
