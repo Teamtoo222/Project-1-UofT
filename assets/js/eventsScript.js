@@ -31,6 +31,8 @@ var showMoreEventsBtn = document.querySelector ("#show-more-events-btn");
 iStart = 0;
 iEnd = 4;
 
+var listOfEvents = [];
+
 //var initialSampleAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=Toronto&startDateTime=2021-05-28T04:00:00Z&endDateTime=2021-05-29T04:00:00z&apikey=jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb"
 
 
@@ -73,33 +75,10 @@ var getEventData = function() {
                         } else {
                             //alert ("unavailable")
                             //div event-container
-                            var divEventsContainer = document.createElement ("div");
-                            divEventsContainer.className = "event-container column card p-0";
-                            divEventsContainer.id = "event-container";
-
-                            //div details-container
-                            var divDetailsContainer = document.createElement ("div");
-                            divDetailsContainer.className = "details-container";
-                            divDetailsContainer.id = "details-container";
-
-                            //div event-details
-                            var divEventDetails = document.createElement ("div");
-                            divEventDetails.className = "store-details is-flex";
-                            divEventDetails.id = "event-details";
-
-                            //p for Alert for nothing available
-                            var pnothing = document.createElement ("p");
-                            pnothing.className = "is-size-3 has-text-centered";
-                            pnothing.id = "event-name";
-                            pnothing.innerHTML = "<strong> Nothing is Available </strong>"
-
-
-                            //appending information
-                            divEventDetails.appendChild (pnothing);
-                            divDetailsContainer.appendChild (divEventDetails);
-                            divEventsContainer.appendChild (divDetailsContainer);
-                            eventCardsContainer.appendChild (divEventsContainer);
-        
+                            listOfEvents = [];
+                            localStorage.setItem("eventsData", JSON.stringify(listOfEvents));
+                            noEventsDsoplay();
+                            
                         }
 
                     })
@@ -111,6 +90,36 @@ var getEventData = function() {
 
             //searchCity.value = city
         }
+
+
+var noEventsDsoplay = function() {
+    var divEventsContainer = document.createElement ("div");
+    divEventsContainer.className = "event-container column card p-0";
+    divEventsContainer.id = "event-container";
+
+    //div details-container
+    var divDetailsContainer = document.createElement ("div");
+    divDetailsContainer.className = "details-container";
+    divDetailsContainer.id = "details-container";
+
+    //div event-details
+    var divEventDetails = document.createElement ("div");
+    divEventDetails.className = "store-details is-flex";
+    divEventDetails.id = "event-details";
+
+    //p for Alert for nothing available
+    var pnothing = document.createElement ("p");
+    pnothing.className = "is-size-3 has-text-centered";
+    pnothing.id = "event-name";
+    pnothing.innerHTML = "<strong> Nothing is Available </strong>"
+
+
+    //appending information
+    divEventDetails.appendChild (pnothing);
+    divDetailsContainer.appendChild (divEventDetails);
+    divEventsContainer.appendChild (divDetailsContainer);
+    eventCardsContainer.appendChild (divEventsContainer);
+};
 
 // Function to display the initial 5 data 
  var display5Records = function(listOfEvents) {
@@ -214,8 +223,12 @@ var loadEvents = function() {
         listOfEvents = loadedData;
     }
 
-    console.log(listOfEvents);
-    display5Records(listOfEvents);
+    if(listOfEvents.length === 0) {
+        noEventsDsoplay();
+    } else {
+        console.log(listOfEvents);
+        display5Records(listOfEvents);
+    } 
 };
 
 
