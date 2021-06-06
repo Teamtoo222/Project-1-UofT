@@ -93,6 +93,8 @@ searchForm.addEventListener('submit', function (event) {
       apiGeoCodeFetch(googleGeoCodeUrl, selectedOption, cityInput);
     }
 
+    localStorage.setItem("type", JSON.stringify(selectedOption));
+
     searchForm.reset();
     // document.querySelector("#keywordInput").value = "";
 
@@ -191,7 +193,6 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
 
       // save the data to local storage
       localStorage.setItem("resData", JSON.stringify(placeIdArray));
-      localStorage.setItem("type", JSON.stringify(typeOf));
       localStorage.setItem("restSearchCities", JSON.stringify(resSearchedCities));
       
       
@@ -204,7 +205,7 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
 // Function to load the load the Restaurant and Recreations
 var loadResData = function() {
   var loadedResData = JSON.parse(localStorage.getItem("resData"));
-  var loadedEventsData = JSON.parse(localStorage.getItem("eventsData"));
+  // var loadedEventsData = JSON.parse(localStorage.getItem("eventsData"));
   var loadedType = JSON.parse(localStorage.getItem("type"));
   var loadedCities = JSON.parse(localStorage.getItem("searchCities"));
 
