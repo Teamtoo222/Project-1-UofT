@@ -5,7 +5,7 @@ var searchCity = document.querySelector ("#search-city");
 var searchStartDate = document.querySelector ("#search-start-date");
 var searchEndDate = document.querySelector ("#search-end-date");
 var searchButton = document.querySelector ("#search-button");
-var eventType = 'Events'
+var selectedOption = document.getElementById("selectOption").value;
 
 // added the form id 
 var searchForm = document.querySelector("#searchForm");
@@ -192,7 +192,6 @@ var getEventData = function() {
     console.log (savedEventsArray);
     //debugger;
     localStorage.setItem("eventsData", JSON.stringify(savedEventsArray));
-    localStorage.setItem("type", JSON.stringify(eventType));
 
     //loadEventsData();
 
