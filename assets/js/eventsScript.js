@@ -27,6 +27,10 @@ var nearbyEventsSection = document.querySelector ("#nearby-events-section");
 var showMoreEvents = document.querySelector ("#show-more-events");
 var showMoreEventsBtn = document.querySelector ("#show-more-events-btn");
 
+// Variables for i
+iStart = 0;
+iEnd = 4;
+
 //var initialSampleAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=Toronto&startDateTime=2021-05-28T04:00:00Z&endDateTime=2021-05-29T04:00:00z&apikey=jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb"
 
 
@@ -111,7 +115,12 @@ var getEventData = function() {
 // Function to display the initial 5 data 
  var display5Records = function(listOfEvents) {
     
-   for (i = 0; i < 4 ; i++) {
+   for (i = iStart; i < iEnd ; i++) {
+
+    // Set i besed on the length
+    if(listOfEvents.length < iEnd) {
+        iEnd = listOfEvents.length;
+    }
 
        // var from array from API
        var eventName = listOfEvents[i].name;
@@ -179,32 +188,50 @@ var getEventData = function() {
     showMoreEvents.appendChild (showMoreEventsBtn)
 
      // save the data to local storage
-    savedEventsArray.push(listOfEvents)
+    savedEventsArray = listOfEvents;
     console.log (savedEventsArray);
     //debugger;
     localStorage.setItem("eventsData", JSON.stringify(savedEventsArray));
     localStorage.setItem("type", JSON.stringify(eventType));
-    
 
     //loadEventsData();
 
 
     $ ("#show-more-events-btn").click(function() {
+    iStart += 4;
+    iEnd += 4;
+
     displayAllRecords(listOfEvents);
     })
- }
+};
+
+var loadEvents = function() {
+    var loadedData = JSON.parse(localStorage.getItem("eventsData"));
+
+    if(!loadedData) {
+      return;
+    } else {
+        listOfEvents = loadedData;
+    }
+
+    console.log(listOfEvents);
+    display5Records(listOfEvents);
+};
 
 
 // Function to display the initial remaining data 
 var displayAllRecords = function(listOfEvents) {
 
     // $ ("#show-more-events-btn").click(function(localArray) {
-    eventCardsContainer.innerHTML = ""
-    showMoreEvents.innerHTML =""
+    // eventCardsContainer.innerHTML = ""
+    // showMoreEvents.innerHTML =""
     console.log (listOfEvents)
    //debugger
+    if(listOfEvents.length < iEnd) {
+        iEnd = listOfEvents.length;
+    }
 
-    for (i = 0; i < listOfEvents.length ; i++) {
+    for (i = iStart; i < iEnd ; i++) {
  
         // var from array from API
         var eventName = listOfEvents[i].name;
@@ -262,7 +289,7 @@ var displayAllRecords = function(listOfEvents) {
     }
 };
 
-
+loadEvents();
 
 // //Function to load the load the Restaurant and Recreations
 // var loadEventsData = function() {
