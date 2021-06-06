@@ -45,6 +45,7 @@ body {
 
 /* Hero Style */
 .hero-container {
+    flex-direction: column;
     height: 600px;
     background-image: url(../images/hero-background.jpg);
     background-position: top;
@@ -60,6 +61,9 @@ body {
     border-radius: 15px;
 }
 
+.history-buttons {
+    margin: 20px;
+}
 .form-container {
     margin: auto;
     padding: 20px 20px;

@@ -25,10 +25,18 @@ var heroContainer = document.getElementById("heroContainer");
 // type = 'tourist_attraction';
 // targetId = '#nearby-recreation';
 
+// For local storage of searched cities
+var retrievedHistory = localStorage.getItem('History')
+if (localStorage.length ===0) {
+var searchHistory = [];
+} else {
+  searchHistory = JSON.parse(retrievedHistory)
+} 
+
 
 var service = new google.maps.places.PlacesService(document.getElementById('map'));
 // submit form event listner
-searchForm.addEventListener('submit', function (event) {
+searchForm.addEventListener('submit', function search(event) {
   event.preventDefault();
   cityInput = document.getElementById('search-city').value;
   keywordInput = document.getElementById('keywordInput').value;
@@ -57,7 +65,6 @@ searchForm.addEventListener('submit', function (event) {
 
     //document.getElementById("mainContainer").innerHTML = "";
 
-    
     heroContainer.classList.remove("hero-def-height");
     mainCont.classList.add("p-2", "main-container");
     
@@ -101,11 +108,77 @@ searchForm.addEventListener('submit', function (event) {
     // searchForm.reset();
     document.querySelector("#keywordInput").value = "";
 
-  }
 
+    
+
+
+
+      //Save searched cities in local history
+    searchHistory.push(cityInput.charAt(0).toUpperCase() + cityInput.slice(1))
+    localStorage.setItem('History', JSON.stringify(searchHistory))
+      
+    
+  var historyContainer = document.querySelector("#history");
+  historyContainer.classList.remove('hideEl');
+
+  // Create buttons for searched cities
+
+  var historyButtons = document.createElement('button')
+  historyButtons.innerHTML = searchHistory[searchHistory.length-1]
+  historyButtons.classList.add('button')
+  historyButtons.classList.add('is-danger')
+  historyButtons.classList.add('history-buttons')
+  historyContainer.appendChild(historyButtons)
+  }
+  
+
+
+  
+  
+
+   // Clicking on button returns information for the city 
+   historyButtons.addEventListener("click", function() {
+    document.querySelector("#search-city").value = historyButtons.innerHTML;
+    search(event);
+    document.querySelector('#search-city').value = ""
+     historyButtons.classList.add('hideEl')
+
+   
+    
+  
+    })
+
+  
 });
 
 
+
+//To retrieve searched cities from local history and create buttons for them
+var historyContainer = document.querySelector("#history");
+
+// Will not display div containing list of searched cities if there are no cities saved in local storage
+if (localStorage.length !== 0){
+historyContainer.classList.remove('hideEl')
+
+// Create buttons for each searched city that is saved in local history
+
+for (var i=0 ; i < searchHistory.length ; i++){
+  var historyButtons = document.createElement('button')
+historyButtons.innerHTML = searchHistory[i];
+historyButtons.classList.add('button');
+historyButtons.classList.add('is-danger');
+historyButtons.classList.add('history-buttons');
+historyContainer.appendChild(historyButtons)
+} 
+}
+
+
+// To prevent listening to something that does not exist since there is no search history
+// if (localStorage.length !==0) {
+// historyButtons.addEventListener("click", function() {
+//   document.getElementById('search-city').value = historyButtons.innerHTML
+// })
+// }
 
 // Fetch the google data
 var apiGeoCodeFetch = function (url, option) {
