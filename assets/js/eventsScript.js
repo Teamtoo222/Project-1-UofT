@@ -206,8 +206,9 @@ var getEventData = function() {
 
 var loadEvents = function() {
     var loadedData = JSON.parse(localStorage.getItem("eventsData"));
+    var loadedType = JSON.parse(localStorage.getItem("type"));
 
-    if(!loadedData) {
+    if(!loadedData || loadedType !== "Events") {
       return;
     } else {
         listOfEvents = loadedData;

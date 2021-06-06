@@ -209,18 +209,19 @@ var loadResData = function() {
   var loadedType = JSON.parse(localStorage.getItem("type"));
   var loadedCities = JSON.parse(localStorage.getItem("searchCities"));
 
-  if(loadedType === "Restaurants") {
-    type = "#nearby-resturants";
+  if (loadedType === "Events") {
+    eventsDisplay();
+    return;
+  } else if(loadedType === "Restaurants") {
+    targetId = "#nearby-resturants";
     restaurantsDisplay();
     document.getElementById("resLocation").textContent = loadedCities[0];
 
   } else if (loadedType === "Recreations") {
-    type = "#nearby-recreation";
+    targetId = "#nearby-recreation";
     recreationsDsiplay();
     document.getElementById("recLocation").textContent = loadedCities[0];
     
-  } else if (loadedType === "Events") {
-    eventsDisplay();
   }
 
   // if the loaded data is empty hide all the elements
@@ -232,12 +233,12 @@ var loadResData = function() {
 
   } else {
     placeArray = loadedResData;
-    passNearByData(placeArray ,type);
+    passNearByData(placeArray ,targetId);
   }
 };
 
 // Function to pass the nearByData
-var passNearByData = function (place ,targetId) {
+var passNearByData = function (place ,typeId) {
   if (place) {
     for (let i = iStart; i < iEnd; i++) {
       // Get details method, check this link for more info https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.getDetails
@@ -250,7 +251,7 @@ var passNearByData = function (place ,targetId) {
           function (getResults, status) {
             if (getResults) {
               //console.log('rec details **** :', targetId);
-              createCards(getResults ,targetId);
+              createCards(getResults ,typeId);
             }
           }
         );
@@ -258,8 +259,6 @@ var passNearByData = function (place ,targetId) {
     }
   }
 }
-
-loadResData();
 
 var createCards = function(place ,targetId) {
   if(place.hasOwnProperty("opening_hours")) {
@@ -359,7 +358,7 @@ document.querySelector('#show-res').addEventListener('click', () => {
   iStart += 4;
   iEnd += 4;
 // run the passNearByData function
-  passNearByData(placeArray, type);
+  passNearByData(placeArray, targetId);
 });
 
 
@@ -367,8 +366,10 @@ document.querySelector('#show-rec').addEventListener('click', () => {
   iStart += 4;
   iEnd += 4;
 // run the passNearByData function
-  passNearByData(placeArray, type);
+  passNearByData(placeArray, targetId);
 });
+
+loadResData();
 
 /**
  * ////////////// COVID SECTION ///////////////
