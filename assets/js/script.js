@@ -191,9 +191,11 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
       keyword: keywordInput,
       // Type or option for the result Restaurants or Recreations
       type: typeOf,
+      RankBy: "DISTANCE"
     },
-    function (place, status) {
-      
+    // pagination can be used for future development
+    function (place, status, pagination) {
+    
       var placeIdArray = [];
       var resSearchedCities = [];
 
@@ -207,9 +209,7 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
 
       // save the data to local storage
       localStorage.setItem("resData", JSON.stringify(placeIdArray));
-      // localStorage.setItem("restSearchCities", JSON.stringify(resSearchedCities));
-      
-      
+      // localStorage.setItem("restSearchCities", JSON.stringify(resSearchedCities)); 
       // load the Resdata
       loadResData();
     }
@@ -285,7 +285,7 @@ var passNearByData = function (place ,typeId, oriLoc) {
           },
           function (getResults, status) {
             if (getResults) {
-              console.log('rec details **** :', getResults);
+              // console.log('rec details **** :', getResults);
               desLatResult = getResults.geometry.location.lat();
               desLngResult = getResults.geometry.location.lng();
             
@@ -293,7 +293,6 @@ var passNearByData = function (place ,typeId, oriLoc) {
             }
           }
         );
-        
       }
     }
   }
@@ -328,21 +327,25 @@ var createCards = function(place ,targetId, val, time) {
   if(place.hasOwnProperty("photos")) {
     var photoUrl = place.photos[0].getUrl();
   } else {
-    photoUrl = "https://picsum.photos/640/320/?blur=8";
+    photoUrl = "./assets/images/default-img.jpg";
   }
 
   // check if the array has a rating
   if(place.hasOwnProperty("rating")) {
     var placeRating = place.rating;
+    var ratingClass = "";
   } else {
     placeRating = "N/A";
+    ratingClass = "visibility-hidden";
   }
 
   // check if the array has a phone number
   if(place.hasOwnProperty("formatted_phone_number")) {
     var placePhone = place.formatted_phone_number;
+    var phoneClass = "";
   } else {
     placePhone = "Not Available";
+    phoneClass = "visibility-hidden";
   }
 
   // getDistance(desLatResult, desLngResult);
@@ -355,8 +358,8 @@ var createCards = function(place ,targetId, val, time) {
     <div class="img-container" style="background-image:url(${photoUrl});">
     <div class="store-status is-flex is-align-items-flex-end is-flex-direction-column">
     <div class="w-100 is-flex is-justify-content-space-between">
-    <p class="ratingNumb"><i class="ratingNumbIcon fas fa-star-half-alt"></i>&nbsp${placeRating}</p>
-    <p class="mb-2 open-status">${openStatus}</p>
+    <p class="ratingNumb ${ratingClass}"><i class="ratingNumbIcon fas fa-star-half-alt"></i>&nbsp${placeRating}</p>
+    <p class="mb-2 open-status ${phoneClass}">${openStatus}</p>
     </div>
     <p class="${busClassList}">${businesStatus}</p>
     </div>
@@ -368,7 +371,7 @@ var createCards = function(place ,targetId, val, time) {
       <a class="wrap-content" href="https://maps.google.com/maps?q=${place.formatted_address}" target="_blank class="store-address"><i class="fas fa-map-marker-alt">&nbsp</i>${place.formatted_address}</a>
       <a href="tel:${place.formatted_phone_number}" class="store-phone"><i class="fas fa-phone-alt"></i>&nbsp${placePhone}</a>
       <a href="${place.website}" target="_blank"><i class="fas fa-globe"></i>&nbsp Website</a> 
-      <p> <i class="fas fa-car-side"></i> &nbsp ${val} | ${time} </p>
+      <p> <i class="fas fa-car-side"></i>&nbsp ${val} | ${time} </p>
       </div>
       </div>
       `;

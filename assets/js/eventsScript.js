@@ -46,8 +46,7 @@ var getEventData = function() {
     // event.preventDefault ();
 
     var city = searchCity.value
-    console.log (city)
-    localStorage.setItem("cityUsed", JSON.stringify(city))
+    localStorage.setItem("cityUsed", JSON.stringify(city));
 
 
         var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&size=15&sort=relevance,desc&city=" 
@@ -59,18 +58,18 @@ var getEventData = function() {
                     + "&apikey="
                     + APIkey
 
-        console.log (eventsAPI);
+        // console.log (eventsAPI);
 
         fetch (eventsAPI)
             .then(function(response) {
                 if (response.ok) {
                     response.json().then(function (data){
-                        console.log (data);// all details
+                        // console.log (data);// all details
                         //console.log (data._embedded.events);// list of all events
                         //console.log (data._embedded.events[0].name);// name of the first event
                         if (data._embedded != undefined || data._embedded != null || city.value != null) {
                         var listOfEvents = data._embedded.events
-                        console.log (listOfEvents)
+                        // console.log (listOfEvents)
                         display5Records (listOfEvents);
                         } else {
                             //alert ("unavailable")
@@ -198,7 +197,7 @@ var noEventsDsoplay = function() {
 
      // save the data to local storage
     savedEventsArray = listOfEvents;
-    console.log (savedEventsArray);
+    // console.log (savedEventsArray);
     //debugger;
     localStorage.setItem("eventsData", JSON.stringify(savedEventsArray));
 
@@ -226,7 +225,7 @@ var loadEvents = function() {
     if(listOfEvents.length === 0) {
         noEventsDsoplay();
     } else {
-        console.log(listOfEvents);
+        // console.log(listOfEvents);
         display5Records(listOfEvents);
     } 
 };
@@ -238,7 +237,7 @@ var displayAllRecords = function(listOfEvents) {
     // $ ("#show-more-events-btn").click(function(localArray) {
     // eventCardsContainer.innerHTML = ""
     // showMoreEvents.innerHTML =""
-    console.log (listOfEvents)
+    // console.log (listOfEvents)
    //debugger
     if(listOfEvents.length < iEnd) {
         iEnd = listOfEvents.length;
