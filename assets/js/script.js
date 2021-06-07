@@ -371,7 +371,7 @@ var createCards = function(place ,targetId, val, time) {
       <a class="wrap-content" href="https://maps.google.com/maps?q=${place.formatted_address}" target="_blank class="store-address"><i class="fas fa-map-marker-alt">&nbsp</i>${place.formatted_address}</a>
       <a href="tel:${place.formatted_phone_number}" class="store-phone"><i class="fas fa-phone-alt"></i>&nbsp${placePhone}</a>
       <a href="${place.website}" target="_blank"><i class="fas fa-globe"></i>&nbsp Website</a> 
-      <p> <i class="fas fa-car-side"></i>&nbsp ${val} | ${time} </p>
+      <a class="wrap-content" href="https://www.google.com/maps/dir/?api=1&destination=${place.formatted_address}" target="_blank class="store-address"><p> <i class="fas fa-car-side"></i>&nbsp ${val} | ${time} </p></a>
       </div>
       </div>
       `;
