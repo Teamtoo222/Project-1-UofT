@@ -250,12 +250,12 @@ var loadResData = function() {
   } else if(loadedType === "Restaurants") {
     targetId = "#nearby-resturants";
     restaurantsDisplay();
-    document.getElementById("resLocation").textContent = loadedCities[0];
+    document.getElementById("resLocation").textContent = loadedCities[loadedCities.length-1];
 
   } else if (loadedType === "Recreations") {
     targetId = "#nearby-recreation";
     recreationsDsiplay();
-    document.getElementById("recLocation").textContent = loadedCities[0];
+    document.getElementById("recLocation").textContent = loadedCities[loadedCities.length-1];
     
   }
 
