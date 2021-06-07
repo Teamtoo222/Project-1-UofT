@@ -22,8 +22,7 @@ During this pandemic, we've all been through lockdowns or quarantines, and most 
 - Opencovid Canada API
 
 ## Screenshot
-
-Sample Screenhots
+> ### Sample Screenhots of deployed application.
 
 ![Sample 1](/assets/images/Sample1.jpeg)
 ![Sample 2](/assets/images/Sample2.jpeg)
@@ -31,6 +30,6 @@ Sample Screenhots
 ![Sample 4](/assets/images/Sample4.jpeg)
 ![Sample 5](/assets/images/Sample5.jpeg)
 
-## Link to deployed application
+## Link to Deployed Application
 
-[https://teamtoo222.github.io/Project-1-UofT/] (Wanna Know What's Happening?)
+[**Click Here**](https://teamtoo222.github.io/Project-1-UofT/) to view the project in Github Pages. (Wanna Know What's Happening?)
