@@ -25,8 +25,9 @@ During this pandemic, we've all been through lockdowns or quarantines, and most 
 [**Click Here**](https://teamtoo222.github.io/Project-1-UofT/) to view the project in Github Pages. (Wanna Know What's Happening?)
 
 ## Screenshot
-> ### Sample Screenhots of deployed application.
+> ### Sample GIF of deployed application.
 ![Final Output Of The Website!](./assets/images/final-product.gif "Final Output Of The Website")
+> ### Sample Screenhots of deployed application.
 ![Sample 1](/assets/images/Sample1.jpeg)
 ![Sample 2](/assets/images/Sample2.jpeg)
 ![Sample 3](/assets/images/Sample3.jpeg)
