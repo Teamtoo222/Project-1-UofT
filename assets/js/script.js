@@ -428,23 +428,7 @@ var checkDistance = function(results,typeId, deslat, desLng) {
         });
 };
 
-
-// // Fcuntion to check the business status
-// var busStatChecker = function() {
-// // Change the background color of busStats
-//   var busStatEl = document.querySelectorAll(".busStatus");
-
-//   for (var i = 0; i < busStatEl.length; i++) {
-//     if(busStatEl[i] === "Operational") {
-//       var statEl =  document.querySelector(".busStatus");
-//       statEl.classList.remove("bg-red");
-//       statEl.classList.add("bg-green");
-//     }
-//   }
-// };
-
-
-
+// eventlistner for showres
 document.querySelector('#show-res').addEventListener('click', () => {
   iStart += 4;
   iEnd += 4;
@@ -452,7 +436,7 @@ document.querySelector('#show-res').addEventListener('click', () => {
   passNearByData(placeArray, targetId);
 });
 
-
+// eventlistner for showrec
 document.querySelector('#show-rec').addEventListener('click', () => {
   iStart += 4;
   iEnd += 4;
@@ -460,6 +444,7 @@ document.querySelector('#show-rec').addEventListener('click', () => {
   passNearByData(placeArray, targetId);
 });
 
+// Load the Res data if there any
 loadResData();
 
 /**
