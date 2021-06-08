@@ -5,11 +5,14 @@ var searchCity = document.querySelector ("#search-city");
 var searchStartDate = document.querySelector ("#search-start-date");
 var searchEndDate = document.querySelector ("#search-end-date");
 var searchButton = document.querySelector ("#search-button");
+var selectedOption = document.getElementById("selectOption").value;
+
 // added the form id 
 var searchForm = document.querySelector("#searchForm");
 var currentDate = moment().format('YYYY-MM-DDT08:00:00[Z]');
 var followingDate = moment().add(1, 'days').format('YYYY-MM-DDT07:59:00[Z]');
 var localArray = []
+var savedEventsArray = []
 
 //Variables for display cards
 var eventName = document.querySelector ("#event-name");
@@ -24,6 +27,12 @@ var nearbyEventsSection = document.querySelector ("#nearby-events-section");
 var showMoreEvents = document.querySelector ("#show-more-events");
 var showMoreEventsBtn = document.querySelector ("#show-more-events-btn");
 
+// Variables for i
+iStart = 0;
+iEnd = 4;
+
+var listOfEvents = [];
+
 //var initialSampleAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&city=Toronto&startDateTime=2021-05-28T04:00:00Z&endDateTime=2021-05-29T04:00:00z&apikey=jYz6ksJAF3WA0eHLAKxbYjp1ZIU0zYlb"
 
 
@@ -34,87 +43,92 @@ var showMoreEventsBtn = document.querySelector ("#show-more-events-btn");
 var getEventData = function() {
     eventCardsContainer.innerHTML = ""
     showMoreEvents.innerHTML =""
-    event.preventDefault ();
+    // event.preventDefault ();
+
     var city = searchCity.value
-    console.log(city)
+    localStorage.setItem("cityUsed", JSON.stringify(city));
 
 
-    if (city === "") {
-        // alert("please insert value")
-    } else {
-    //var startDate = searchStartDate.value + "T04:00:00Z"// in case we need a value via input
-    //var endDate = searchEndDate.value + "T04:00:00Z"// in case we need a value via input
-    //saveData(city,startDate,endDate);//possible local storage function if needed
+        var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&size=15&sort=relevance,desc&city=" 
+                    + city 
+                    + "&startDateTime=" 
+                    + currentDate 
+                    + "&endDateTime="
+                    + followingDate 
+                    + "&apikey="
+                    + APIkey
 
-    var eventsAPI = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=CA&size=15&sort=relevance,desc&city=" 
-                + city 
-                + "&startDateTime=" 
-                + currentDate 
-                + "&endDateTime="
-                + followingDate 
-                + "&apikey="
-                + APIkey
+        // console.log (eventsAPI);
 
-    console.log (eventsAPI);
+        fetch (eventsAPI)
+            .then(function(response) {
+                if (response.ok) {
+                    response.json().then(function (data){
+                        // console.log (data);// all details
+                        //console.log (data._embedded.events);// list of all events
+                        //console.log (data._embedded.events[0].name);// name of the first event
+                        if (data._embedded != undefined || data._embedded != null || city.value != null) {
+                        var listOfEvents = data._embedded.events
+                        // console.log (listOfEvents)
+                        display5Records (listOfEvents);
+                        } else {
+                            //alert ("unavailable")
+                            //div event-container
+                            listOfEvents = [];
+                            localStorage.setItem("eventsData", JSON.stringify(listOfEvents));
+                            noEventsDsoplay();
+                            
+                        }
 
-    fetch (eventsAPI)
-        .then(function(response) {
-            if (response.ok) {
-                response.json().then(function (data){
-                    console.log (data);// all details
-                    //console.log (data._embedded.events);// list of all events
-                    //console.log (data._embedded.events[0].name);// name of the first event
-                    if (data._embedded != undefined || data._embedded != null || city.value != null) {
-                    var listOfEvents = data._embedded.events
-                    console.log (listOfEvents)
-                    display5Records (listOfEvents);
-                    } else {
-                        //alert ("unavailable")
-                        //div event-container
-                        var divEventsContainer = document.createElement ("div");
-                        divEventsContainer.className = "event-container column card p-0";
-                        divEventsContainer.id = "event-container";
+                    })
+                }
+            })
+            .catch(function(error) {
+                alert("Unable to connect");
+            })
 
-                        //div details-container
-                        var divDetailsContainer = document.createElement ("div");
-                        divDetailsContainer.className = "details-container";
-                        divDetailsContainer.id = "details-container";
-
-                        //div event-details
-                        var divEventDetails = document.createElement ("div");
-                        divEventDetails.className = "store-details is-flex";
-                        divEventDetails.id = "event-details";
-
-                        //p for Alert for nothing available
-                        var pnothing = document.createElement ("p");
-                        pnothing.className = "is-size-3 has-text-centered";
-                        pnothing.id = "event-name";
-                        pnothing.innerHTML = "<strong> Nothing is Available </strong>"
+            //searchCity.value = city
+        }
 
 
-                        //appending information
-                        divEventDetails.appendChild (pnothing);
-                        divDetailsContainer.appendChild (divEventDetails);
-                        divEventsContainer.appendChild (divDetailsContainer);
-                        eventCardsContainer.appendChild (divEventsContainer);
-       
-                    }
+var noEventsDsoplay = function() {
+    var divEventsContainer = document.createElement ("div");
+    divEventsContainer.className = "event-container column card p-0";
+    divEventsContainer.id = "event-container";
 
-                })
-            }
-        })
-        .catch(function(error) {
-            alert("Unable to connect");
-        })
-    }
+    //div details-container
+    var divDetailsContainer = document.createElement ("div");
+    divDetailsContainer.className = "details-container";
+    divDetailsContainer.id = "details-container";
 
-        // searchCity.value = ""
-}
+    //div event-details
+    var divEventDetails = document.createElement ("div");
+    divEventDetails.className = "store-details is-flex";
+    divEventDetails.id = "event-details";
+
+    //p for Alert for nothing available
+    var pnothing = document.createElement ("p");
+    pnothing.className = "is-size-3 has-text-centered";
+    pnothing.id = "event-name";
+    pnothing.innerHTML = "<strong> Nothing is Available </strong>"
+
+
+    //appending information
+    divEventDetails.appendChild (pnothing);
+    divDetailsContainer.appendChild (divEventDetails);
+    divEventsContainer.appendChild (divDetailsContainer);
+    eventCardsContainer.appendChild (divEventsContainer);
+};
 
 // Function to display the initial 5 data 
  var display5Records = function(listOfEvents) {
     
-   for (i = 0; i < 4 ; i++) {
+   for (i = iStart; i < iEnd ; i++) {
+
+    // Set i besed on the length
+    if(listOfEvents.length < iEnd) {
+        iEnd = listOfEvents.length;
+    }
 
        // var from array from API
        var eventName = listOfEvents[i].name;
@@ -180,28 +194,56 @@ var getEventData = function() {
     showMoreEventsBtn.innerHTML = "Show More"
 
     showMoreEvents.appendChild (showMoreEventsBtn)
-    
-    // localArray =[]
-    // localArray.push(listOfEvents)
-    // console.log (localArray);
-    //debugger
+
+     // save the data to local storage
+    savedEventsArray = listOfEvents;
+    // console.log (savedEventsArray);
+    //debugger;
+    localStorage.setItem("eventsData", JSON.stringify(savedEventsArray));
+
+    //loadEventsData();
+
 
     $ ("#show-more-events-btn").click(function() {
+    iStart += 4;
+    iEnd += 4;
+
     displayAllRecords(listOfEvents);
     })
- }
+};
+
+var loadEvents = function() {
+    var loadedData = JSON.parse(localStorage.getItem("eventsData"));
+    var loadedType = JSON.parse(localStorage.getItem("type"));
+
+    if(!loadedData || loadedType !== "Events") {
+      return;
+    } else {
+        listOfEvents = loadedData;
+    }
+
+    if(listOfEvents.length === 0) {
+        noEventsDsoplay();
+    } else {
+        // console.log(listOfEvents);
+        display5Records(listOfEvents);
+    } 
+};
 
 
 // Function to display the initial remaining data 
 var displayAllRecords = function(listOfEvents) {
 
     // $ ("#show-more-events-btn").click(function(localArray) {
-    eventCardsContainer.innerHTML = ""
-    showMoreEvents.innerHTML =""
-    console.log (listOfEvents)
+    // eventCardsContainer.innerHTML = ""
+    // showMoreEvents.innerHTML =""
+    // console.log (listOfEvents)
    //debugger
+    if(listOfEvents.length < iEnd) {
+        iEnd = listOfEvents.length;
+    }
 
-    for (i = 0; i < listOfEvents.length ; i++) {
+    for (i = iStart; i < iEnd ; i++) {
  
         // var from array from API
         var eventName = listOfEvents[i].name;
@@ -255,12 +297,19 @@ var displayAllRecords = function(listOfEvents) {
         divDetailsContainer.appendChild (divEventDetails);
         divEventsContainer.appendChild (divDetailsContainer);
         eventCardsContainer.appendChild (divEventsContainer);
-              
+          
     }
 };
-    // )}
 
-// // Change the function to submit so it works on the other side as well.
-// //Event listener
-// searchForm.addEventListener("submit",getEventData);
-// //showMoreEvents.addEventListener("click", displayAllRecords (localArray)); //problem lies here remove parameter 
+loadEvents();
+
+// //Function to load the load the Restaurant and Recreations
+// var loadEventsData = function() {
+//     var loadedEventsData = JSON.parse(localStorage.getItem("eventsData"));
+//     var storeDataEvents = loadedEventsData[0]
+//     console.log (storeDataEvents)
+//     var citieUsed = JSON.parse(localStorage.getItem("searchCities"));
+//     console.log (citieUsed)
+//     citieUsed.value = searchCity
+
+// }

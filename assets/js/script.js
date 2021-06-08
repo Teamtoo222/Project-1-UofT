@@ -1,5 +1,6 @@
 // Variables
 var searchForm = document.getElementById('searchForm');
+var submitForm = document.getElementById ("#submit-form")
 
 var cityInput = "";
 var keywordInput = "";
@@ -10,12 +11,24 @@ var googleGeoCodeUrl =
   '&key=' +
   googleApiKey;
 
-var placeArray = [];
+var originLoc = "";
+var originLat = "";
+var originLng = "";
+var desLatResult = "";
+var desLngResult = "";
+var distanceValue = "";
+var distanceTime = "";
+
+var placeIdArray = [];
+var placeArray = []
+var searchedCities = [];
 var errorModal =  document.getElementById("error-Modal");
 
-let iStart = 0;
-let iEnd = 4;
-let typeOf = 'restaurant';
+var iStart = 0;
+var iEnd = 4;
+var iStartNews = 0;
+var iEndNews = 4;
+var typeOf = 'restaurant';
 var targetId = '#nearby-resturants';
 var mainCont = document.getElementById("mainContainer");
 var heroContainer = document.getElementById("heroContainer");
@@ -26,13 +39,15 @@ var recreationContainer = document.getElementById("recreationContainer");
 var newscontainer = document.querySelector("#news-cards-container");
 var addressArrayforNews = [];
 var page = 1;
-var loadedNews = [];
+var newNewsArry = [];
 
 // type = 'tourist_attraction';
 // targetId = '#nearby-recreation';
 
 // Variable to get the PLaceServiceMap
 var service = new google.maps.places.PlacesService(document.getElementById('map'));
+// const geocoder = new google.maps.Geocoder();
+var distanceService = new google.maps.DistanceMatrixService();
 var searchInput = document.getElementById('search-city');
 var options = {
   componentRestrictions: { country: "CA" },
@@ -78,6 +93,7 @@ searchForm.addEventListener('submit', function (event) {
       apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
       eventsDisplay();
       getEventData();
+
       
     } else if (selectedOption === "Restaurants") { 
       restaurantsDisplay();
@@ -93,12 +109,20 @@ searchForm.addEventListener('submit', function (event) {
       apiGeoCodeFetch(googleGeoCodeUrl, selectedOption, cityInput);
     }
 
+    localStorage.setItem("type", JSON.stringify(selectedOption));
+
     searchForm.reset();
     // document.querySelector("#keywordInput").value = "";
 
   }
 
   newscontainer.innerHTML = "";
+  newNewsArry = [];
+  addressArrayforNews = [];
+
+  //store the cities 
+  searchedCities.push(cityInput);
+  localStorage.setItem("searchCities", JSON.stringify(searchedCities));
 
 });
 
@@ -159,27 +183,33 @@ var apiGeoCodeFetch = function (url, option, searchCity) {
 
 // Function to pull the nearby the restaurants
 function logResPlaceDetails(passedData, typeOf, searchCity) {
-  var latData = passedData.results[0].geometry.location.lat;
-  var lngData = passedData.results[0].geometry.location.lng;
+  originLat = passedData.results[0].geometry.location.lat;
+  originLng = passedData.results[0].geometry.location.lng;
+
+  originLoc = { lat: originLat, lng: originLng };
+
+  localStorage.setItem("originLoc" ,JSON.stringify(originLoc));
   //console.log(passedData , latData, lngData);
   // Nearby Search method, https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.nearbySearch
   service.nearbySearch(
     {
       // City/Location in lat and lng
-      location: { lat: latData, lng: lngData },
+      location: { lat: originLat, lng: originLng },
       // radius for the search list
       radius: 15000,
       // Specific keywords
       keyword: keywordInput,
       // Type or option for the result Restaurants or Recreations
       type: typeOf,
+      RankBy: "DISTANCE"
     },
-    function (place, status) {
-
+    // pagination can be used for future development
+    function (place, status, pagination) {
+    
       var placeIdArray = [];
-      var searchedCities = [];
+      var resSearchedCities = [];
 
-      searchedCities.push(searchCity);
+      resSearchedCities.push(searchCity);
 
       for(var i = 0; i < place.length; i++) {
         placeIdArray.push(place[i].place_id);
@@ -189,34 +219,54 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
 
       // save the data to local storage
       localStorage.setItem("resData", JSON.stringify(placeIdArray));
-      localStorage.setItem("type", JSON.stringify(typeOf));
-      localStorage.setItem("searchCities", JSON.stringify(searchedCities));
-      
-      
+      // localStorage.setItem("restSearchCities", JSON.stringify(resSearchedCities)); 
       // load the Resdata
       loadResData();
     }
   );
 };
 
+// var getDistance = function(desLat, desLng) {
+//   console.log(desLatResult);
+//   console.log(desLngResult);
+//   console.log(originLat);
+//   console.log(originLng);
+
+//   fetch(
+//     "https://maps.googleapis.com/maps/api/distancematrix/json?origins=heading=" + originLat + "," + originLng +"&destinations=side_of_road:" + desLat + "," + desLng + "&key=" + googleApiKey)
+//     .then(function (response) {
+//       if (response.ok) {
+//         response.json()
+//         .then(function (data) {
+//           console.log(data);
+//       })
+//     };
+//   });
+// };
+
 // Function to load the load the Restaurant and Recreations
 var loadResData = function() {
   var loadedResData = JSON.parse(localStorage.getItem("resData"));
+  // var loadedEventsData = JSON.parse(localStorage.getItem("eventsData"));
   var loadedType = JSON.parse(localStorage.getItem("type"));
   var loadedCities = JSON.parse(localStorage.getItem("searchCities"));
+  var loadedOriginLoc = JSON.parse(localStorage.getItem("originLoc"));
 
-  if(loadedType === "Restaurants") {
-    type = "#nearby-resturants";
+  originLoc = loadedOriginLoc;
+
+  if (loadedType === "Events") {
+    eventsDisplay();
+    return;
+  } else if(loadedType === "Restaurants") {
+    targetId = "#nearby-resturants";
     restaurantsDisplay();
-    document.getElementById("resLocation").textContent = loadedCities[0];
+    document.getElementById("resLocation").textContent = loadedCities[loadedCities.length-1];
 
   } else if (loadedType === "Recreations") {
-    type = "#nearby-recreation";
+    targetId = "#nearby-recreation";
     recreationsDsiplay();
-    document.getElementById("recLocation").textContent = loadedCities[0];
+    document.getElementById("recLocation").textContent = loadedCities[loadedCities.length-1];
     
-  } else if (loadedType === "Events"){
-    eventsDisplay();
   }
 
   // if the loaded data is empty hide all the elements
@@ -228,14 +278,20 @@ var loadResData = function() {
 
   } else {
     placeArray = loadedResData;
-    passNearByData(placeArray ,type);
+    passNearByData(placeArray ,targetId, loadedOriginLoc);
   }
 };
 
 // Function to pass the nearByData
-var passNearByData = function (place ,targetId) {
+var passNearByData = function (place ,typeId, oriLoc) {
   if (place) {
     for (let i = iStart; i < iEnd; i++) {
+      if(place.length < iEnd) {
+        iEnd = place.length;
+        document.querySelector('#show-res').classList.add("hideEl");
+        document.querySelector('#show-rec').classList.add("hideEl");
+        return;
+      }
       // Get details method, check this link for more info https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.getDetails
       if (place[i]) {
         // console.log(place[i]);
@@ -245,8 +301,11 @@ var passNearByData = function (place ,targetId) {
           },
           function (getResults, status) {
             if (getResults) {
-              //console.log('rec details **** :', targetId);
-              createCards(getResults ,targetId);
+              // console.log('rec details **** :', getResults);
+              desLatResult = getResults.geometry.location.lat();
+              desLngResult = getResults.geometry.location.lng();
+            
+              checkDistance(getResults,typeId, desLatResult, desLngResult);
             }
           }
         );
@@ -255,9 +314,8 @@ var passNearByData = function (place ,targetId) {
   }
 }
 
-loadResData();
+var createCards = function(place ,targetId, val, time) {
 
-var createCards = function(place ,targetId) {
   if(place.hasOwnProperty("opening_hours")) {
     const isOpen = place.opening_hours.isOpen();
     if (isOpen === true) {
@@ -286,22 +344,30 @@ var createCards = function(place ,targetId) {
   if(place.hasOwnProperty("photos")) {
     var photoUrl = place.photos[0].getUrl();
   } else {
-    photoUrl = "https://picsum.photos/640/320/?blur=8";
+    photoUrl = "./assets/images/default-img.jpg";
   }
 
   // check if the array has a rating
   if(place.hasOwnProperty("rating")) {
     var placeRating = place.rating;
+    var ratingClass = "";
   } else {
     placeRating = "N/A";
+    ratingClass = "visibility-hidden";
   }
 
   // check if the array has a phone number
   if(place.hasOwnProperty("formatted_phone_number")) {
     var placePhone = place.formatted_phone_number;
+    var phoneClass = "";
   } else {
     placePhone = "Not Available";
+    phoneClass = "visibility-hidden";
   }
+
+  // getDistance(desLatResult, desLngResult);
+
+  // console.log(place.geometry.location.lng());
 
   // template to create the card
   const template = `
@@ -309,8 +375,8 @@ var createCards = function(place ,targetId) {
     <div class="img-container" style="background-image:url(${photoUrl});">
     <div class="store-status is-flex is-align-items-flex-end is-flex-direction-column">
     <div class="w-100 is-flex is-justify-content-space-between">
-    <p class="ratingNumb"><i class="ratingNumbIcon fas fa-star-half-alt"></i>&nbsp${placeRating}</p>
-    <p class="mb-2 open-status">${openStatus}</p>
+    <p class="ratingNumb ${ratingClass}"><i class="ratingNumbIcon fas fa-star-half-alt"></i>&nbsp${placeRating}</p>
+    <p class="mb-2 open-status ${phoneClass}">${openStatus}</p>
     </div>
     <p class="${busClassList}">${businesStatus}</p>
     </div>
@@ -321,7 +387,8 @@ var createCards = function(place ,targetId) {
     <p class="store-name wrap-content"><i class="fas fa-bars"></i>&nbsp<strong>${place.name}</strong></p>
       <a class="wrap-content" href="https://maps.google.com/maps?q=${place.formatted_address}" target="_blank class="store-address"><i class="fas fa-map-marker-alt">&nbsp</i>${place.formatted_address}</a>
       <a href="tel:${place.formatted_phone_number}" class="store-phone"><i class="fas fa-phone-alt"></i>&nbsp${placePhone}</a>
-      <a href="${place.website}" target="_blank"><i class="fas fa-globe"></i>&nbsp Website</a>
+      <a href="${place.website}" target="_blank"><i class="fas fa-globe"></i>&nbsp Website</a> 
+      <a class="wrap-content" href="https://www.google.com/maps/dir/?api=1&destination=${place.formatted_address}" target="_blank class="store-address"><p> <i class="fas fa-car-side"></i>&nbsp ${val} | ${time} </p></a>
       </div>
       </div>
       `;
@@ -332,6 +399,33 @@ var createCards = function(place ,targetId) {
     container.innerHTML = template;
     document.querySelector(targetId).append(container);
 
+};
+
+
+var checkDistance = function(results,typeId, deslat, desLng) {
+  var desLoc = { lat: deslat, lng: desLng }
+
+
+   const distance = new google.maps.DistanceMatrixService();
+        distance.getDistanceMatrix(
+        {
+          origins: [originLoc],
+          destinations: [desLoc],
+          travelMode: google.maps.TravelMode.DRIVING,
+          unitSystem: google.maps.UnitSystem.METRIC,
+          avoidHighways: false,
+          avoidTolls: false,
+        },
+        (response, status) => {
+          if (status !== "OK") {
+            alert("Error was: " + status);
+          } else {
+            var disVal = response.rows[0].elements[0].distance.text;
+            var disTime = response.rows[0].elements[0].duration.text;
+
+            createCards(results ,typeId, disVal, disTime);
+          }
+        });
 };
 
 
@@ -355,7 +449,7 @@ document.querySelector('#show-res').addEventListener('click', () => {
   iStart += 4;
   iEnd += 4;
 // run the passNearByData function
-  passNearByData(placeArray, type);
+  passNearByData(placeArray, targetId);
 });
 
 
@@ -363,8 +457,10 @@ document.querySelector('#show-rec').addEventListener('click', () => {
   iStart += 4;
   iEnd += 4;
 // run the passNearByData function
-  passNearByData(placeArray, type);
+  passNearByData(placeArray, targetId);
 });
+
+loadResData();
 
 /**
  * ////////////// COVID SECTION ///////////////
@@ -387,7 +483,11 @@ var covidLoc = function(data) {
   for(var i = 0; i < data.results[0].address_components.length - 1; i++) {
     addressArrayforNews.push(data.results[0].address_components[i].long_name);
   }
-  console.log(addressArrayforNews);
+
+  var dupCheck = new Set(addressArrayforNews);
+
+  addressArrayforNews = [...dupCheck];
+
   covidData(covidUrl);
   covidNewsFetch(addressArrayforNews, page);
   covidNewsLoc.textContent = province;
@@ -408,7 +508,6 @@ var covidData = function (covidUrl) {
     }
   });
 };
-
 // Function to SaveCovidData
 var saveCovidData = function(data) {
   localStorage.setItem("covidData", JSON.stringify(data));
@@ -416,18 +515,19 @@ var saveCovidData = function(data) {
 
 // Function to LoadCovidFunction
 var loadCovidData = function() {
+  newNewsArry = [];
   loadedData = JSON.parse(localStorage.getItem("covidData"));
   loadedNews = JSON.parse(localStorage.getItem("news"));
 
-  if(!loadedData) {
+  if(!loadedData || !loadedNews) {
     return;
   } else {
     covidArray = loadedData;
-    covidNews = loadedNews;
+    newNewsArry = loadedNews;
 
   // console.log("this is the returned array", covidArray);
   displayCovidStats(covidArray);
-  covidNewsCards(loadedNews);
+  covidNewsCards(newNewsArry);
   }
   
 };
@@ -489,7 +589,6 @@ var covidNewsFetch = function(chosenProvince, page) {
     return response.json();
   })
   .then(data => {
-    console.log(data);
     groupRelatedNews(data, chosenProvince);
 
   })
@@ -498,50 +597,46 @@ var covidNewsFetch = function(chosenProvince, page) {
   });
 };
 
+// function to narrow down the news list
 function checkInput(input, words) {
   return words.some(word => input.toLowerCase().includes(word.toLowerCase()));
  };
- 
-var newNewsArry = [];
 
- console.log(checkInput('"Definitely," he said in a matter-of-fact tone.', 
- ["matter", "definitely"]));
 
+// Function to group the new list into a new array
 var groupRelatedNews = function(newsData, chosenProvince) {
   for(var i = 0; i < newsData.articles.length; i++) {
     var newsSummary = newsData.articles[i].summary;
-    console.log(checkInput(newsSummary, ["toronto"]));
     var status = checkInput(newsSummary, chosenProvince); 
     if (status) {
       newNewsArry.push(newsData.articles[i]);
     }
   }
-
-  console.log(newNewsArry);
-
-  if(newNewsArry.length < 4) {
+  // if the array does not have 8 news fetch again in the next page
+  if(newNewsArry.length < 8) {
     page += 1;
     covidNewsFetch(addressArrayforNews, page);
   } else {
     covidNewsCards(newNewsArry);
   }
-
+  // Save the array in the locatl storage
   localStorage.setItem("news", JSON.stringify(newNewsArry));
 };
 
+// function to create th enews cards
+var covidNewsCards = function(articles) { 
+  for(var i = iStartNews; i < iEndNews ;i ++) {
+    if(articles.length < iEndNews) {
+      iEndNews = articles.length;
+      document.querySelector('#show-news').classList.add("hideEl");
+      return;
+    }
 
-var covidNewsCards = function(articles) {  
-   // Set i besed on the length
-   if(articles.length < iEnd) {
-    iEnd = articles.length;
-  }
-
-  for(var i = iStart; i < iEnd;i ++) {
     var imageUrl = "";
-    if(!articles[i].media_content) {
+    if(!articles[i].media) {
       imageUrl = "./assets/images/news.jpg";
     } else {
-      imageUrl = articles[i].media_content;
+      imageUrl = articles[i].media;
     }
 
     var articleDate = moment(articles[i].published_date).format("MM/DD/YYYY");
@@ -555,9 +650,9 @@ var covidNewsCards = function(articles) {
       </a>
       <div class="details-container">
       <div class="store-details is-flex">
-      <a href="${articles[i].link}" target="_blank"><p class="store-name wrap-content-100 height-65"><strong>${articles[i].title}</strong></p></a>
+      <a href="${articles[i].link}" target="_blank"><p class="store-name wrap-content-100 height-40"><strong>${articles[i].title}</strong></p></a>
       <p class="store-desc wrap-content-100 my-2">${articles[i].summary}</p>
-        <a href="${articles[i].clean_url}" target="_blank"><i class="fas fa-globe"></i>&nbsp ${articles[i].clean_url}</a>
+        <a href="https://${articles[i].clean_url}" target="_blank"><i class="fas fa-globe"></i>&nbsp ${articles[i].clean_url}</a>
         </div>
         </div>
         `;
@@ -570,14 +665,12 @@ var covidNewsCards = function(articles) {
     }
 };
 
-
-
+// Show more news
 document.querySelector('#show-news').addEventListener('click', () => {
   var loadedNews = JSON.parse(localStorage.getItem("news"));
 
-  iStart += 4;
-  iEnd += 4;
-
+  iStartNews += 4;
+  iEndNews += 4;
 // run the passNearByData function
 covidNewsCards(loadedNews);
 

@@ -19,12 +19,16 @@ body {
     margin-right: auto;
 }
 
+.visibility-hidden {
+    visibility: hidden;
+}
+
 .showEl {
     display: flex;
 }
 
 .hideEl {
-    display: none;
+    display: none !important;
 }
 
 .wrap-content {
@@ -244,8 +248,8 @@ body {
     -webkit-line-clamp: 3;
 }
 
-.height-65 {
-    height: 65px;
+.height-40 {
+    height: 40px;
 }
 
 @media only screen and (max-width: 1400px) {
