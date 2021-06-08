@@ -17,9 +17,10 @@ During this pandemic, we've all been through lockdowns or quarantines, and most 
 - Moment.js
 
 ## Serverside APIs Used
-- Google Geocoding / Places API
+- Google Geocoding / Places / DistanceMatrix API
 - Ticketmaster API
 - Opencovid Canada API
+- CovidNews API
 
 ## Link to Deployed Application
 [**Click Here**](https://teamtoo222.github.io/Project-1-UofT/) to view the project in Github Pages. (Wanna Know What's Happening?)
