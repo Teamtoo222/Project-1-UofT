@@ -24,6 +24,9 @@ var eventsContainer = document.getElementById("nearby-events-section");
 var restaurantsContainer = document.getElementById("restaurantsContainer");
 var recreationContainer = document.getElementById("recreationContainer");
 var newscontainer = document.querySelector("#news-cards-container");
+var addressArrayforNews = [];
+var page = 1;
+var loadedNews = [];
 
 // type = 'tourist_attraction';
 // targetId = '#nearby-recreation';
@@ -380,9 +383,13 @@ var covidLoc = function(data) {
     province = addressData[addressData.length - 2].short_name;
   }
   var covidUrl = "https://api.opencovid.ca/summary?loc=" + province + "&date=" + currentDay;
-
+  
+  for(var i = 0; i < data.results[0].address_components.length - 1; i++) {
+    addressArrayforNews.push(data.results[0].address_components[i].long_name);
+  }
+  console.log(addressArrayforNews);
   covidData(covidUrl);
-  covidNewsFetch(province);
+  covidNewsFetch(addressArrayforNews, page);
   covidNewsLoc.textContent = province;
 } 
 
@@ -410,14 +417,17 @@ var saveCovidData = function(data) {
 // Function to LoadCovidFunction
 var loadCovidData = function() {
   loadedData = JSON.parse(localStorage.getItem("covidData"));
+  loadedNews = JSON.parse(localStorage.getItem("news"));
 
   if(!loadedData) {
     return;
   } else {
     covidArray = loadedData;
+    covidNews = loadedNews;
 
   // console.log("this is the returned array", covidArray);
   displayCovidStats(covidArray);
+  covidNewsCards(loadedNews);
   }
   
 };
@@ -466,13 +476,13 @@ var displayCovidStats = function (covidArray) {
 
 
 // Covid 19 News
-var covidNewsFetch = function(chosenProvince) {
+var covidNewsFetch = function(chosenProvince, page) {
   // Covid News
-  fetch("https://coronavirus-smartable.p.rapidapi.com/news/v1/CA-" + chosenProvince + "/", {
+  fetch("https://covid-19-news.p.rapidapi.com/v1/covid?q=covid&lang=en&sort_by=date&country=CA&page=" + page + "&page_size=100&media=True", {
     "method": "GET",
     "headers": {
       "x-rapidapi-key": "4cf7ac4704msh1b9e803a13a0c62p1cfe7djsnef3594636b71",
-      "x-rapidapi-host": "coronavirus-smartable.p.rapidapi.com"
+      "x-rapidapi-host": "covid-19-news.p.rapidapi.com"
     }
   })
   .then(response => {
@@ -480,42 +490,63 @@ var covidNewsFetch = function(chosenProvince) {
   })
   .then(data => {
     console.log(data);
-    CovidNewsCards(data);
-    localStorage.setItem("news", JSON.stringify(data));
+    groupRelatedNews(data, chosenProvince);
 
   })
   .catch(err => {
     console.error(err);
   });
 };
-// function checkImage(url) {
-//   var image = new Image();
-//   image.onload = function() {
-//     if (this.width > 0) {
-//       console.log("image exists");
-//     }
-//   }
-//   image.onerror = function() {
-//     console.log("image doesn't exist");
-//   }
-//   image.src = url;
-// };
 
-//  Covid News Generator 
+function checkInput(input, words) {
+  return words.some(word => input.toLowerCase().includes(word.toLowerCase()));
+ };
+ 
+var newNewsArry = [];
+
+ console.log(checkInput('"Definitely," he said in a matter-of-fact tone.', 
+ ["matter", "definitely"]));
+
+var groupRelatedNews = function(newsData, chosenProvince) {
+  for(var i = 0; i < newsData.articles.length; i++) {
+    var newsSummary = newsData.articles[i].summary;
+    console.log(checkInput(newsSummary, ["toronto"]));
+    var status = checkInput(newsSummary, chosenProvince); 
+    if (status) {
+      newNewsArry.push(newsData.articles[i]);
+    }
+  }
+
+  console.log(newNewsArry);
+
+  if(newNewsArry.length < 4) {
+    page += 1;
+    covidNewsFetch(addressArrayforNews, page);
+  } else {
+    covidNewsCards(newNewsArry);
+  }
+
+  localStorage.setItem("news", JSON.stringify(newNewsArry));
+};
 
 
-var CovidNewsCards = function(newsData) {     
+var covidNewsCards = function(articles) {  
+   // Set i besed on the length
+   if(articles.length < iEnd) {
+    iEnd = articles.length;
+  }
+
   for(var i = iStart; i < iEnd;i ++) {
     var imageUrl = "";
-    if(newsData.news[i].images === null) {
+    if(!articles[i].media_content) {
       imageUrl = "./assets/images/news.jpg";
     } else {
-      imageUrl = newsData.news[i].images[0].url;
+      imageUrl = articles[i].media_content;
     }
 
-    var articleDate = moment(newsData.news[i].publishedDateTime).format("MM/DD/YYYY");
+    var articleDate = moment(articles[i].published_date).format("MM/DD/YYYY");
     const newsCardTemp = `
-      <a class="linkImage" href=${newsData.news[i].originalUrl} target="_blank">
+      <a class="linkImage" href=${articles[i].link} target="_blank">
       <div class="img-container" style="background-image:url(${imageUrl});">
       <div class="w-100 is-flex is-justify-content-space-between">
       <p class="open-status">${articleDate}</p>
@@ -524,9 +555,9 @@ var CovidNewsCards = function(newsData) {
       </a>
       <div class="details-container">
       <div class="store-details is-flex">
-      <a href="${newsData.news[i].originalUrl}" target="_blank"><p class="store-name wrap-content-100 height-65"><strong>${newsData.news[i].title}</strong></p></a>
-      <p class="store-desc wrap-content-100 my-2">${newsData.news[i].excerpt}</p>
-        <a href="${newsData.news[i].originalUrl}" target="_blank"><i class="fas fa-globe"></i>&nbsp ${newsData.news[i].provider.name}</a>
+      <a href="${articles[i].link}" target="_blank"><p class="store-name wrap-content-100 height-65"><strong>${articles[i].title}</strong></p></a>
+      <p class="store-desc wrap-content-100 my-2">${articles[i].summary}</p>
+        <a href="${articles[i].clean_url}" target="_blank"><i class="fas fa-globe"></i>&nbsp ${articles[i].clean_url}</a>
         </div>
         </div>
         `;
@@ -543,12 +574,14 @@ var CovidNewsCards = function(newsData) {
 
 document.querySelector('#show-news').addEventListener('click', () => {
   var loadedNews = JSON.parse(localStorage.getItem("news"));
+
   iStart += 4;
   iEnd += 4;
-// run the passNearByData function
-CovidNewsCards(loadedNews);
-});
 
+// run the passNearByData function
+covidNewsCards(loadedNews);
+
+});
 
 // Load covidData when the page loads
 loadCovidData();
