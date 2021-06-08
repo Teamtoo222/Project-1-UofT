@@ -40,6 +40,7 @@ var newscontainer = document.querySelector("#news-cards-container");
 var addressArrayforNews = [];
 var page = 1;
 var newNewsArry = [];
+var geoPoint = "";
 
 // type = 'tourist_attraction';
 // targetId = '#nearby-recreation';
@@ -90,9 +91,8 @@ searchForm.addEventListener('submit', function (event) {
     mainCont.classList.add("p-2", "main-container");
     
     if(selectedOption === "Events") {
-      apiGeoCodeFetch(googleGeoCodeUrl, selectedOption);
+      apiGeoCodeFetch(googleGeoCodeUrl, selectedOption, cityInput);
       eventsDisplay();
-      getEventData();
 
       
     } else if (selectedOption === "Restaurants") { 
@@ -119,6 +119,7 @@ searchForm.addEventListener('submit', function (event) {
   newscontainer.innerHTML = "";
   newNewsArry = [];
   addressArrayforNews = [];
+  savedEventsArray = [];
 
   //store the cities 
   searchedCities.push(cityInput);
@@ -171,6 +172,7 @@ var apiGeoCodeFetch = function (url, option, searchCity) {
       response.json().then(function (data) {
         if(option === "Events") {
           covidLoc(data);
+          getEventData(data.results[0].geometry.location.lat, data.results[0].geometry.location.lng, searchCity);
         } else {
           covidLoc(data);
           logResPlaceDetails(data, option, searchCity);
