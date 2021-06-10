@@ -11,6 +11,14 @@ var googleGeoCodeUrl =
   '&key=' +
   googleApiKey;
 
+var originLoc = '';
+var originLat = '';
+var originLng = '';
+var desLatResult = '';
+var desLngResult = '';
+var distanceValue = '';
+var distanceTime = '';
+
 var placeIdArray = [];
 var placeArray = [];
 var searchedCities = [];
@@ -35,6 +43,7 @@ var service = new google.maps.places.PlacesService(
   document.getElementById('map')
 );
 var searchInput = document.getElementById('search-city');
+console.log(searchInput);
 var options = {
   componentRestrictions: { country: 'CA' },
   types: ['geocode'],
@@ -159,14 +168,18 @@ var apiGeoCodeFetch = function (url, option, searchCity) {
 
 // Function to pull the nearby the restaurants
 function logResPlaceDetails(passedData, typeOf, searchCity) {
-  var latData = passedData.results[0].geometry.location.lat;
-  var lngData = passedData.results[0].geometry.location.lng;
+  originLat = passedData.results[0].geometry.location.lat;
+  originLng = passedData.results[0].geometry.location.lng;
+
+  originLoc = { lat: originLat, lng: originLng };
+
+  localStorage.setItem('originLoc', JSON.stringify(originLoc));
   //console.log(passedData , latData, lngData);
   // Nearby Search method, https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.nearbySearch
   service.nearbySearch(
     {
       // City/Location in lat and lng
-      location: { lat: latData, lng: lngData },
+      location: { lat: originLat, lng: originLng },
       // radius for the search list
       radius: 15000,
       // Specific keywords
@@ -188,10 +201,7 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
 
       // save the data to local storage
       localStorage.setItem('resData', JSON.stringify(placeIdArray));
-      localStorage.setItem(
-        'restSearchCities',
-        JSON.stringify(resSearchedCities)
-      );
+      // localStorage.setItem("restSearchCities", JSON.stringify(resSearchedCities));
 
       // load the Resdata
       loadResData();
@@ -199,12 +209,33 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
   );
 }
 
+// var getDistance = function(desLat, desLng) {
+//   console.log(desLatResult);
+//   console.log(desLngResult);
+//   console.log(originLat);
+//   console.log(originLng);
+
+//   fetch(
+//     "https://maps.googleapis.com/maps/api/distancematrix/json?origins=heading=" + originLat + "," + originLng +"&destinations=side_of_road:" + desLat + "," + desLng + "&key=" + googleApiKey)
+//     .then(function (response) {
+//       if (response.ok) {
+//         response.json()
+//         .then(function (data) {
+//           console.log(data);
+//       })
+//     };
+//   });
+// };
+
 // Function to load the load the Restaurant and Recreations
 var loadResData = function () {
   var loadedResData = JSON.parse(localStorage.getItem('resData'));
   // var loadedEventsData = JSON.parse(localStorage.getItem("eventsData"));
   var loadedType = JSON.parse(localStorage.getItem('type'));
   var loadedCities = JSON.parse(localStorage.getItem('searchCities'));
+  var loadedOriginLoc = JSON.parse(localStorage.getItem('originLoc'));
+
+  originLoc = loadedOriginLoc;
 
   if (loadedType === 'Events') {
     eventsDisplay();
@@ -227,12 +258,12 @@ var loadResData = function () {
     return;
   } else {
     placeArray = loadedResData;
-    passNearByData(placeArray, targetId);
+    passNearByData(placeArray, targetId, loadedOriginLoc);
   }
 };
 
 // Function to pass the nearByData
-var passNearByData = function (place, typeId) {
+var passNearByData = function (place, typeId, oriLoc) {
   if (place) {
     for (let i = iStart; i < iEnd; i++) {
       // Get details method, check this link for more info https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.getDetails
@@ -244,8 +275,11 @@ var passNearByData = function (place, typeId) {
           },
           function (getResults, status) {
             if (getResults) {
-              //console.log('rec details **** :', targetId);
-              createCards(getResults, typeId);
+              console.log('rec details **** :', getResults);
+              desLatResult = getResults.geometry.location.lat();
+              desLngResult = getResults.geometry.location.lng();
+
+              checkDistance(getResults, typeId, desLatResult, desLngResult);
             }
           }
         );
@@ -254,7 +288,7 @@ var passNearByData = function (place, typeId) {
   }
 };
 
-var createCards = function (place, targetId) {
+var createCards = function (place, targetId, val, time) {
   if (place.hasOwnProperty('opening_hours')) {
     const isOpen = place.opening_hours.isOpen();
     if (isOpen === true) {
@@ -300,6 +334,10 @@ var createCards = function (place, targetId) {
     placePhone = 'Not Available';
   }
 
+  // getDistance(desLatResult, desLngResult);
+
+  // console.log(place.geometry.location.lng());
+
   // template to create the card
   const template = `
     <a class="linkImage" href=${place.url} target="_blank">
@@ -318,7 +356,8 @@ var createCards = function (place, targetId) {
     <p class="store-name wrap-content"><i class="fas fa-bars"></i>&nbsp<strong>${place.name}</strong></p>
       <a class="wrap-content" href="https://maps.google.com/maps?q=${place.formatted_address}" target="_blank class="store-address"><i class="fas fa-map-marker-alt">&nbsp</i>${place.formatted_address}</a>
       <a href="tel:${place.formatted_phone_number}" class="store-phone"><i class="fas fa-phone-alt"></i>&nbsp${placePhone}</a>
-      <a href="${place.website}" target="_blank"><i class="fas fa-globe"></i>&nbsp Website</a>
+      <a href="${place.website}" target="_blank"><i class="fas fa-globe"></i>&nbsp Website</a> 
+      <p> <i class="fas fa-car-side"></i> &nbsp ${val} | ${time} </p>
       </div>
       </div>
       `;
@@ -329,6 +368,46 @@ var createCards = function (place, targetId) {
   container.innerHTML = template;
   document.querySelector(targetId).append(container);
 };
+
+var checkDistance = function (results, typeId, deslat, desLng) {
+  var desLoc = { lat: deslat, lng: desLng };
+
+  const distance = new google.maps.DistanceMatrixService();
+  distance.getDistanceMatrix(
+    {
+      origins: [originLoc],
+      destinations: [desLoc],
+      travelMode: google.maps.TravelMode.DRIVING,
+      unitSystem: google.maps.UnitSystem.METRIC,
+      avoidHighways: false,
+      avoidTolls: false,
+    },
+    (response, status) => {
+      if (status !== 'OK') {
+        alert('Error was: ' + status);
+      } else {
+        var disVal = response.rows[0].elements[0].distance.text;
+        var disTime = response.rows[0].elements[0].duration.text;
+
+        createCards(results, typeId, disVal, disTime);
+      }
+    }
+  );
+};
+
+// // Fcuntion to check the business status
+// var busStatChecker = function() {
+// // Change the background color of busStats
+//   var busStatEl = document.querySelectorAll(".busStatus");
+
+//   for (var i = 0; i < busStatEl.length; i++) {
+//     if(busStatEl[i] === "Operational") {
+//       var statEl =  document.querySelector(".busStatus");
+//       statEl.classList.remove("bg-red");
+//       statEl.classList.add("bg-green");
+//     }
+//   }
+// };
 
 document.querySelector('#show-res').addEventListener('click', () => {
   iStart += 4;
@@ -383,7 +462,6 @@ var covidData = function (covidUrl) {
     }
   });
 };
-
 // Function to SaveCovidData
 var saveCovidData = function (data) {
   localStorage.setItem('covidData', JSON.stringify(data));
