@@ -24,9 +24,11 @@ var placeArray = [];
 var searchedCities = [];
 var errorModal = document.getElementById('error-Modal');
 
-let iStart = 0;
-let iEnd = 4;
-let typeOf = 'restaurant';
+var iStart = 0;
+var iEnd = 4;
+var iStartNews = 0;
+var iEndNews = 4;
+var typeOf = 'restaurant';
 var targetId = '#nearby-resturants';
 var mainCont = document.getElementById('mainContainer');
 var heroContainer = document.getElementById('heroContainer');
@@ -34,6 +36,10 @@ var covidContainer = document.getElementById('covidContainer');
 var eventsContainer = document.getElementById('nearby-events-section');
 var restaurantsContainer = document.getElementById('restaurantsContainer');
 var recreationContainer = document.getElementById('recreationContainer');
+var newscontainer = document.querySelector('#news-cards-container');
+var addressArrayforNews = [];
+var page = 1;
+var newNewsArry = [];
 
 // type = 'tourist_attraction';
 // targetId = '#nearby-recreation';
@@ -44,6 +50,7 @@ var service = new google.maps.places.PlacesService(
 );
 var searchInput = document.getElementById('search-city');
 console.log(searchInput);
+
 var options = {
   componentRestrictions: { country: 'CA' },
   types: ['geocode'],
@@ -106,6 +113,10 @@ searchForm.addEventListener('submit', function (event) {
     searchForm.reset();
     // document.querySelector("#keywordInput").value = "";
   }
+
+  newscontainer.innerHTML = '';
+  newNewsArry = [];
+  addressArrayforNews = [];
 
   //store the cities
   searchedCities.push(cityInput);
@@ -186,8 +197,10 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
       keyword: keywordInput,
       // Type or option for the result Restaurants or Recreations
       type: typeOf,
+      RankBy: 'DISTANCE',
     },
-    function (place, status) {
+    // pagination can be used for future development
+    function (place, status, pagination) {
       var placeIdArray = [];
       var resSearchedCities = [];
 
@@ -202,7 +215,6 @@ function logResPlaceDetails(passedData, typeOf, searchCity) {
       // save the data to local storage
       localStorage.setItem('resData', JSON.stringify(placeIdArray));
       // localStorage.setItem("restSearchCities", JSON.stringify(resSearchedCities));
-
       // load the Resdata
       loadResData();
     }
@@ -243,11 +255,13 @@ var loadResData = function () {
   } else if (loadedType === 'Restaurants') {
     targetId = '#nearby-resturants';
     restaurantsDisplay();
-    document.getElementById('resLocation').textContent = loadedCities[0];
+    document.getElementById('resLocation').textContent =
+      loadedCities[loadedCities.length - 1];
   } else if (loadedType === 'Recreations') {
     targetId = '#nearby-recreation';
     recreationsDsiplay();
-    document.getElementById('recLocation').textContent = loadedCities[0];
+    document.getElementById('recLocation').textContent =
+      loadedCities[loadedCities.length - 1];
   }
 
   // if the loaded data is empty hide all the elements
@@ -266,6 +280,12 @@ var loadResData = function () {
 var passNearByData = function (place, typeId, oriLoc) {
   if (place) {
     for (let i = iStart; i < iEnd; i++) {
+      if (place.length < iEnd) {
+        iEnd = place.length;
+        document.querySelector('#show-res').classList.add('hideEl');
+        document.querySelector('#show-rec').classList.add('hideEl');
+        return;
+      }
       // Get details method, check this link for more info https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesService.getDetails
       if (place[i]) {
         // console.log(place[i]);
@@ -275,7 +295,7 @@ var passNearByData = function (place, typeId, oriLoc) {
           },
           function (getResults, status) {
             if (getResults) {
-              console.log('rec details **** :', getResults);
+              // console.log('rec details **** :', getResults);
               desLatResult = getResults.geometry.location.lat();
               desLngResult = getResults.geometry.location.lng();
 
@@ -317,21 +337,25 @@ var createCards = function (place, targetId, val, time) {
   if (place.hasOwnProperty('photos')) {
     var photoUrl = place.photos[0].getUrl();
   } else {
-    photoUrl = 'https://picsum.photos/640/320/?blur=8';
+    photoUrl = './assets/images/default-img.jpg';
   }
 
   // check if the array has a rating
   if (place.hasOwnProperty('rating')) {
     var placeRating = place.rating;
+    var ratingClass = '';
   } else {
     placeRating = 'N/A';
+    ratingClass = 'visibility-hidden';
   }
 
   // check if the array has a phone number
   if (place.hasOwnProperty('formatted_phone_number')) {
     var placePhone = place.formatted_phone_number;
+    var phoneClass = '';
   } else {
     placePhone = 'Not Available';
+    phoneClass = 'visibility-hidden';
   }
 
   // getDistance(desLatResult, desLngResult);
@@ -344,8 +368,8 @@ var createCards = function (place, targetId, val, time) {
     <div class="img-container" style="background-image:url(${photoUrl});">
     <div class="store-status is-flex is-align-items-flex-end is-flex-direction-column">
     <div class="w-100 is-flex is-justify-content-space-between">
-    <p class="ratingNumb"><i class="ratingNumbIcon fas fa-star-half-alt"></i>&nbsp${placeRating}</p>
-    <p class="mb-2 open-status">${openStatus}</p>
+    <p class="ratingNumb ${ratingClass}"><i class="ratingNumbIcon fas fa-star-half-alt"></i>&nbsp${placeRating}</p>
+    <p class="mb-2 open-status ${phoneClass}">${openStatus}</p>
     </div>
     <p class="${busClassList}">${businesStatus}</p>
     </div>
@@ -357,7 +381,7 @@ var createCards = function (place, targetId, val, time) {
       <a class="wrap-content" href="https://maps.google.com/maps?q=${place.formatted_address}" target="_blank class="store-address"><i class="fas fa-map-marker-alt">&nbsp</i>${place.formatted_address}</a>
       <a href="tel:${place.formatted_phone_number}" class="store-phone"><i class="fas fa-phone-alt"></i>&nbsp${placePhone}</a>
       <a href="${place.website}" target="_blank"><i class="fas fa-globe"></i>&nbsp Website</a> 
-      <p> <i class="fas fa-car-side"></i> &nbsp ${val} | ${time} </p>
+      <a class="wrap-content" href="https://www.google.com/maps/dir/?api=1&destination=${place.formatted_address}" target="_blank class="store-address"><p> <i class="fas fa-car-side"></i>&nbsp ${val} | ${time} </p></a>
       </div>
       </div>
       `;
@@ -395,20 +419,7 @@ var checkDistance = function (results, typeId, deslat, desLng) {
   );
 };
 
-// // Fcuntion to check the business status
-// var busStatChecker = function() {
-// // Change the background color of busStats
-//   var busStatEl = document.querySelectorAll(".busStatus");
-
-//   for (var i = 0; i < busStatEl.length; i++) {
-//     if(busStatEl[i] === "Operational") {
-//       var statEl =  document.querySelector(".busStatus");
-//       statEl.classList.remove("bg-red");
-//       statEl.classList.add("bg-green");
-//     }
-//   }
-// };
-
+// eventlistner for showres
 document.querySelector('#show-res').addEventListener('click', () => {
   iStart += 4;
   iEnd += 4;
@@ -416,6 +427,7 @@ document.querySelector('#show-res').addEventListener('click', () => {
   passNearByData(placeArray, targetId);
 });
 
+// eventlistner for showrec
 document.querySelector('#show-rec').addEventListener('click', () => {
   iStart += 4;
   iEnd += 4;
@@ -423,6 +435,7 @@ document.querySelector('#show-rec').addEventListener('click', () => {
   passNearByData(placeArray, targetId);
 });
 
+// Load the Res data if there any
 loadResData();
 
 /**
@@ -444,7 +457,17 @@ var covidLoc = function (data) {
   var covidUrl =
     'https://api.opencovid.ca/summary?loc=' + province + '&date=' + currentDay;
 
+  for (var i = 0; i < data.results[0].address_components.length - 1; i++) {
+    addressArrayforNews.push(data.results[0].address_components[i].long_name);
+  }
+
+  var dupCheck = new Set(addressArrayforNews);
+
+  addressArrayforNews = [...dupCheck];
+
   covidData(covidUrl);
+  covidNewsFetch(addressArrayforNews, page);
+  covidNewsLoc.textContent = province;
 };
 
 // Array for Covid
@@ -469,15 +492,19 @@ var saveCovidData = function (data) {
 
 // Function to LoadCovidFunction
 var loadCovidData = function () {
+  newNewsArry = [];
   loadedData = JSON.parse(localStorage.getItem('covidData'));
+  loadedNews = JSON.parse(localStorage.getItem('news'));
 
-  if (!loadedData) {
+  if (!loadedData || !loadedNews) {
     return;
   } else {
     covidArray = loadedData;
+    newNewsArry = loadedNews;
 
     // console.log("this is the returned array", covidArray);
     displayCovidStats(covidArray);
+    covidNewsCards(newNewsArry);
   }
 };
 
@@ -496,6 +523,7 @@ var todayChange = document.querySelector('#todayChange');
 var todayVaccine = document.querySelector('#todayVaccine');
 var proviceEl = document.querySelectorAll('.province');
 var covidLocEl = document.querySelector('#covidLocation');
+var covidNewsLoc = document.querySelector('#covidNewsLoc');
 
 // Function to format numbers (Obtained from - https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript)
 function formatNumber(num) {
@@ -514,7 +542,8 @@ var displayCovidStats = function (covidArray) {
   todayCases.textContent = formatNumber(covidArray.summary[0].cases);
   todayDeaths.textContent = formatNumber(covidArray.summary[0].deaths);
   todayRecovered.textContent = formatNumber(covidArray.summary[0].recovered);
-  covidLocEl.textContent = formatNumber(covidArray.summary[0].province);
+  covidLocEl.textContent = covidArray.summary[0].province;
+  covidNewsLoc.textContent = covidArray.summary[0].province;
   totalTests.textContent = formatNumber(
     covidArray.summary[0].cumulative_testing
   );
@@ -528,6 +557,109 @@ var displayCovidStats = function (covidArray) {
   );
   todayVaccine.textContent = formatNumber(covidArray.summary[0].avaccine);
 };
+
+// Covid 19 News
+var covidNewsFetch = function (chosenProvince, page) {
+  // Covid News
+  fetch(
+    'https://covid-19-news.p.rapidapi.com/v1/covid?q=covid&lang=en&sort_by=date&country=CA&page=' +
+      page +
+      '&page_size=100&media=True',
+    {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-key': '4cf7ac4704msh1b9e803a13a0c62p1cfe7djsnef3594636b71',
+        'x-rapidapi-host': 'covid-19-news.p.rapidapi.com',
+      },
+    }
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      groupRelatedNews(data, chosenProvince);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+// function to narrow down the news list
+function checkInput(input, words) {
+  return words.some((word) => input.toLowerCase().includes(word.toLowerCase()));
+}
+
+// Function to group the new list into a new array
+var groupRelatedNews = function (newsData, chosenProvince) {
+  for (var i = 0; i < newsData.articles.length; i++) {
+    var newsSummary = newsData.articles[i].summary;
+    var status = checkInput(newsSummary, chosenProvince);
+    if (status) {
+      newNewsArry.push(newsData.articles[i]);
+    }
+  }
+  // if the array does not have 8 news fetch again in the next page
+  if (newNewsArry.length < 8) {
+    page += 1;
+    covidNewsFetch(addressArrayforNews, page);
+  } else {
+    covidNewsCards(newNewsArry);
+  }
+  // Save the array in the locatl storage
+  localStorage.setItem('news', JSON.stringify(newNewsArry));
+};
+
+// function to create th enews cards
+var covidNewsCards = function (articles) {
+  for (var i = iStartNews; i < iEndNews; i++) {
+    if (articles.length < iEndNews) {
+      iEndNews = articles.length;
+      document.querySelector('#show-news').classList.add('hideEl');
+      return;
+    }
+
+    var imageUrl = '';
+    if (!articles[i].media) {
+      imageUrl = './assets/images/news.jpg';
+    } else {
+      imageUrl = articles[i].media;
+    }
+
+    var articleDate = moment(articles[i].published_date).format('MM/DD/YYYY');
+    const newsCardTemp = `
+      <a class="linkImage" href=${articles[i].link} target="_blank">
+      <div class="img-container" style="background-image:url(${imageUrl});">
+      <div class="w-100 is-flex is-justify-content-space-between">
+      <p class="open-status">${articleDate}</p>
+      </div>
+      </div>
+      </a>
+      <div class="details-container">
+      <div class="store-details is-flex">
+      <a href="${articles[i].link}" target="_blank"><p class="store-name wrap-content-100 height-40"><strong>${articles[i].title}</strong></p></a>
+      <p class="store-desc wrap-content-100 my-2">${articles[i].summary}</p>
+        <a href="https://${articles[i].clean_url}" target="_blank"><i class="fas fa-globe"></i>&nbsp ${articles[i].clean_url}</a>
+        </div>
+        </div>
+        `;
+
+    // Create and append the card
+    const container = document.createElement('div');
+    container.classList = 'event-container column card p-0';
+    container.innerHTML = newsCardTemp;
+    document.querySelector('#news-cards-container').append(container);
+  }
+};
+
+// Show more news
+document.querySelector('#show-news').addEventListener('click', () => {
+  var loadedNews = JSON.parse(localStorage.getItem('news'));
+
+  iStartNews += 4;
+  iEndNews += 4;
+  // run the passNearByData function
+  covidNewsCards(loadedNews);
+});
 
 // Load covidData when the page loads
 loadCovidData();

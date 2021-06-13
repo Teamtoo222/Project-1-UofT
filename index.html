@@ -173,6 +173,47 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Covid News Section -->
+        <div class="section-container my-6 is-flex-direction-column" id = "covid-news-section">
+            <!-- Title -->
+            <div class="title-container column has-text-centered">
+                <h3 class="title is-size-3 mt-3 mb-2">Covid News</h3>
+                <h5 id="covidNewsLoc" class="title is-size-5 pt-2 locHeading sub-heading"></h5>
+            </div>
+    
+            <!-- Event Cards Container -->
+            <div class="cards-container columns is-full pt-5 is-flex-wrap-wrap" id = "news-cards-container">
+            <!-- Sample DOM starts
+                <div class="event-container column card p-0" id = "event-container">
+                    <div class="img-container"id = "img-container">
+                        <div class="store-status is-flex is-justify-content-flex-end">
+                        </div>
+                    </div>
+                    <div class="details-container" id = "details-container">
+                        <div class="store-details is-flex" id = "event-details">
+                            <p class="name" id = "event-name"><strong>Toronto Raptors</strong> </p>
+                            <p class="time" id = "event-time"> 14:00pm</p>
+                            <p class="url" id = "event-url" > event.com</p>
+                        </div>
+                    </div>
+                Sample DOM ends -->
+            </div>
+                <!-- Showmore button -->
+            <button
+            id="show-news"
+            class="
+            button
+            is-medium is-danger is-light
+            show-more-button
+            is-flex
+            mt-5
+            "
+            >
+                Show More
+            </button>
+        </div>
+
 
         <!-- Nearby Events Section -->
         <div class="section-container my-6 is-flex-direction-column" id = "nearby-events-section">
@@ -270,12 +311,8 @@
 
     <!-- Scripts -->
     <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=geometry,places">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAhOZZGJoUqHE0c14emapGTAXw11nkiHqs&libraries=geometry,places">
     </script>
-    <!-- <script
-      type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places&v=weekly"
-    ></script> -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
